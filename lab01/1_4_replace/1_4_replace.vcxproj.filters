@@ -14,4 +14,28 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="empty.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="expected_nonexistent_file_copy_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="multi_line.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="single_line.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.bat">
+      <Filter>Файлы исходного кода</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="replace.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>
