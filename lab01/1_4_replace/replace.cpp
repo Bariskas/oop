@@ -9,6 +9,9 @@
 #include <boost/chrono.hpp>
 #include <boost/algorithm/searching/knuth_morris_pratt.hpp>
 
+#define NORMALIZE_ARRAY_INDEX_VALUE 1
+#define ADDITIONAL_INDEX_FOR_ENDL 1
+
 using namespace std;
 
 vector<int> findReplacePositions(const string&, const string&);
@@ -18,7 +21,8 @@ int main(int argc, char * argv[])
 {
 	if (argc != 5)
 	{
-		cout << "Arguments: <sourceFile> <destinationFile> <stringToReplace> <newString>" << endl;
+		cout << "Must be 4 arguments: <sourceFile> <destinationFile> <stringToReplace> <newString>" << endl;
+		return 1;
 	}
 
 	ifstream input(argv[1]);
@@ -35,18 +39,19 @@ int main(int argc, char * argv[])
 		return 1;
 	}
 
-	string stringForReplacement = argv[3];
-	if (stringForReplacement.empty())
+	string searchString = argv[3];
+	if (searchString.empty())
 	{
 		cout << "string for replacement must be not empty" << endl;
+		return 1;
 	}
 
-	string replacementString = argv[4];
+	string replaceString = argv[4];
 
 	string inputLine;
 	while (getline(input, inputLine))
 	{
-		output << doReplace(inputLine, stringForReplacement, replacementString) << endl;
+		output << doReplace(inputLine, searchString, replaceString) << endl;
 	}
 
 	if (!output.flush())
@@ -58,55 +63,54 @@ int main(int argc, char * argv[])
 	return 0;
 }
 
-const char* doReplace(const string& inputLine, const string& stringForReplacement, const string& replacementString)
+const char* doReplace(const string& inputLine, const string& searchString, const string& replaceString)
 {
 	vector<int> replacePositions;
 
-	replacePositions = findReplacePositions(inputLine, stringForReplacement);
+	replacePositions = findReplacePositions(inputLine, searchString);
 	if (replacePositions.empty())
 	{
 		return inputLine.c_str();
 	}
 
 	size_t inputLinePos = 0;
-	size_t newLineLength = inputLine.length() + (replacementString.length() - stringForReplacement.length()) * replacePositions.size();
-	char* newLine = new char[newLineLength + 1];
-	char* newLineCopyPtr = newLine;
+	size_t newLineLength = inputLine.length() + (replaceString.length() - searchString.length()) * replacePositions.size();
+	char* newLine = new char[newLineLength + ADDITIONAL_INDEX_FOR_ENDL];
+	char* newLineCopyPositionPtr = newLine;
 
 	size_t countCharToCopy;
 	for (auto nextReplacementPosition : replacePositions)
 	{
 		countCharToCopy = nextReplacementPosition - inputLinePos;
-		inputLine.copy(newLineCopyPtr, countCharToCopy, inputLinePos);
+		inputLine.copy(newLineCopyPositionPtr, countCharToCopy, inputLinePos);
 		inputLinePos += countCharToCopy;
-		newLineCopyPtr += countCharToCopy;
+		newLineCopyPositionPtr += countCharToCopy;
 
-		replacementString.copy(newLineCopyPtr, replacementString.length(), 0);
-		inputLinePos += stringForReplacement.length();
-		newLineCopyPtr += replacementString.length();
+		replaceString.copy(newLineCopyPositionPtr, replaceString.length(), 0);
+		inputLinePos += searchString.length();
+		newLineCopyPositionPtr += replaceString.length();
 	}
 
-	cout << inputLine.length() << "  " << inputLinePos << " " << newLineLength << endl;
 	if (inputLinePos != inputLine.length())
 	{
-		countCharToCopy = inputLine.length() - inputLinePos + 1;
-		inputLine.copy(newLineCopyPtr, countCharToCopy, inputLinePos);
+		countCharToCopy = inputLine.length() - inputLinePos + NORMALIZE_ARRAY_INDEX_VALUE;
+		inputLine.copy(newLineCopyPositionPtr, countCharToCopy, inputLinePos);
 	}
 	newLine[newLineLength] = '\0';
 
 	return newLine;
 }
 
-vector<int> findReplacePositions(const string& source, const string& stringToFind)
+vector<int> findReplacePositions(const string& source, const string& searchString)
 {
 	vector<int> replacePositions;
-	auto searchForPattern = boost::algorithm::make_knuth_morris_pratt(stringToFind);
+	auto searchForPattern = boost::algorithm::make_knuth_morris_pratt(searchString);
 
-	auto pos = source.cbegin();
-	while ((pos = searchForPattern(pos, source.cend())) != source.cend())
+	auto searchPosition = source.cbegin();
+	while ((searchPosition = searchForPattern(searchPosition, source.cend())) != source.cend())
 	{
-		replacePositions.push_back(pos - source.cbegin());
-		pos += stringToFind.length();
+		replacePositions.push_back(searchPosition - source.cbegin());
+		searchPosition += searchString.length();
 	}
 
 	return replacePositions;

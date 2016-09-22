@@ -75,6 +75,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
+    <PostBuildEvent>
+      <Command>test.bat "$(TargetPath)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>running tests</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -82,6 +88,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
+    <PostBuildEvent>
+      <Command>test.bat "$(TargetPath)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>running tests</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -95,6 +107,12 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>test.bat "$(TargetPath)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>running tests</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -108,12 +126,26 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>test.bat "$(TargetPath)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>running tests</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="empty.txt" />
     <Text Include="expected_nonexistent_file_copy_result.txt" />
-    <Text Include="multi_line.txt" />
-    <Text Include="single_line.txt" />
+    <Text Include="expected_run_program_with_empty_string_to_replace.txt" />
+    <Text Include="expected_run_program_with_wrong_count_arguments_result.txt" />
+    <Text Include="expected_simple_test_text_result.txt" />
+    <Text Include="expected_test_text_begin_end_placement_result.txt" />
+    <Text Include="expected_test_text_repeated_search_text_in_a_row_result.txt" />
+    <Text Include="expected_test_text_with_empty_rows_result.txt" />
+    <Text Include="simple_test_text.txt" />
+    <Text Include="test_text_begin_end_placement.txt" />
+    <Text Include="test_text_repeated_search_text_in_a_row.txt" />
+    <Text Include="test_text_with_empty_rows.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="test.bat" />

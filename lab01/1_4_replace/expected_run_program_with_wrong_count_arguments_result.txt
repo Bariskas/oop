@@ -1,0 +1,1 @@
+Must be 4 arguments: <sourceFile> <destinationFile> <stringToReplace> <newString>

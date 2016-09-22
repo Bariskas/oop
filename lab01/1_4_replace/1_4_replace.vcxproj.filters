@@ -21,10 +21,34 @@
     <Text Include="expected_nonexistent_file_copy_result.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
-    <Text Include="multi_line.txt">
+    <Text Include="expected_run_program_with_empty_string_to_replace.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
-    <Text Include="single_line.txt">
+    <Text Include="expected_simple_test_text_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="simple_test_text.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="expected_test_text_begin_end_placement_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="test_text_begin_end_placement.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="expected_test_text_repeated_search_text_in_a_row_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="test_text_repeated_search_text_in_a_row.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="expected_test_text_with_empty_rows_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="expected_run_program_with_wrong_count_arguments_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="test_text_with_empty_rows.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
   </ItemGroup>

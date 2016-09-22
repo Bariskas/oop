@@ -1,0 +1,2 @@
+testSearch line first
+second line testSearch

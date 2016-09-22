@@ -1,0 +1,4 @@
+first line testReplace first
+second testReplace line
+line third
+string without 

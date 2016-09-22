@@ -1,0 +1,2 @@
+testReplace line first
+second line testReplace
