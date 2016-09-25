@@ -6,16 +6,12 @@
 #include <string>
 #include <cassert>
 #include <vector>
-#include <boost/chrono.hpp>
 #include <boost/algorithm/searching/knuth_morris_pratt.hpp>
-
-#define NORMALIZE_ARRAY_INDEX_VALUE 1
-#define ADDITIONAL_INDEX_FOR_ENDL 1
 
 using namespace std;
 
-vector<int> findReplacePositions(const string&, const string&);
-const char* doReplace(const string&, const string&, const string&);
+vector<size_t> FindSubstringPositions(const string& sourceString, const string& substring);
+string Replace(const string& inputLine, const string& searchString, const string& replaceString);
 
 int main(int argc, char * argv[])
 {
@@ -51,7 +47,7 @@ int main(int argc, char * argv[])
 	string inputLine;
 	while (getline(input, inputLine))
 	{
-		output << doReplace(inputLine, searchString, replaceString) << endl;
+		output << Replace(inputLine, searchString, replaceString) << endl;
 	}
 
 	if (!output.flush())
@@ -63,54 +59,44 @@ int main(int argc, char * argv[])
 	return 0;
 }
 
-const char* doReplace(const string& inputLine, const string& searchString, const string& replaceString)
+string Replace(const string& inputLine, const string& searchString, const string& replaceString)
 {
-	vector<int> replacePositions;
-
-	replacePositions = findReplacePositions(inputLine, searchString);
+	vector<size_t> replacePositions = FindSubstringPositions(inputLine, searchString);
 	if (replacePositions.empty())
 	{
-		return inputLine.c_str();
+		return inputLine;
 	}
 
-	size_t inputLinePos = 0;
 	size_t newLineLength = inputLine.length() + (replaceString.length() - searchString.length()) * replacePositions.size();
-	char* newLine = new char[newLineLength + ADDITIONAL_INDEX_FOR_ENDL];
-	char* newLineCopyPositionPtr = newLine;
+	string newLine;
+	newLine.reserve(newLineLength);
 
-	size_t countCharToCopy;
-	for (auto nextReplacementPosition : replacePositions)
+	auto inputLineIt = inputLine.begin();
+	for (auto replacePositionIt : replacePositions)
 	{
-		countCharToCopy = nextReplacementPosition - inputLinePos;
-		inputLine.copy(newLineCopyPositionPtr, countCharToCopy, inputLinePos);
-		inputLinePos += countCharToCopy;
-		newLineCopyPositionPtr += countCharToCopy;
-
-		replaceString.copy(newLineCopyPositionPtr, replaceString.length(), 0);
-		inputLinePos += searchString.length();
-		newLineCopyPositionPtr += replaceString.length();
+		newLine.append(inputLineIt, inputLine.begin() + replacePositionIt);
+		newLine.append(replaceString);
+		inputLineIt = inputLine.begin() + replacePositionIt + searchString.length();
 	}
 
-	if (inputLinePos != inputLine.length())
+	if (inputLineIt != inputLine.end())
 	{
-		countCharToCopy = inputLine.length() - inputLinePos + NORMALIZE_ARRAY_INDEX_VALUE;
-		inputLine.copy(newLineCopyPositionPtr, countCharToCopy, inputLinePos);
+		newLine.append(inputLineIt, inputLine.end());
 	}
-	newLine[newLineLength] = '\0';
 
 	return newLine;
 }
 
-vector<int> findReplacePositions(const string& source, const string& searchString)
+vector<size_t> FindSubstringPositions(const string& source, const string& substring)
 {
-	vector<int> replacePositions;
-	auto searchForPattern = boost::algorithm::make_knuth_morris_pratt(searchString);
+	vector<size_t> replacePositions;
+	auto searchForPattern = boost::algorithm::make_knuth_morris_pratt(substring);
 
 	auto searchPosition = source.cbegin();
 	while ((searchPosition = searchForPattern(searchPosition, source.cend())) != source.cend())
 	{
 		replacePositions.push_back(searchPosition - source.cbegin());
-		searchPosition += searchString.length();
+		searchPosition += substring.length();
 	}
 
 	return replacePositions;
