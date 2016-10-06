@@ -2,16 +2,17 @@
 #include <iostream>
 #include <map>  
 #include <limits>
+#include <boost/format.hpp>
 
 using namespace std;
 
-string ChangeRadix(const unsigned long long& sourceRadix, const unsigned long long& destinationRadix, const unsigned long long& value);
-unsigned long long StringToDec(const string& stringToConvert, const int& sourceRadix = 10);
-string DecToString(unsigned long long value, const int& radix);
-int CharToDec(char input);
-char DecToChar(int input);
-bool IsMultiplicationOverflow(unsigned long long firstMultiplier, unsigned long long secondMultiplier);
-bool IsAdditionOverflow(unsigned long long firstArg, unsigned long long secondArg);
+unsigned int StringToNumber(const string& stringToConvert, const int& sourceRadix = 10);
+string NumberToString(unsigned int value, const int& radix);
+int CharToNumber(const char& input);
+char NumberToChar(const int& input);
+bool IsMultiplicationOverflow(unsigned int firstMultiplier, unsigned int secondMultiplier);
+bool IsAdditionOverflow(unsigned int firstArg, unsigned int secondArg);
+bool IsValidRadix(int radix);
 
 int main(int argc, char * argv[])
 {
@@ -21,58 +22,44 @@ int main(int argc, char * argv[])
 		return 1;
 	}
 
-	// TODO: validate <source notation> <destination notation>
 	int sourceRadix;
-	try
-	{
-		sourceRadix = StringToDec(argv[1]);
-	}
-	catch (exception(e))
-	{
-		cout << e.what() << endl;
-		return 1;
-	}
-	
 	int destinationRadix;
+	unsigned int value;
 	try
 	{
-		destinationRadix = StringToDec(argv[2]);
+		sourceRadix = StringToNumber(argv[1]);
+		destinationRadix = StringToNumber(argv[2]);
+		value = StringToNumber(argv[3], sourceRadix);
 	}
-	catch (exception(e))
+	catch (exception& e)
 	{
 		cout << e.what() << endl;
 		return 1;
 	}
 
-	unsigned long long value;
-	try
-	{
-		value = StringToDec(argv[3], sourceRadix);
-	}
-	catch (exception(e))
-	{
-		cout << e.what() << endl;
-		return 1;
-	}
-	// TODO: validate <value>
-
-	string result = ChangeRadix(sourceRadix, destinationRadix, value);
-	cout << result << endl;
-	getchar();
+	cout << NumberToString(value, destinationRadix) << endl;
 	return 0;
 }
 
-string ChangeRadix(const unsigned long long& sourceRadix, const unsigned long long& destinationRadix, const unsigned long long& value)
+unsigned int StringToNumber(const string& stringToConvert, const int& radix)
 {
-	return DecToString(value, destinationRadix);
-}
-
-unsigned long long StringToDec(const string& stringToConvert, const int& radix)
-{
-	unsigned long long result;
+	if (stringToConvert == "")
+	{
+		throw invalid_argument("Converting string to number failed. Converting string can't be empty");
+	}
+	if (radix > 36 || radix < 2)
+	{
+		throw invalid_argument("Radix must be between 2 and 36");
+	}
+	unsigned int result;
 	
-	int length = stringToConvert.length();
-	result = CharToDec(stringToConvert[0]);
+	size_t length = stringToConvert.length();
+	result = CharToNumber(stringToConvert[0]);
+	if (result >= radix)
+	{
+		auto exceptionString = (boost::format("Converting string contain wrong symbol %1%") % stringToConvert[0]).str();
+		throw invalid_argument(exceptionString);
+	}
 	for (int i = 1; i < length; ++i)
 	{
 		if (IsMultiplicationOverflow(radix, result))
@@ -80,7 +67,12 @@ unsigned long long StringToDec(const string& stringToConvert, const int& radix)
 			throw overflow_error("Overflow error while converting " + stringToConvert);
 		}
 		result *= radix;
-		int nextDigit = CharToDec(stringToConvert[i]);
+		int nextDigit = CharToNumber(stringToConvert[i]);
+		if (nextDigit >= radix)
+		{
+			auto exceptionString = (boost::format("Converting string contain wrong symbol %1%") % stringToConvert[i]).str();
+			throw invalid_argument(exceptionString);
+		}
 		if (IsAdditionOverflow(result, nextDigit))
 		{
 			throw overflow_error("Overflow error while converting " + stringToConvert);
@@ -90,10 +82,13 @@ unsigned long long StringToDec(const string& stringToConvert, const int& radix)
 	return result;
 }
 
-string DecToString(unsigned long long number, const int& radix)
+string NumberToString(unsigned int number, const int& radix)
 {
+	if (radix > 36 || radix < 2)
+	{
+		throw invalid_argument("Radix must be between 2 and 36");
+	}
 	string result;
-	//TODO: reserve
 	while (number >= radix)
 	{
 		int modPart = number % radix;
@@ -102,13 +97,13 @@ string DecToString(unsigned long long number, const int& radix)
 	}
 	if (number != 0)
 	{
-		result += DecToChar(number);
+		result += NumberToChar(number);
 	}
 	reverse(result.begin(), result.end());
 	return result;
 }
 
-int CharToDec(char input)
+int CharToNumber(const char& input)
 {
 	int result;
 	if (isdigit(input))
@@ -122,7 +117,7 @@ int CharToDec(char input)
 	return result;
 }
 
-char DecToChar(int input)
+char NumberToChar(const int& input)
 {
 	char result;
 	if (input < 10)
@@ -136,22 +131,32 @@ char DecToChar(int input)
 	return result;
 }
 
-bool IsMultiplicationOverflow(unsigned long long firstArg, unsigned long long secondArg)
+bool IsMultiplicationOverflow(unsigned int firstArg, unsigned int secondArg)
 {
 	bool isOverflow = false;
-	if ((numeric_limits<unsigned long long>::max() / firstArg) < secondArg)
+	if ((numeric_limits<unsigned int>::max() / firstArg) < secondArg)
 	{
 		isOverflow = true;
 	}
 	return isOverflow;
 }
 
-bool IsAdditionOverflow(unsigned long long firstArg, unsigned long long secondArg)
+bool IsAdditionOverflow(unsigned int firstArg, unsigned int secondArg)
 {
 	bool isOverflow = false;
-	if ((numeric_limits<unsigned long long>::max() - firstArg) < secondArg)
+	if ((numeric_limits<unsigned int>::max() - firstArg) < secondArg)
 	{
 		isOverflow = true;
 	}
 	return isOverflow;
+}
+
+bool IsValidRadix(int radix)
+{
+	bool isValid = true;
+	if (radix > 36 || radix < 2)
+	{
+		isValid = false;
+	}
+	return isValid;
 }
