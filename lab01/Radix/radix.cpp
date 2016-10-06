@@ -1,14 +1,17 @@
 #include <string>
 #include <iostream>
 #include <map>  
+#include <limits>
 
 using namespace std;
 
-string ChangeRadix(const string& sourceRadix, const string& destinationRadix, const string& value);
-unsigned long long StringToDec(const string& stringToConvert, const string& sourceRadix);
-string DecToString(unsigned long long value, const string& radix);
+string ChangeRadix(const unsigned long long& sourceRadix, const unsigned long long& destinationRadix, const unsigned long long& value);
+unsigned long long StringToDec(const string& stringToConvert, const int& sourceRadix = 10);
+string DecToString(unsigned long long value, const int& radix);
 int CharToDec(char input);
 char DecToChar(int input);
+bool IsMultiplicationOverflow(unsigned long long firstMultiplier, unsigned long long secondMultiplier);
+bool IsAdditionOverflow(unsigned long long firstArg, unsigned long long secondArg);
 
 int main(int argc, char * argv[])
 {
@@ -19,44 +22,76 @@ int main(int argc, char * argv[])
 	}
 
 	// TODO: validate <source notation> <destination notation>
+	int sourceRadix;
+	try
+	{
+		sourceRadix = StringToDec(argv[1]);
+	}
+	catch (exception(e))
+	{
+		cout << e.what() << endl;
+		return 1;
+	}
+	
+	int destinationRadix;
+	try
+	{
+		destinationRadix = StringToDec(argv[2]);
+	}
+	catch (exception(e))
+	{
+		cout << e.what() << endl;
+		return 1;
+	}
 
+	unsigned long long value;
+	try
+	{
+		value = StringToDec(argv[3], sourceRadix);
+	}
+	catch (exception(e))
+	{
+		cout << e.what() << endl;
+		return 1;
+	}
 	// TODO: validate <value>
 
-	string result = ChangeRadix(argv[1], argv[2], argv[3]);
-
+	string result = ChangeRadix(sourceRadix, destinationRadix, value);
+	cout << result << endl;
+	getchar();
 	return 0;
 }
 
-string ChangeRadix(const string& sourceRadix, const string& destinationRadix, const string& value)
+string ChangeRadix(const unsigned long long& sourceRadix, const unsigned long long& destinationRadix, const unsigned long long& value)
 {
-	unsigned long long result = StringToDec(value, sourceRadix);
-	cout << "heh1: " << result << endl;
-	string sres = DecToString(result, destinationRadix);
-	cout << "heh2: " << sres << endl;
-	return "kek";
+	return DecToString(value, destinationRadix);
 }
 
-unsigned long long StringToDec(const string& stringToConvert, const string& sourceRadix)
+unsigned long long StringToDec(const string& stringToConvert, const int& radix)
 {
-	int radix = stoi(sourceRadix);
 	unsigned long long result;
 	
 	int length = stringToConvert.length();
-	//cout << "o: " << lastCharIndex << endl;
-	//cout << "stringToConvert: " << stringToConvert << endl;
-	//cout << "stringToConvert[lastCharIndex]: " << stringToConvert[lastCharIndex] << endl;
 	result = CharToDec(stringToConvert[0]);
 	for (int i = 1; i < length; ++i)
 	{
-		result = radix * result + CharToDec(stringToConvert[i]);
-		//cout << "op: " << result << endl;
+		if (IsMultiplicationOverflow(radix, result))
+		{
+			throw overflow_error("Overflow error while converting " + stringToConvert);
+		}
+		result *= radix;
+		int nextDigit = CharToDec(stringToConvert[i]);
+		if (IsAdditionOverflow(result, nextDigit))
+		{
+			throw overflow_error("Overflow error while converting " + stringToConvert);
+		}
+		result += nextDigit;
 	}
 	return result;
 }
 
-string DecToString(unsigned long long number, const string& radixStr)
+string DecToString(unsigned long long number, const int& radix)
 {
-	int radix = stoi(radixStr);
 	string result;
 	//TODO: reserve
 	while (number >= radix)
@@ -67,7 +102,7 @@ string DecToString(unsigned long long number, const string& radixStr)
 	}
 	if (number != 0)
 	{
-		result += to_string(number);
+		result += DecToChar(number);
 	}
 	reverse(result.begin(), result.end());
 	return result;
@@ -76,7 +111,6 @@ string DecToString(unsigned long long number, const string& radixStr)
 int CharToDec(char input)
 {
 	int result;
-	cout << "input " << input << endl;
 	if (isdigit(input))
 	{
 		result = input - '0';
@@ -100,4 +134,24 @@ char DecToChar(int input)
 		result = input + 'A' - 10;
 	}
 	return result;
+}
+
+bool IsMultiplicationOverflow(unsigned long long firstArg, unsigned long long secondArg)
+{
+	bool isOverflow = false;
+	if ((numeric_limits<unsigned long long>::max() / firstArg) < secondArg)
+	{
+		isOverflow = true;
+	}
+	return isOverflow;
+}
+
+bool IsAdditionOverflow(unsigned long long firstArg, unsigned long long secondArg)
+{
+	bool isOverflow = false;
+	if ((numeric_limits<unsigned long long>::max() - firstArg) < secondArg)
+	{
+		isOverflow = true;
+	}
+	return isOverflow;
 }
