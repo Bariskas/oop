@@ -6,13 +6,16 @@
 
 using namespace std;
 
-unsigned int StringToNumber(const string& stringToConvert, const int& sourceRadix = 10);
-string NumberToString(unsigned int value, const int& radix);
-int CharToNumber(const char& input);
-char NumberToChar(const int& input);
-bool IsMultiplicationOverflow(unsigned int firstMultiplier, unsigned int secondMultiplier);
-bool IsAdditionOverflow(unsigned int firstArg, unsigned int secondArg);
+string ChangeRadix(const string& sourceRadix, const string& destRadix, const string& value);
+unsigned StringToNumber(const string& stringToConvert, int sourceRadix = 10);
+string NumberToString(unsigned value, int radix);
+int CharToNumber(char input);
+char NumberToChar(int input);
+bool IsMultiplicationOverflow(unsigned firstMultiplier, unsigned secondMultiplier);
+bool IsAdditionOverflow(unsigned firstArg, unsigned secondArg);
 bool IsValidRadix(int radix);
+unsigned MultiplicationWithOverflowCheck(unsigned arg1, unsigned arg2);
+unsigned AdditionWithOverflowCheck(unsigned arg1, unsigned arg2);
 
 int main(int argc, char * argv[])
 {
@@ -22,26 +25,46 @@ int main(int argc, char * argv[])
 		return 1;
 	}
 
-	int sourceRadix;
-	int destinationRadix;
-	unsigned int value;
+	string result;
 	try
 	{
-		sourceRadix = StringToNumber(argv[1]);
-		destinationRadix = StringToNumber(argv[2]);
-		value = StringToNumber(argv[3], sourceRadix);
+		result = ChangeRadix(argv[1], argv[2], argv[3]);
 	}
-	catch (exception& e)
+	catch (const exception& e)
 	{
 		cout << e.what() << endl;
 		return 1;
 	}
 
-	cout << NumberToString(value, destinationRadix) << endl;
+	cout << result << endl;
 	return 0;
 }
 
-unsigned int StringToNumber(const string& stringToConvert, const int& radix)
+string ChangeRadix(const string& sourceRadixStr, const string& destRadixStr, const string& valueStr)
+{
+	int sourceRadix;
+	int destinationRadix;
+	unsigned value;
+	sourceRadix = StringToNumber(sourceRadixStr);
+	destinationRadix = StringToNumber(destRadixStr);
+
+	string result;
+	if (valueStr[0] == '+' || valueStr[0] == '-')
+	{
+		value = StringToNumber(valueStr.c_str() + 1, sourceRadix);
+		result = valueStr[0] + NumberToString(value, destinationRadix);
+	}
+	else
+	{
+		value = StringToNumber(valueStr, sourceRadix);
+		result = NumberToString(value, destinationRadix);
+	}
+	cout << result;
+	getchar();
+	return result;
+}
+
+unsigned StringToNumber(const string& stringToConvert, int radix)
 {
 	if (stringToConvert == "")
 	{
@@ -51,38 +74,42 @@ unsigned int StringToNumber(const string& stringToConvert, const int& radix)
 	{
 		throw invalid_argument("Radix must be between 2 and 36");
 	}
-	unsigned int result;
+	unsigned result;
 	
-	size_t length = stringToConvert.length();
-	result = CharToNumber(stringToConvert[0]);
-	if (result >= radix)
+	result = 0;
+	for (size_t i = 0; i < stringToConvert.length(); ++i)
 	{
-		auto exceptionString = (boost::format("Converting string contain wrong symbol %1%") % stringToConvert[0]).str();
-		throw invalid_argument(exceptionString);
-	}
-	for (int i = 1; i < length; ++i)
-	{
-		if (IsMultiplicationOverflow(radix, result))
-		{
-			throw overflow_error("Overflow error while converting " + stringToConvert);
-		}
-		result *= radix;
+		result = MultiplicationWithOverflowCheck(radix, result);
 		int nextDigit = CharToNumber(stringToConvert[i]);
 		if (nextDigit >= radix)
 		{
 			auto exceptionString = (boost::format("Converting string contain wrong symbol %1%") % stringToConvert[i]).str();
 			throw invalid_argument(exceptionString);
 		}
-		if (IsAdditionOverflow(result, nextDigit))
-		{
-			throw overflow_error("Overflow error while converting " + stringToConvert);
-		}
-		result += nextDigit;
+		result = AdditionWithOverflowCheck(result, nextDigit);
 	}
 	return result;
 }
 
-string NumberToString(unsigned int number, const int& radix)
+unsigned MultiplicationWithOverflowCheck(unsigned arg1, unsigned arg2)
+{
+	if (IsMultiplicationOverflow(arg1, arg2))
+	{
+		throw overflow_error("Overflow error");
+	}
+	return arg1 * arg2;
+}
+
+unsigned AdditionWithOverflowCheck(unsigned arg1, unsigned arg2)
+{
+	if (IsAdditionOverflow(arg1, arg2))
+	{
+		throw overflow_error("Overflow error");
+	}
+	return arg1 + arg2;
+}
+
+string NumberToString(unsigned number, int radix)
 {
 	if (radix > 36 || radix < 2)
 	{
@@ -103,7 +130,7 @@ string NumberToString(unsigned int number, const int& radix)
 	return result;
 }
 
-int CharToNumber(const char& input)
+int CharToNumber(char input)
 {
 	int result;
 	if (isdigit(input))
@@ -117,7 +144,7 @@ int CharToNumber(const char& input)
 	return result;
 }
 
-char NumberToChar(const int& input)
+char NumberToChar(int input)
 {
 	char result;
 	if (input < 10)
@@ -131,20 +158,20 @@ char NumberToChar(const int& input)
 	return result;
 }
 
-bool IsMultiplicationOverflow(unsigned int firstArg, unsigned int secondArg)
+bool IsMultiplicationOverflow(unsigned firstArg, unsigned secondArg)
 {
 	bool isOverflow = false;
-	if ((numeric_limits<unsigned int>::max() / firstArg) < secondArg)
+	if ((numeric_limits<unsigned>::max() / firstArg) < secondArg)
 	{
 		isOverflow = true;
 	}
 	return isOverflow;
 }
 
-bool IsAdditionOverflow(unsigned int firstArg, unsigned int secondArg)
+bool IsAdditionOverflow(unsigned firstArg, unsigned secondArg)
 {
 	bool isOverflow = false;
-	if ((numeric_limits<unsigned int>::max() - firstArg) < secondArg)
+	if ((numeric_limits<unsigned>::max() - firstArg) < secondArg)
 	{
 		isOverflow = true;
 	}
