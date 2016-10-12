@@ -19,4 +19,32 @@
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="test.bat">
+      <Filter>Файлы исходного кода</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="expected_run_program_without_arguments_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="expected_run_program_with_empty_argument_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="expected_simple_test_from_10_to_2_255_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="expected_from_10_to_16_4294967295_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="expected_from_16_to_10_FFFFFFFF_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="overflow_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="wrong_radix_error.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

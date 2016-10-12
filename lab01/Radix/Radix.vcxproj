@@ -87,6 +87,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
+    <PostBuildEvent>
+      <Command>test.bat "$(TargetPath)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>tests</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -94,6 +100,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
+    <PostBuildEvent>
+      <Command>test.bat "$(TargetPath)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>tests</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -107,6 +119,12 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>test.bat "$(TargetPath)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>tests</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -120,9 +138,27 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>test.bat "$(TargetPath)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>tests</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="radix.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="expected_from_10_to_16_4294967295_result.txt" />
+    <Text Include="expected_from_16_to_10_FFFFFFFF_result.txt" />
+    <Text Include="expected_run_program_without_arguments_result.txt" />
+    <Text Include="expected_run_program_with_empty_argument_result.txt" />
+    <Text Include="expected_simple_test_from_10_to_2_255_result.txt" />
+    <Text Include="overflow_result.txt" />
+    <Text Include="wrong_radix_error.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

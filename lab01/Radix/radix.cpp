@@ -1,6 +1,5 @@
 #include <string>
 #include <iostream>
-#include <map>  
 #include <limits>
 #include <boost/format.hpp>
 
@@ -8,7 +7,7 @@ using namespace std;
 
 string ChangeRadix(const string& sourceRadix, const string& destRadix, const string& value);
 unsigned StringToNumber(const string& stringToConvert, int sourceRadix = 10);
-string NumberToString(unsigned value, int radix);
+string NumberToString(unsigned value, unsigned radix);
 int CharToNumber(char input);
 char NumberToChar(int input);
 bool IsMultiplicationOverflow(unsigned firstMultiplier, unsigned secondMultiplier);
@@ -59,8 +58,7 @@ string ChangeRadix(const string& sourceRadixStr, const string& destRadixStr, con
 		value = StringToNumber(valueStr, sourceRadix);
 		result = NumberToString(value, destinationRadix);
 	}
-	cout << result;
-	getchar();
+
 	return result;
 }
 
@@ -109,7 +107,7 @@ unsigned AdditionWithOverflowCheck(unsigned arg1, unsigned arg2)
 	return arg1 + arg2;
 }
 
-string NumberToString(unsigned number, int radix)
+string NumberToString(unsigned number, unsigned radix)
 {
 	if (radix > 36 || radix < 2)
 	{
@@ -119,7 +117,7 @@ string NumberToString(unsigned number, int radix)
 	while (number >= radix)
 	{
 		int modPart = number % radix;
-		result += to_string(modPart);
+		result += NumberToChar(modPart);
 		number = number / radix;
 	}
 	if (number != 0)
