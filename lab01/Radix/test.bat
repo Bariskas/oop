@@ -1,12 +1,12 @@
 set PROGRAM="%~1"
 
-rem Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ Ñ Ð½ÐµÐ²ÐµÑ€Ð½Ñ‹Ð¼ ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾Ð¼ Ð°Ñ€Ð³ÑƒÐ¼ÐµÐ½Ñ‚Ð¾Ð²
+rem ïðîâåðÿåì ðàáîòó ïðîãðàììû ñ íåâåðíûì êîëè÷åñòâîì àðãóìåíòîâ
 %PROGRAM% > %TEMP%/run_program_without_arguments_result.txt
 if NOT ERRORLEVEL 1 goto err
 fc.exe %TEMP%\run_program_without_arguments_result.txt expected_run_program_without_arguments_result.txt
 if ERRORLEVEL 1 goto err
 
-rem Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ Ñ Ð¿ÑƒÑÑ‚Ñ‹Ð¼ Ð°Ñ€Ð³ÑƒÐ¼ÐµÐ½Ñ‚Ð¾Ð¼
+rem ïðîâåðÿåì ðàáîòó ïðîãðàììû ñ ïóñòûì àðãóìåíòîì
 %PROGRAM% 10 "" 45 > %TEMP%/run_program_with_empty_radix_argument_result.txt
 if NOT ERRORLEVEL 1 goto err
 fc.exe %TEMP%\run_program_with_empty_radix_argument_result.txt expected_run_program_with_empty_argument_result.txt
@@ -16,13 +16,13 @@ if NOT ERRORLEVEL 1 goto err
 fc.exe %TEMP%\run_program_with_empty_value_argument_result.txt expected_run_program_with_empty_argument_result.txt
 if ERRORLEVEL 1 goto err
 
-rem Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ Ñ Ð¾Ð±Ñ‹Ñ‡Ð½Ñ‹Ð¼Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ð¼Ð¸
+rem ïðîâåðÿåì ðàáîòó ñ îáû÷íûìè äàííûìè
 %PROGRAM% 10 2 255 > %TEMP%\simple_test_from_10_to_2_255.txt
 if ERRORLEVEL 1 goto err
 fc.exe %TEMP%\simple_test_from_10_to_2_255.txt expected_simple_test_from_10_to_2_255_result.txt
 if ERRORLEVEL 1 goto err
 
-rem Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ Ñ Ð¼Ð°ÐºÑÐ¸Ð¼Ð°Ð»ÑŒÐ½Ñ‹Ð¼ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸ÐµÐ¼ unsigned int: 4 294 967 295
+rem ïðîâåðÿåì ðàáîòó ñ ìàêñèìàëüíûì çíà÷åíèåì unsigned int: 4 294 967 295
 %PROGRAM% 10 16 4294967295 > %TEMP%\from_10_to_16_4294967295.txt
 if ERRORLEVEL 1 goto err
 fc.exe %TEMP%\from_10_to_16_4294967295.txt expected_from_10_to_16_4294967295_result.txt
@@ -32,7 +32,7 @@ if ERRORLEVEL 1 goto err
 fc.exe %TEMP%\from_16_to_10_FFFFFFFF.txt expected_from_16_to_10_FFFFFFFF_result.txt
 if ERRORLEVEL 1 goto err
 
-rem Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ Ñ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸ÐµÐ¼ Ð±Ð¾Ð»ÑŒÑˆÐ¸Ð¼ Ð¼Ð°ÐºÑÐ¸Ð¼Ð°Ð»ÑŒÐ½Ð¾Ð³Ð¾ Ð½Ð° 1 unsigned int: 4 294 967 296
+rem ïðîâåðÿåì ðàáîòó ñ çíà÷åíèåì áîëüøèì ìàêñèìàëüíîãî íà 1 unsigned int: 4 294 967 296
 %PROGRAM% 10 16 4294967296 > %TEMP%\from_10_to_16_4294967296.txt
 if NOT ERRORLEVEL 1 goto err
 fc.exe %TEMP%\from_10_to_16_4294967296.txt overflow_result.txt
@@ -42,7 +42,7 @@ if NOT ERRORLEVEL 1 goto err
 fc.exe %TEMP%\from_16_to_10_100000000.txt overflow_result.txt
 if ERRORLEVEL 1 goto err
 
-rem Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ Ñ Ð½ÐµÐ²ÐµÑ€Ð½Ð¾Ð¹ ÑÐ¸ÑÑ‚ÐµÐ¼Ð¾Ð¹ ÑÑ‡Ð¸ÑÐ»ÐµÐ½Ð¸Ñ
+rem ïðîâåðÿåì ðàáîòó ñ íåâåðíîé ñèñòåìîé ñ÷èñëåíèÿ
 %PROGRAM% 40 16 429496729 > %TEMP%\from_40_to_16_429496729.txt
 if NOT ERRORLEVEL 1 goto err
 fc.exe %TEMP%\from_40_to_16_429496729.txt wrong_radix_error.txt
@@ -52,7 +52,7 @@ if NOT ERRORLEVEL 1 goto err
 fc.exe %TEMP%\from_1_to_16_429496729.txt wrong_radix_error.txt
 if ERRORLEVEL 1 goto err
 
-rem Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ Ñ ÑƒÐ½Ð°Ñ€Ð½Ñ‹Ð¼ Ð¼Ð¸Ð½ÑƒÑÐ¾Ð¼ Ð¸ Ð¿Ð»ÑŽÑÐ¾Ð¼
+rem ïðîâåðÿåì ðàáîòó ñ óíàðíûì ìèíóñîì è ïëþñîì
 %PROGRAM% 10 2 -255 > %TEMP%\test_unary_minus.txt
 if ERRORLEVEL 1 goto err
 fc.exe %TEMP%\test_unary_minus.txt expected_test_unary_minus_result.txt
