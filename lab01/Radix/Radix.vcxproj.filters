@@ -46,5 +46,11 @@
     <Text Include="wrong_radix_error.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
+    <Text Include="expected_test_unary_minus_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="expected_test_unary_plus_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
 </Project>

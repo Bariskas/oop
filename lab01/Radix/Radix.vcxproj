@@ -157,6 +157,8 @@
     <Text Include="expected_run_program_without_arguments_result.txt" />
     <Text Include="expected_run_program_with_empty_argument_result.txt" />
     <Text Include="expected_simple_test_from_10_to_2_255_result.txt" />
+    <Text Include="expected_test_unary_minus_result.txt" />
+    <Text Include="expected_test_unary_plus_result.txt" />
     <Text Include="overflow_result.txt" />
     <Text Include="wrong_radix_error.txt" />
   </ItemGroup>

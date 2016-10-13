@@ -13,6 +13,7 @@ void GetInvertMatrix(double(&sourceMatrix)[3][3], double(&invertMatrix)[3][3]);
 void GetMinorMatrix(double(&sourceMatrix)[3][3], double(&minorMatrix)[3][3]);
 void TransposeMatrix(double(&matrixToTranspose)[3][3]);
 void InvertMatrix(double(&matrixToInvert)[3][3], double determinant);
+void WriteMatrixToConsole(double(&matrix)[3][3]);
 bool IsOnlyDigitString(const std::string &str);
 
 int main(int argc, char * argv[])
@@ -95,10 +96,16 @@ void GetInvertMatrix(double(&sourceMatrix)[3][3], double(&invertMatrix)[3][3])
 	double determinant = (sm[0][0] * sm[1][1] * sm[2][2]) + (sm[0][1] * sm[1][2] * sm[2][0]) + (sm[0][2] * sm[1][0] * sm[2][1]) - 
 		(sm[0][2] * sm[1][1] * sm[2][0]) - (sm[0][0] * sm[2][1] * sm[1][2]) - (sm[1][0] * sm[0][1] * sm[2][2]);
 	
-	double minorMatrix[3][3];
-	GetMinorMatrix(sourceMatrix, minorMatrix);
-	TransposeMatrix(minorMatrix);
-	InvertMatrix(minorMatrix, determinant);
+	if (determinant == 0)
+	{
+		throw invalid_argument("Matrix must have not null determinant");
+	}
+
+	double tempMatrix[3][3];
+	GetMinorMatrix(sourceMatrix, tempMatrix);
+	TransposeMatrix(tempMatrix);
+	InvertMatrix(tempMatrix, determinant);
+	WriteMatrixToConsole(tempMatrix);
 }
 
 void GetMinorMatrix(double(&sourceMatrix)[3][3], double(&minorMatrix)[3][3])
@@ -123,15 +130,24 @@ void TransposeMatrix(double(&matrixToTranspose)[3][3])
 void InvertMatrix(double(&matrixToTranspose)[3][3], double determinant)
 {
 	double revertDeterminant = 1 / determinant;
-	cout.width(0);
-	cout.setf(ios::fixed);
-	cout.precision(3);
-	cout.width(10);
 	for (int i = 0; i < 3; ++i)
 	{
 		for (int j = 0; j < 3; ++j)
 		{
-			cout << (matrixToTranspose[i][j] /= revertDeterminant) << " ";
+			matrixToTranspose[i][j] *= revertDeterminant;
+		}
+	}
+}
+
+void WriteMatrixToConsole(double(&matrix)[3][3])
+{
+	cout.setf(ios::fixed);
+	cout.precision(3);
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			cout << matrix[i][j] << " ";
 		}
 		cout << endl;
 	}
@@ -139,5 +155,5 @@ void InvertMatrix(double(&matrixToTranspose)[3][3], double determinant)
 
 bool IsOnlyDigitString(const std::string &str)
 {
-	return all_of(str.begin(), str.end(), [](char i) { return isdigit(i) || i == '-'; });
+	return all_of(str.begin(), str.end(), [](char i) { return isdigit(i) || i == '-' || i == '.'; });
 }

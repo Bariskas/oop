@@ -52,6 +52,16 @@ if NOT ERRORLEVEL 1 goto err
 fc.exe %TEMP%\from_1_to_16_429496729.txt wrong_radix_error.txt
 if ERRORLEVEL 1 goto err
 
+rem проверяем работу с унарным минусом и плюсом
+%PROGRAM% 10 2 -255 > %TEMP%\test_unary_minus.txt
+if ERRORLEVEL 1 goto err
+fc.exe %TEMP%\test_unary_minus.txt expected_test_unary_minus_result.txt
+if ERRORLEVEL 1 goto err
+%PROGRAM% 10 2 +255 > %TEMP%\test_unary_plus.txt
+if ERRORLEVEL 1 goto err
+fc.exe %TEMP%\test_unary_plus.txt expected_test_unary_plus_result.txt
+if ERRORLEVEL 1 goto err
+
 :succ
 echo Program testing successed
 exit 0

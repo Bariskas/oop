@@ -1,0 +1,1 @@
+Matrix must have not null determinant

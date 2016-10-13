@@ -116,7 +116,15 @@
     <ClCompile Include="matrixInvert.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="2_elem_in_row_matrix.txt" />
+    <Text Include="2_row_in_matrix.txt" />
+    <Text Include="expected_test_2_element_in_row_matrix_result.txt" />
+    <Text Include="expected_test_2_row_in_matrix_result.txt" />
+    <Text Include="expected_test_matrix_with_null_determinant_result.txt" />
     <Text Include="expected_test_non_exist_file_open_result.txt" />
+    <Text Include="expected_test_simple_matrix_result.txt" />
+    <Text Include="simple_matrix.txt" />
+    <Text Include="matrix_with_null_determinant.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="test.bat" />

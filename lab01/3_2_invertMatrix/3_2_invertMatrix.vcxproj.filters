@@ -23,6 +23,30 @@
     <Text Include="expected_test_non_exist_file_open_result.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
+    <Text Include="expected_test_simple_matrix_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="simple_matrix.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="2_elem_in_row_matrix.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="expected_test_2_element_in_row_matrix_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="2_row_in_matrix.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="expected_test_2_row_in_matrix_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="expected_test_matrix_with_null_determinant_result.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="matrix_with_null_determinant.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="test.bat">
