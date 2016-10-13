@@ -1,30 +1,30 @@
 set PROGRAM="%~1"
 
-rem ïðîâåðÿåì ðàáîòó ïðîãðàììû ñ íåñóùåñòâóþùèì ôàéëîì
+rem Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ Ñ Ð½ÐµÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¼ Ñ„Ð°Ð¹Ð»Ð¾Ð¼
 %PROGRAM% nonexistent.txt> %TEMP%/test_non_exist_file_open.txt
 if NOT ERRORLEVEL 1 goto err
 fc.exe %TEMP%\test_non_exist_file_open.txt expected_test_non_exist_file_open_result.txt
 if ERRORLEVEL 1 goto err
 
-rem ïðîâåðÿåì ðàáîòó ïðîãðàììû ñ îáû÷íîé ìàòðèöåé
+rem Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ Ñ Ð¾Ð±Ñ‹Ñ‡Ð½Ð¾Ð¹ Ð¼Ð°Ñ‚Ñ€Ð¸Ñ†ÐµÐ¹
 %PROGRAM% simple_matrix.txt > %TEMP%/test_simple_matrix.txt
 if ERRORLEVEL 1 goto err
 fc.exe %TEMP%\test_simple_matrix.txt expected_test_simple_matrix_result.txt
 if ERRORLEVEL 1 goto err
 
-rem ïðîâåðÿåì ðàáîòó ïðîãðàììû ñ íåâûðîæäåííîé ìàòðèöåé
+rem Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ Ñ Ð½ÐµÐ²Ñ‹Ñ€Ð¾Ð¶Ð´ÐµÐ½Ð½Ð¾Ð¹ Ð¼Ð°Ñ‚Ñ€Ð¸Ñ†ÐµÐ¹
 %PROGRAM% matrix_with_null_determinant.txt > %TEMP%/test_matrix_with_null_determinant.txt
 if NOT ERRORLEVEL 1 goto err
 fc.exe %TEMP%\test_matrix_with_null_determinant.txt expected_test_matrix_with_null_determinant_result.txt
 if ERRORLEVEL 1 goto err
 
-rem ïðîâåðÿåì ðàáîòó ïðîãðàììû ñ íåäîñòàþùèì êîëè÷åñòâîì ýëåìåíòîâ â ñòðîêå
+rem Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ Ñ Ð½ÐµÐ´Ð¾ÑÑ‚Ð°ÑŽÑ‰Ð¸Ð¼ ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾Ð¼ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð² Ð² ÑÑ‚Ñ€Ð¾ÐºÐµ
 %PROGRAM% 2_elem_in_row_matrix.txt > %TEMP%/test_2_element_in_row_matrix.txt
 if NOT ERRORLEVEL 1 goto err
 fc.exe %TEMP%\test_2_element_in_row_matrix.txt expected_test_2_element_in_row_matrix_result.txt
 if ERRORLEVEL 1 goto err
 
-rem ïðîâåðÿåì ðàáîòó ïðîãðàììû ñ íåäîñòàþùèì êîëè÷åñòâîì ñòðîê
+rem Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ Ñ Ð½ÐµÐ´Ð¾ÑÑ‚Ð°ÑŽÑ‰Ð¸Ð¼ ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾Ð¼ ÑÑ‚Ñ€Ð¾Ðº
 %PROGRAM% 2_row_in_matrix.txt > %TEMP%/test_2_row_in_matrix.txt
 if NOT ERRORLEVEL 1 goto err
 fc.exe %TEMP%\test_2_row_in_matrix.txt expected_test_2_row_in_matrix_result.txt
