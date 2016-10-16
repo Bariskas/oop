@@ -7,14 +7,15 @@
 
 using namespace std;
 
+typedef double(&matrix)[3][3];
+
 void ProcessFile(ifstream& matrixFileStream);
-void GetMatrixFromStream(ifstream& matrixFileStream, double(&sourceMatrix)[3][3]);
-void GetInvertMatrix(double(&sourceMatrix)[3][3], double(&invertMatrix)[3][3]);
-void GetMinorMatrix(double(&sourceMatrix)[3][3], double(&minorMatrix)[3][3]);
-void TransposeMatrix(double(&matrixToTranspose)[3][3]);
-void InvertMatrix(double(&matrixToInvert)[3][3], double determinant);
-void WriteMatrixToConsole(double(&matrix)[3][3]);
-bool IsOnlyDigitString(const std::string &str);
+void GetMatrixFromStream(ifstream& matrixFileStream, matrix sourceMatrix);
+bool GetInvertMatrix(const matrix sourceMatrix, matrix invertMatrix);
+void GetMinorMatrix(const matrix sourceMatrix, matrix minorMatrix);
+void TransposeMatrix(matrix matrixToTranspose);
+void MultiplyMatrixOnNumber(matrix matrixToInvert, double determinant);
+void WriteMatrixToConsole(matrix matrix);
 
 int main(int argc, char * argv[])
 {
@@ -49,14 +50,17 @@ void ProcessFile(ifstream& matrixFileStream)
 	double sourceMatrix[3][3];
 	GetMatrixFromStream(matrixFileStream, sourceMatrix);
 	double invertMatrix[3][3];
-	GetInvertMatrix(sourceMatrix, invertMatrix);
+	if (!GetInvertMatrix(sourceMatrix, invertMatrix))
+	{
+		throw invalid_argument("Unknown error while inverting");
+	}
+	WriteMatrixToConsole(invertMatrix);
 }
 
-void GetMatrixFromStream(ifstream& matrixFileStream, double (&sourceMatrix)[3][3])
+void GetMatrixFromStream(ifstream& matrixFileStream, matrix sourceMatrix)
 {
 	int rowIndex = 0;
 	string matrixRowLine;
-	string tempLine;
 	stringstream stringStream;
 
 	while (rowIndex < 3 && getline(matrixFileStream, matrixRowLine))
@@ -66,14 +70,15 @@ void GetMatrixFromStream(ifstream& matrixFileStream, double (&sourceMatrix)[3][3
 		int columnIndex = 0;
 		while (stringStream.good() && columnIndex < 3)
 		{
-			stringStream >> tempLine;
+			double matrixElement;
+			stringStream >> matrixElement;
 
-			if (!IsOnlyDigitString(tempLine))
+			if (stringStream.fail())
 			{
-				throw invalid_argument("elements in matrix must be digits");
+				throw invalid_argument("matrix elements must be numbers");
 			}
 
-			sourceMatrix[rowIndex][columnIndex++] = stod(tempLine);
+			sourceMatrix[rowIndex][columnIndex++] = matrixElement;
 		}
 
 		if (columnIndex != 3)
@@ -90,7 +95,7 @@ void GetMatrixFromStream(ifstream& matrixFileStream, double (&sourceMatrix)[3][3
 	}
 }
 
-void GetInvertMatrix(double(&sourceMatrix)[3][3], double(&invertMatrix)[3][3])
+bool GetInvertMatrix(const matrix sourceMatrix, matrix invertMatrix)
 {
 	double (& sm)[3][3] = sourceMatrix;
 	double determinant = (sm[0][0] * sm[1][1] * sm[2][2]) + (sm[0][1] * sm[1][2] * sm[2][0]) + (sm[0][2] * sm[1][0] * sm[2][1]) - 
@@ -98,17 +103,17 @@ void GetInvertMatrix(double(&sourceMatrix)[3][3], double(&invertMatrix)[3][3])
 	
 	if (determinant == 0)
 	{
-		throw invalid_argument("Matrix must have not null determinant");
+		return false;
 	}
 
-	double tempMatrix[3][3];
-	GetMinorMatrix(sourceMatrix, tempMatrix);
-	TransposeMatrix(tempMatrix);
-	InvertMatrix(tempMatrix, determinant);
-	WriteMatrixToConsole(tempMatrix);
+	GetMinorMatrix(sourceMatrix, invertMatrix);
+	TransposeMatrix(invertMatrix);
+	double revertDeterminant = 1 / determinant;
+	MultiplyMatrixOnNumber(invertMatrix, revertDeterminant);
+	return true;
 }
 
-void GetMinorMatrix(double(&sourceMatrix)[3][3], double(&minorMatrix)[3][3])
+void GetMinorMatrix(const matrix sourceMatrix, matrix minorMatrix)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -120,26 +125,25 @@ void GetMinorMatrix(double(&sourceMatrix)[3][3], double(&minorMatrix)[3][3])
 	}
 }
 
-void TransposeMatrix(double(&matrixToTranspose)[3][3])
+void TransposeMatrix(matrix matrixToTranspose)
 {
 	swap(matrixToTranspose[0][1], matrixToTranspose[1][0]);
 	swap(matrixToTranspose[0][2], matrixToTranspose[2][0]);
 	swap(matrixToTranspose[1][2], matrixToTranspose[2][1]);
 }
 
-void InvertMatrix(double(&matrixToTranspose)[3][3], double determinant)
+void MultiplyMatrixOnNumber(matrix matrixToMultiply, double number)
 {
-	double revertDeterminant = 1 / determinant;
 	for (int i = 0; i < 3; ++i)
 	{
 		for (int j = 0; j < 3; ++j)
 		{
-			matrixToTranspose[i][j] *= revertDeterminant;
+			matrixToMultiply[i][j] *= number;
 		}
 	}
 }
 
-void WriteMatrixToConsole(double(&matrix)[3][3])
+void WriteMatrixToConsole(const matrix matrix)
 {
 	cout.setf(ios::fixed);
 	cout.precision(3);
@@ -151,9 +155,4 @@ void WriteMatrixToConsole(double(&matrix)[3][3])
 		}
 		cout << endl;
 	}
-}
-
-bool IsOnlyDigitString(const std::string &str)
-{
-	return all_of(str.begin(), str.end(), [](char i) { return isdigit(i) || i == '-' || i == '.'; });
 }

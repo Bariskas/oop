@@ -12,7 +12,7 @@ if ERRORLEVEL 1 goto err
 fc.exe %TEMP%\test_simple_matrix.txt expected_test_simple_matrix_result.txt
 if ERRORLEVEL 1 goto err
 
-rem проверяем работу программы с невырожденной матрицей
+rem проверяем работу программы с вырожденной матрицей
 %PROGRAM% matrix_with_null_determinant.txt > %TEMP%/test_matrix_with_null_determinant.txt
 if NOT ERRORLEVEL 1 goto err
 fc.exe %TEMP%\test_matrix_with_null_determinant.txt expected_test_matrix_with_null_determinant_result.txt
