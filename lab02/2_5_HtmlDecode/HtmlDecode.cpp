@@ -33,7 +33,6 @@ string DecodeHtmlEntities(const string& toDecode)
 				auto codedHtmlEntitySize = codedHtmlEntity.size();
 				if (std::strncmp(stringToDecode + i, codedHtmlEntity.c_str(), codedHtmlEntitySize) == 0)
 				{
-					//stringToDecode += codedHtmlEntitySize;
 					result.append(get<1>(entity));
 					i += codedHtmlEntitySize;
 					isEntityDetected = true;
@@ -53,22 +52,6 @@ string DecodeHtmlEntities(const string& toDecode)
 
 	}
 
-	/*
-	for (auto it = toDecode.begin(); it != toDecode.end(); ++it)
-	{
-		if (*it != '&')
-		{
-			result.push_back(*it);
-		}
-		else
-		{
-			for (const auto& entity : htmlEntities)
-			{
-				toDecode.compare(it - toDecode.begin(), entity.first.length(), entity.first);
-			}
-		}
-	}
-	*/
 	cout << result << endl;
 	return result;
 }
