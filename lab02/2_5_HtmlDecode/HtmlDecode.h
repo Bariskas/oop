@@ -8,4 +8,4 @@
 #include <algorithm>
 #include <map>
 
-void DecodeHtmlEntities(const string& toDecode);
+std::string DecodeHtmlEntities(const std::string& toDecode);

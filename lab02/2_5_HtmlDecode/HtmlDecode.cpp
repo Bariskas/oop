@@ -11,7 +11,7 @@ using namespace std;
 Х	& (амперсанд)замен€етс€ на &amp;
 */
 
-void DecodeHtmlEntities(const string& toDecode)
+string DecodeHtmlEntities(const string& toDecode)
 {
 	static map<string, string> htmlEntities = {
 		{"&quot;", "\""}, {"&apos;", "\'"}, {"&lt;", "<"}, {"&gt;", ">"}, {"&amp;", "&"}
@@ -20,6 +20,35 @@ void DecodeHtmlEntities(const string& toDecode)
 	string result;
 	result.reserve(toDecode.length());
 
+	const char* stringToDecode = toDecode.c_str();
+
+	for (auto i = 0; i < toDecode.size();)
+	{
+		if (stringToDecode[i] == '&')
+		{
+			for (auto& entity : htmlEntities)
+			{
+				auto codedHtmlEntity = get<0>(entity);
+				auto codedHtmlEntitySize = codedHtmlEntity.size();
+				if (std::strncmp(stringToDecode + i, codedHtmlEntity.c_str(), codedHtmlEntitySize) == 0)
+				{
+					//stringToDecode += codedHtmlEntitySize;
+					result.append(get<1>(entity));
+					i += codedHtmlEntitySize - 1;
+					break;
+				}
+			}
+			++i;
+		}
+		else
+		{
+			result.push_back(stringToDecode[i]);
+			++i;
+		}
+
+	}
+
+	/*
 	for (auto it = toDecode.begin(); it != toDecode.end(); ++it)
 	{
 		if (*it != '&')
@@ -34,5 +63,7 @@ void DecodeHtmlEntities(const string& toDecode)
 			}
 		}
 	}
-
+	*/
+	cout << result << endl;
+	return result;
 }
