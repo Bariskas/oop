@@ -15,24 +15,23 @@ void DoubleOddDecreaseEven(vector<double>& inputVector)
 
 	int index = 0;
 	for_each(inputVector.begin(), inputVector.end(),
-		[&index, &sumPositiveValues](double& value) 
-	{
-		value = (index % 2) == 0 ? value * 2 : value - sumPositiveValues;
-		++index; 
-	});
+		[&index, &sumPositiveValues](double& value) {
+			value = (index % 2) == 0 ? value * 2 : value - sumPositiveValues;
+			++index; 
+		}
+	);
 }
 
 double CalculatePositiveElementSum(const vector<double>& inputVector)
 {
 	double sumPositiveValues = 0;
 	for_each(inputVector.begin(), inputVector.end(),
-		[&sumPositiveValues](double element)
-	{
-		if (element >= 0)
-		{
-			sumPositiveValues += element;
+		[&sumPositiveValues](double element) {
+			if (element >= 0)
+			{
+				sumPositiveValues += element;
+			}
 		}
-	}
 	);
 
 	return sumPositiveValues;

@@ -7,15 +7,16 @@
 
 using namespace std;
 
-typedef double(&matrix)[3][3];
+typedef double matrix[3][3];
 
 void ProcessFile(ifstream& matrixFileStream);
-void GetMatrixFromStream(ifstream& matrixFileStream, matrix sourceMatrix);
-bool GetInvertMatrix(const matrix sourceMatrix, matrix invertMatrix);
-void GetMinorMatrix(const matrix sourceMatrix, matrix minorMatrix);
-void TransposeMatrix(matrix matrixToTranspose);
-void MultiplyMatrixOnNumber(matrix matrixToInvert, double determinant);
-void WriteMatrixToConsole(matrix matrix);
+void GetMatrixFromStream(ifstream& matrixFileStream, matrix& sourceMatrix);
+bool GetInvertMatrix(const matrix& sourceMatrix, matrix& invertMatrix);
+void GetMinorMatrix(const matrix& sourceMatrix, matrix& minorMatrix);
+void TransposeMatrix(matrix& matrixToTranspose);
+double CalculateDeterminantForMatrix(const matrix& sourceMatrix);
+void MultiplyMatrixOnNumber(matrix& matrixToInvert, double determinant);
+void WriteMatrixToConsole(const matrix& matrix);
 
 int main(int argc, char * argv[])
 {
@@ -57,7 +58,7 @@ void ProcessFile(ifstream& matrixFileStream)
 	WriteMatrixToConsole(invertMatrix);
 }
 
-void GetMatrixFromStream(ifstream& matrixFileStream, matrix sourceMatrix)
+void GetMatrixFromStream(ifstream& matrixFileStream, matrix& sourceMatrix)
 {
 	int rowIndex = 0;
 	string matrixRowLine;
@@ -95,13 +96,11 @@ void GetMatrixFromStream(ifstream& matrixFileStream, matrix sourceMatrix)
 	}
 }
 
-bool GetInvertMatrix(const matrix sourceMatrix, matrix invertMatrix)
+bool GetInvertMatrix(const matrix& sourceMatrix, matrix& invertMatrix)
 {
-	double (& sm)[3][3] = sourceMatrix;
-	double determinant = (sm[0][0] * sm[1][1] * sm[2][2]) + (sm[0][1] * sm[1][2] * sm[2][0]) + (sm[0][2] * sm[1][0] * sm[2][1]) - 
-		(sm[0][2] * sm[1][1] * sm[2][0]) - (sm[0][0] * sm[2][1] * sm[1][2]) - (sm[1][0] * sm[0][1] * sm[2][2]);
+	double determinant = CalculateDeterminantForMatrix(sourceMatrix);
 	
-	if (determinant == 0)
+	if (abs(determinant) <= DBL_EPSILON)
 	{
 		return false;
 	}
@@ -113,7 +112,7 @@ bool GetInvertMatrix(const matrix sourceMatrix, matrix invertMatrix)
 	return true;
 }
 
-void GetMinorMatrix(const matrix sourceMatrix, matrix minorMatrix)
+void GetMinorMatrix(const matrix& sourceMatrix, matrix& minorMatrix)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -125,14 +124,14 @@ void GetMinorMatrix(const matrix sourceMatrix, matrix minorMatrix)
 	}
 }
 
-void TransposeMatrix(matrix matrixToTranspose)
+void TransposeMatrix(matrix& matrixToTranspose)
 {
 	swap(matrixToTranspose[0][1], matrixToTranspose[1][0]);
 	swap(matrixToTranspose[0][2], matrixToTranspose[2][0]);
 	swap(matrixToTranspose[1][2], matrixToTranspose[2][1]);
 }
 
-void MultiplyMatrixOnNumber(matrix matrixToMultiply, double number)
+void MultiplyMatrixOnNumber(matrix& matrixToMultiply, double number)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -143,7 +142,7 @@ void MultiplyMatrixOnNumber(matrix matrixToMultiply, double number)
 	}
 }
 
-void WriteMatrixToConsole(const matrix matrix)
+void WriteMatrixToConsole(const matrix& matrix)
 {
 	cout.setf(ios::fixed);
 	cout.precision(3);
@@ -155,4 +154,12 @@ void WriteMatrixToConsole(const matrix matrix)
 		}
 		cout << endl;
 	}
+}
+
+double CalculateDeterminantForMatrix(const matrix& sourceMatrix)
+{
+	const double(&sm)[3][3] = sourceMatrix;
+	double determinant = (sm[0][0] * sm[1][1] * sm[2][2]) + (sm[0][1] * sm[1][2] * sm[2][0]) + (sm[0][2] * sm[1][0] * sm[2][1]) -
+		(sm[0][2] * sm[1][1] * sm[2][0]) - (sm[0][0] * sm[2][1] * sm[1][2]) - (sm[1][0] * sm[0][1] * sm[2][2]);
+	return determinant;
 }

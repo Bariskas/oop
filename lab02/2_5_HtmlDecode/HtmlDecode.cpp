@@ -26,6 +26,7 @@ string DecodeHtmlEntities(const string& toDecode)
 	{
 		if (stringToDecode[i] == '&')
 		{
+			bool isEntityDetected = false;
 			for (auto& entity : htmlEntities)
 			{
 				auto codedHtmlEntity = get<0>(entity);
@@ -34,11 +35,15 @@ string DecodeHtmlEntities(const string& toDecode)
 				{
 					//stringToDecode += codedHtmlEntitySize;
 					result.append(get<1>(entity));
-					i += codedHtmlEntitySize - 1;
-					break;
+					i += codedHtmlEntitySize;
+					isEntityDetected = true;
 				}
 			}
-			++i;
+			if (!isEntityDetected)
+			{
+				result.push_back(stringToDecode[i]);
+				i++;
+			}
 		}
 		else
 		{
