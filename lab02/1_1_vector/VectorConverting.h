@@ -13,4 +13,3 @@
 
 void ConvertVector(std::vector<double>& inputVector);
 double CalculatePositiveElementSum(const std::vector<double>& inputVector);
-void DoubleOddDecreaseEven(std::vector<double>& inputVector);

@@ -4,20 +4,13 @@ using namespace std;
 
 void ConvertVector(vector<double>& inputVector)
 {
-	DoubleOddDecreaseEven(inputVector);
-
-	sort(inputVector.begin(), inputVector.end());
-}
-
-void DoubleOddDecreaseEven(vector<double>& inputVector)
-{
 	double sumPositiveValues = CalculatePositiveElementSum(inputVector);
 
-	int index = 0;
-	for_each(inputVector.begin(), inputVector.end(),
-		[&index, &sumPositiveValues](double& value) {
-			value = (index % 2) == 0 ? value * 2 : value - sumPositiveValues;
-			++index; 
+	bool isEven = false;
+	transform(inputVector.begin(), inputVector.end(), inputVector.begin(),
+			[&](double value) {
+			isEven = !isEven;
+			return isEven ? value * 2 : value - sumPositiveValues;
 		}
 	);
 }

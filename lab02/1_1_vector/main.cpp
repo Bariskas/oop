@@ -8,6 +8,8 @@ int main()
 
 	ConvertVector(inputVector);
 
+	sort(inputVector.begin(), inputVector.end());
+
 	cout.setf(ios::fixed);
 	cout.precision(3);
 	copy(inputVector.begin(), inputVector.end(), ostream_iterator<double>(cout, ", "));
