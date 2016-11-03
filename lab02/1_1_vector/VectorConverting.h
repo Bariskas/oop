@@ -7,6 +7,7 @@
 #include <sstream>
 #include <cstdio>
 #include <iterator> 
+#include <numeric>
 
 #include <stdio.h>
 #include <tchar.h>

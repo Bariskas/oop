@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_SUITE(NumericConverterTestSuite)
 	{
 		vector<double> testVector = { -2, -3, -4 };
 		auto sum = CalculatePositiveElementSum(testVector);
-		BOOST_CHECK_EQUAL(sum, 0);
+		BOOST_CHECK_EQUAL(sum, 1);
 	}
 
 	BOOST_AUTO_TEST_CASE(convert_positive_vector_without_sort)

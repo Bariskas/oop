@@ -8,7 +8,7 @@ void ConvertVector(vector<double>& inputVector)
 
 	bool isEven = false;
 	transform(inputVector.begin(), inputVector.end(), inputVector.begin(),
-			[&](double value) {
+		[&](double value) {
 			isEven = !isEven;
 			return isEven ? value * 2 : value - sumPositiveValues;
 		}
@@ -17,13 +17,9 @@ void ConvertVector(vector<double>& inputVector)
 
 double CalculatePositiveElementSum(const vector<double>& inputVector)
 {
-	double sumPositiveValues = 0;
-	for_each(inputVector.begin(), inputVector.end(),
-		[&sumPositiveValues](double element) {
-			if (element >= 0)
-			{
-				sumPositiveValues += element;
-			}
+	double sumPositiveValues = std::accumulate(inputVector.begin(), inputVector.end(), 0,
+		[] (double sum, double value) {
+			return value >= 0 ? sum += value : sum;
 		}
 	);
 
