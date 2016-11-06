@@ -8,9 +8,11 @@ using namespace std;
 
 int main()
 {
-	string toDecode;
-	cin >> toDecode;
-	DecodeHtmlEntities(toDecode);
+	vector<string> inputVector(istream_iterator<string>(cin), (istream_iterator<string>()));
+	for (string strToDecode : inputVector)
+	{
+		cout << DecodeHtmlEntities(strToDecode) << endl;
+	}
     return 0;
 }
 

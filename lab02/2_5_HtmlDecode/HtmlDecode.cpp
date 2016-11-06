@@ -22,7 +22,7 @@ string DecodeHtmlEntities(const string& toDecode)
 
 	const char* stringToDecode = toDecode.c_str();
 
-	for (auto i = 0; i < toDecode.size();)
+	for (size_t i = 0; i < toDecode.size();)
 	{
 		if (stringToDecode[i] == '&')
 		{
@@ -49,9 +49,7 @@ string DecodeHtmlEntities(const string& toDecode)
 			result.push_back(stringToDecode[i]);
 			++i;
 		}
-
 	}
 
-	cout << result << endl;
 	return result;
 }
