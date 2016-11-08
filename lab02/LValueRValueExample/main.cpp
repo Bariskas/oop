@@ -1,5 +1,9 @@
 #include <string>
 #include <iostream>
+#include <algorithm>
+#include <iterator>
+#include <stdio.h>
+#include <tchar.h>
 
 using namespace std;
 
@@ -51,7 +55,7 @@ Student CreateStudent()
 	return Student(name, surname);
 }
 
-int main()
+void testMove()
 {
 	string vasya = "Vasya";
 	Student student(vasya, "Pupkin");
@@ -68,5 +72,23 @@ int main()
 	string op = std::move(g);
 	cout << op << endl;
 	cout << g << endl;
+}
+
+int main()
+{
+	setlocale(LC_ALL, "");
+
+	wstring str = L"ÒåÑò TeSt";
+	string str2 = "TeSt ÒåÑò";
+	for (int i = 0; i < str.length(); i++)
+	{
+		str[i] = towlower(str[i]);
+		str2[i] = tolower(str2[i]);
+	}
+
+	wcout << str << endl;
+	cout << str2 << endl;
+
+	getchar();
 	return 0;
 }

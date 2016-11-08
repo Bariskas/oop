@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <tchar.h>
 
+#include <utility> // make_pair
 #include <iostream>
 #include <istream>
 #include <algorithm>
@@ -21,5 +22,7 @@
 #include <numeric>
 #include <fstream>
 #include <unordered_map>
+
+#include <boost/algorithm/string.hpp>
 
 // TODO: reference additional headers your program requires here
