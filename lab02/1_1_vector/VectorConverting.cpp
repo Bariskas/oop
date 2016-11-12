@@ -17,9 +17,9 @@ void ConvertVector(vector<double>& inputVector)
 
 double CalculatePositiveElementSum(const vector<double>& inputVector)
 {
-	double sumPositiveValues = std::accumulate(inputVector.begin(), inputVector.end(), 0,
+	double sumPositiveValues = std::accumulate(inputVector.begin(), inputVector.end(), 0.,
 		[] (double sum, double value) {
-			return value >= 0 ? sum += value : sum;
+			return value >= 0. ? sum += value : sum;
 		}
 	);
 

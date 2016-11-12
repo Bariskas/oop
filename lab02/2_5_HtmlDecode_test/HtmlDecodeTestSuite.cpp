@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ #include "stdafx.h"
 #include "../2_5_HtmlDecode/HtmlDecode.h"
 
 using namespace std;
@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_SUITE(HtmlDecodeTestSuite)
 		result = DecodeHtmlEntities("&amp;amp;");
 		BOOST_CHECK_EQUAL(result, "&amp;");
 		result = DecodeHtmlEntities("123&amp;&amp;");
-		BOOST_CHECK_EQUAL(result, "123&1&");
+		BOOST_CHECK_EQUAL(result, "123&&");
 	}
 
 BOOST_AUTO_TEST_SUITE_END()
