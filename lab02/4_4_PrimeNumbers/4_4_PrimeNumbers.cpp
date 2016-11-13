@@ -22,7 +22,6 @@ int main(int argc, char* argv[])
 		cout << primeNumber << " ";
 	}
 
-	getchar();
     return 0;
 }
 
