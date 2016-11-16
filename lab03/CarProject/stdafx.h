@@ -12,7 +12,8 @@
 
 #include <iostream>
 #include <map>
-#include <functional>	// function
+#include <functional>	// function, bind, placeholders
 #include <string>		// getline
 #include <sstream>		// istringstream
+#include <climits>		// INT_MIN INT_MAX
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

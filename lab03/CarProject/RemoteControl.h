@@ -7,6 +7,13 @@ class CRemoteControl
 public:
 	CRemoteControl(CCar& car, std::istream& input, std::ostream& output);
 	bool HandleCommand();
+
+private:
+	bool Info(std::istream& args);
+	bool EngineOn(std::istream& args);
+	bool EngineOff(std::istream& args);
+	bool SetSpeed(std::istream& args);
+	bool SetGear(std::istream& args);
 private:
 	typedef std::map<std::string, std::function<bool(std::istream& args)>> ActionMap;
 	
