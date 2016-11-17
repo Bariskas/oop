@@ -31,7 +31,15 @@ bool CRemoteControl::HandleCommand()
 	auto it = m_actionMap.find(action);
 	if (it != m_actionMap.end())
 	{
-		return it->second(strm);
+		try
+		{
+			return it->second(strm);
+		}
+		catch(const exception& e)
+		{
+			m_output << e.what() << endl;
+			return true;
+		}
 	}
 
 	return false;
@@ -42,7 +50,7 @@ bool CRemoteControl::Info(istream& /*args*/)
 	string info;
 	if (m_car.IsTurnedOn())
 	{
-		info.append("Car is turned on and have direction " + to_string(m_car.GetDirection()) + " with " + to_string(m_car.GetTransmission()) + " transmission and speed = " + to_string(m_car.GetSpeed()));
+		info.append("Car is turned on and have \"" + m_car.GetDirection() + "\" direction with " + to_string(m_car.GetTransmission()) + " transmission and speed = " + to_string(m_car.GetSpeed()));
 	}
 	else
 	{

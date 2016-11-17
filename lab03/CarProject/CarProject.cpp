@@ -9,15 +9,23 @@ using namespace std;
 
 int main()
 {
-	CCar car;
+	bool enableException = true;
+	CCar car(enableException);
 	CRemoteControl remoteControl(car, cin, cout);
 
 	while (!cin.eof() && !cin.fail())
 	{
 		cout << "> ";
-		if (!remoteControl.HandleCommand())
+		try
 		{
-			cout << "Unknown command!" << endl;
+			if (!remoteControl.HandleCommand())
+			{
+				cout << "Unknown command!" << endl;
+			}
+		}
+		catch (const exception& e)
+		{
+			cout << e.what() << endl;
 		}
 	}
     return 0;

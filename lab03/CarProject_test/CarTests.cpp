@@ -7,7 +7,6 @@ struct CarTexture
 };
 
 BOOST_FIXTURE_TEST_SUITE(CarTestSuite, CarTexture)
-
 	BOOST_AUTO_TEST_CASE(is_turned_off_by_default)
 	{
 		BOOST_CHECK_EQUAL(car.IsTurnedOn(), false);
@@ -40,7 +39,6 @@ BOOST_FIXTURE_TEST_SUITE(CarTestSuite, CarTexture)
 	};
 
 	BOOST_FIXTURE_TEST_SUITE(when_turned_on, when_turned_on_)
-		
 		BOOST_AUTO_TEST_CASE(cant_be_turned_on_twice_in_a_row)
 		{
 			BOOST_CHECK(!car.TurnOnEngine());
@@ -58,7 +56,7 @@ BOOST_FIXTURE_TEST_SUITE(CarTestSuite, CarTexture)
 			BOOST_CHECK_EQUAL(car.GetTransmission(), 1);
 		}
 
-		BOOST_AUTO_TEST_CASE(transmission_can_be_changed_on_2)
+		BOOST_AUTO_TEST_CASE(transmission_cant_be_changed_on_2)
 		{
 			BOOST_CHECK(!car.SetTransmission(2));
 			BOOST_CHECK_EQUAL(car.GetTransmission(), 0);
@@ -76,6 +74,49 @@ BOOST_FIXTURE_TEST_SUITE(CarTestSuite, CarTexture)
 			BOOST_CHECK_EQUAL(car.GetSpeed(), 0);
 		}
 
+		struct when_change_tranmission_on_negative_ : when_turned_on_
+		{
+			when_change_tranmission_on_negative_()
+			{
+				car.SetTransmission(-1);
+			}
+		};
+
+		BOOST_FIXTURE_TEST_SUITE(when_change_tranmission_on_negative, when_change_tranmission_on_negative_)
+			BOOST_AUTO_TEST_CASE(speed_can_be_increased)
+			{
+				BOOST_CHECK(car.SetSpeed(10));
+				BOOST_CHECK_EQUAL(car.GetSpeed(), 10);
+			}
+
+			BOOST_AUTO_TEST_CASE(car_cant_be_turned_off)
+			{
+				BOOST_CHECK(!car.TurnOffEngine());
+				BOOST_CHECK(car.IsTurnedOn());
+			}
+
+			struct when_set_speed_10_on_negative_transmission_ : when_change_tranmission_on_negative_
+			{
+				when_set_speed_10_on_negative_transmission_()
+				{
+					car.SetSpeed(10);
+				}
+			};
+
+			BOOST_FIXTURE_TEST_SUITE(when_set_speed_10_on_negative_transmission, when_set_speed_10_on_negative_transmission_)
+				BOOST_AUTO_TEST_CASE(transmission_cant_be_changed_on_1)
+				{
+					BOOST_CHECK(!car.SetTransmission(1));
+					BOOST_CHECK_EQUAL(car.GetTransmission(), -1);
+				}
+
+				BOOST_AUTO_TEST_CASE(direction_must_be_backward)
+				{
+					BOOST_CHECK_EQUAL(car.GetDirection(), "Backward");
+				}
+			BOOST_AUTO_TEST_SUITE_END()
+		BOOST_AUTO_TEST_SUITE_END()
+
 		struct when_change_tranmission_on_1_ : when_turned_on_
 		{
 			when_change_tranmission_on_1_()
@@ -85,7 +126,6 @@ BOOST_FIXTURE_TEST_SUITE(CarTestSuite, CarTexture)
 		};
 
 		BOOST_FIXTURE_TEST_SUITE(when_change_tranmission_on_1, when_change_tranmission_on_1_)
-
 			BOOST_AUTO_TEST_CASE(speed_can_be_changed_between_0_and_30)
 			{
 				BOOST_CHECK(car.SetSpeed(20));
@@ -98,24 +138,10 @@ BOOST_FIXTURE_TEST_SUITE(CarTestSuite, CarTexture)
 				BOOST_CHECK_EQUAL(car.GetSpeed(), 0);
 			}
 
-			BOOST_AUTO_TEST_CASE(transmission_can_be_changed_on_negative_with_0_speed)
+			BOOST_AUTO_TEST_CASE(transmission_can_be_changed_on_negative)
 			{
-				car.SetSpeed(10);
-				BOOST_CHECK(!car.SetTransmission(-1));
-				BOOST_CHECK_EQUAL(car.GetTransmission(), 1);
-				car.SetSpeed(0);
 				BOOST_CHECK(car.SetTransmission(-1));
 				BOOST_CHECK_EQUAL(car.GetTransmission(), -1);
-			}
-
-			BOOST_AUTO_TEST_CASE(transmission_can_be_changed_on_2_speed_between_20_30)
-			{
-				car.SetSpeed(10);
-				BOOST_CHECK(!car.SetTransmission(2));
-				BOOST_CHECK_EQUAL(car.GetTransmission(), 1);
-				car.SetSpeed(20);
-				BOOST_CHECK(car.SetTransmission(2));
-				BOOST_CHECK_EQUAL(car.GetTransmission(), 2);
 			}
 
 			BOOST_AUTO_TEST_CASE(engine_cant_be_turned_off)
@@ -124,6 +150,49 @@ BOOST_FIXTURE_TEST_SUITE(CarTestSuite, CarTexture)
 				BOOST_CHECK(car.IsTurnedOn());
 			}
 
+			struct when_change_speed_to_10_on_1_transmission_ : when_change_tranmission_on_1_
+			{
+				when_change_speed_to_10_on_1_transmission_()
+				{
+					car.SetSpeed(10);
+				}
+			};
+
+			BOOST_FIXTURE_TEST_SUITE(when_change_speed_to_10_on_1_transmission, when_change_speed_to_10_on_1_transmission_)
+				BOOST_AUTO_TEST_CASE(cant_set_negative_transmission)
+				{
+					BOOST_CHECK(!car.SetTransmission(-1));
+					BOOST_CHECK_EQUAL(car.GetTransmission(), 1);
+				}
+
+				BOOST_AUTO_TEST_CASE(transmission_cant_be_changed_on_2)
+				{
+					BOOST_CHECK(!car.SetTransmission(2));
+					BOOST_CHECK_EQUAL(car.GetTransmission(), 1);
+				}
+			BOOST_AUTO_TEST_SUITE_END()
+
+			struct when_change_speed_to_30_on_1_transmission_ : when_change_tranmission_on_1_
+			{
+				when_change_speed_to_30_on_1_transmission_()
+				{
+					car.SetSpeed(30);
+				}
+			};
+
+			BOOST_FIXTURE_TEST_SUITE(when_change_speed_to_30_on_1_transmission, when_change_speed_to_30_on_1_transmission_)
+				BOOST_AUTO_TEST_CASE(can_set_2)
+				{
+					BOOST_CHECK(car.SetTransmission(2));
+					BOOST_CHECK_EQUAL(car.GetTransmission(), 2);
+				}
+
+				BOOST_AUTO_TEST_CASE(can_set_3)
+				{
+					BOOST_CHECK(car.SetTransmission(3));
+					BOOST_CHECK_EQUAL(car.GetTransmission(), 3);
+				}
+			BOOST_AUTO_TEST_SUITE_END()
 		BOOST_AUTO_TEST_SUITE_END()
 
 		struct when_change_tranmission_on_5_ : when_turned_on_
@@ -175,22 +244,20 @@ BOOST_FIXTURE_TEST_SUITE(CarTestSuite, CarTexture)
 			};
 
 			BOOST_FIXTURE_TEST_SUITE(when_change_transmission_on_0, when_change_transmission_on_0_)
-				
 				BOOST_AUTO_TEST_CASE(cant_increase_speed)
-			{
-				BOOST_CHECK(!car.SetSpeed(60));
-				BOOST_CHECK_EQUAL(car.GetSpeed(), 50);
-			}
+				{
+					BOOST_CHECK(!car.SetSpeed(60));
+					BOOST_CHECK_EQUAL(car.GetSpeed(), 50);
+				}
 
-			BOOST_AUTO_TEST_CASE(can_decrease_speed_for_0)
-			{
-				BOOST_CHECK_EQUAL(car.GetSpeed(), 50);
-				BOOST_CHECK(car.SetSpeed(20));
-				BOOST_CHECK_EQUAL(car.GetSpeed(), 20);
-				BOOST_CHECK(car.SetSpeed(0));
-				BOOST_CHECK_EQUAL(car.GetSpeed(), 0);
-			}
-
+				BOOST_AUTO_TEST_CASE(can_decrease_speed_for_0)
+				{
+					BOOST_CHECK_EQUAL(car.GetSpeed(), 50);
+					BOOST_CHECK(car.SetSpeed(20));
+					BOOST_CHECK_EQUAL(car.GetSpeed(), 20);
+					BOOST_CHECK(car.SetSpeed(0));
+					BOOST_CHECK_EQUAL(car.GetSpeed(), 0);
+				}
 			BOOST_AUTO_TEST_SUITE_END()
 		BOOST_AUTO_TEST_SUITE_END()
 	BOOST_AUTO_TEST_SUITE_END()
