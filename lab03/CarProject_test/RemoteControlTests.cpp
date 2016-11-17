@@ -36,26 +36,34 @@ struct RemoteControlFixture : RemoteControlDependencies
 };
 
 BOOST_FIXTURE_TEST_SUITE(Remote_Control, RemoteControlFixture)
-BOOST_AUTO_TEST_CASE(can_handle_Info_command)
-{
-	VerifyCommandHandling("Info", false, 0, 0, "Car is turned off\n");
-}
+	BOOST_AUTO_TEST_CASE(cant_handle_unknow_command)
+	{
+		output = stringstream();
+		input = stringstream("asgASGasgasg");
+		BOOST_CHECK(!remoteControl.HandleCommand());
+		BOOST_CHECK_EQUAL(output.str(), "");
+	}
 
-BOOST_AUTO_TEST_CASE(can_handle_EngineOn_command)
-{
-	VerifyCommandHandling("EngineOn", true, 0, 0, "Car engine is turned on\n");
-}
+	BOOST_AUTO_TEST_CASE(can_handle_Info_command)
+	{
+		VerifyCommandHandling("Info", false, 0, 0, "Car is turned off\n");
+	}
 
-BOOST_AUTO_TEST_CASE(can_handle_SetSpeed_command)
-{
-	VerifyCommandHandling("SetSpeed 3", false, 0, 0, "Engine is turned off!\n");
-	car.TurnOnEngine();
-	VerifyCommandHandling("SetSpeed 3", true, 0, 0, "Cant increase speed on zero transmission!!!!!\n");
-}
+	BOOST_AUTO_TEST_CASE(can_handle_EngineOn_command)
+	{
+		VerifyCommandHandling("EngineOn", true, 0, 0, "Car engine is turned on\n");
+	}
 
-BOOST_AUTO_TEST_CASE(can_handle_EngineOff_command)
-{
-	car.TurnOnEngine();
-	VerifyCommandHandling("EngineOff", false, 0, 0, "Car engine is turned off\n");
-}
+	BOOST_AUTO_TEST_CASE(can_handle_SetSpeed_command)
+	{
+		VerifyCommandHandling("SetSpeed 3", false, 0, 0, "Engine is turned off!\n");
+		car.TurnOnEngine();
+		VerifyCommandHandling("SetSpeed 3", true, 0, 0, "Cant increase speed on zero transmission!!!!!\n");
+	}
+
+	BOOST_AUTO_TEST_CASE(can_handle_EngineOff_command)
+	{
+		car.TurnOnEngine();
+		VerifyCommandHandling("EngineOff", false, 0, 0, "Car engine is turned off\n");
+	}
 BOOST_AUTO_TEST_SUITE_END()
