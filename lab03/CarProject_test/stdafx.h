@@ -14,3 +14,4 @@
 #include <functional>	// function
 #include <string>		// getline
 #include <sstream>		// istringstream
+#include <exception>

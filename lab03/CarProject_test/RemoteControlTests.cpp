@@ -6,7 +6,7 @@ using namespace std;
 
 struct RemoteControlDependencies
 {
-	CCar car = CCar(true);
+	CCar car = CCar();
 	stringstream input;
 	stringstream output;
 };

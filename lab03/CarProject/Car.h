@@ -10,22 +10,20 @@ enum class Direction
 class CCar
 {
 public:
-	CCar();
-	CCar(bool enableException);
-	bool TurnOnEngine();
-	bool TurnOffEngine();
-	bool SetTransmission(int gear);
-	bool SetSpeed(int speed);
+	void TurnOnEngine();
+	void TurnOffEngine();
+	void SetTransmission(int gear);
+	void SetSpeed(int speed);
 	bool IsTurnedOn() const;
 	int GetTransmission() const;
 	int GetSpeed() const;
-	std::string GetDirection() const;
+	Direction GetDirection() const;
 
 private:
 	bool CanChangeTransmission(int tranmission) const;
 	bool CanChangeSpeed(int speed) const;
 	void SetDirection(int speed);
-	bool BeepBeepException(const std::string& exceptionText) const;
+	std::string DirectionToString(Direction direction) const;
 
 	bool CheckForTurnedOffEngine() const;
 	bool CheckIsSpeedAllowedByTransmission(int speed, int transmission) const;
@@ -41,8 +39,9 @@ private:
 	typedef std::map<int, std::pair<int, int>> TranmissionSpeedMap;
 	typedef std::map<Direction, std::string> DirectionNameMap;
 
-	TranmissionSpeedMap m_transmissionSpeedMap;
-	DirectionNameMap m_directionNameMap;
+	static const TranmissionSpeedMap m_transmissionSpeedMap;
+	static const DirectionNameMap m_directionNameMap;
+
 	bool m_isExceptionEnabled = false;
 	bool m_isTurnedOn = false;
 	Direction m_direction = Direction::Holding;

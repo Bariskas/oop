@@ -3,100 +3,60 @@
 
 using namespace std;
 
-CCar::CCar()
-	: m_transmissionSpeedMap({
-		{ -1,{ 0, 20 } },
-		{ 0,{ INT_MIN, INT_MAX } },
-		{ 1,{ 0, 30 } },
-		{ 2,{ 20, 50 } },
-		{ 3,{ 30, 60 } },
-		{ 4,{ 40, 90 } },
-		{ 5,{ 50, 150 } }
-	})
-	, m_directionNameMap({
-		{ Direction::Backward, "Backward" },
-		{ Direction::Forward, "Forward" },
-		{ Direction::Holding, "Holding" }
-	})
-	, m_isExceptionEnabled(false)
-{}
+const CCar::TranmissionSpeedMap CCar::m_transmissionSpeedMap{
+	{ -1,{ 0, 20 } },
+	{ 0,{ INT_MIN, INT_MAX } },
+	{ 1,{ 0, 30 } },
+	{ 2,{ 20, 50 } },
+	{ 3,{ 30, 60 } },
+	{ 4,{ 40, 90 } },
+	{ 5,{ 50, 150 } }
+};
 
-CCar::CCar(bool enableException = false)
-	: m_transmissionSpeedMap({
-		{ -1,{ 0, 20 } },
-		{ 0,{ INT_MIN, INT_MAX } },
-		{ 1,{ 0, 30 } },
-		{ 2,{ 20, 50 } },
-		{ 3,{ 30, 60 } },
-		{ 4,{ 40, 90 } },
-		{ 5,{ 50, 150 } }
-	})
-	, m_directionNameMap({
-		{ Direction::Backward, "Backward" },
-		{ Direction::Forward, "Forward" },
-		{ Direction::Holding, "Holding" }
-	})
-	, m_isExceptionEnabled(enableException)
-{}
+const CCar::DirectionNameMap CCar::m_directionNameMap{
+	{ Direction::Backward, "Backward" },
+	{ Direction::Forward, "Forward" },
+	{ Direction::Holding, "Holding" }
+};
 
 bool CCar::IsTurnedOn() const
 {
 	return m_isTurnedOn;
 }
 
-bool CCar::TurnOnEngine()
+void CCar::TurnOnEngine()
 {
-	bool isTurnedOn = false;
-
 	if (CheckForTurnedOffEngine())
 	{
 		m_isTurnedOn = true;
-		isTurnedOn = true;
 	}
-
-	return isTurnedOn;
 }
 
-bool CCar::TurnOffEngine()
+void CCar::TurnOffEngine()
 {
-	bool isTurnedOff = false;
-
 	if (CheckForTurnedOnEngine()
 		&& CheckForZeroSpeed()
 		&& CheckForZeroTransmission())
 	{
-		isTurnedOff = true;
 		m_isTurnedOn = false;
 	}
-
-	return isTurnedOff;
 }
 
-bool CCar::SetTransmission(int transmission)
+void CCar::SetTransmission(int transmission)
 {
-	bool isTranmissionChanged = false;
-
 	if (CanChangeTransmission(transmission))
 	{
 		m_transmission = transmission;
-		isTranmissionChanged = true;
 	}
-
-	return isTranmissionChanged;
 }
 
-bool CCar::SetSpeed(int speed)
+void CCar::SetSpeed(int speed)
 {
-	bool isSpeedChanged = false;
-
 	if (CanChangeSpeed(speed))
 	{
 		m_speed = speed;
-		isSpeedChanged = true;
 	}
 	SetDirection(speed);
-
-	return isSpeedChanged;
 }
 
 int CCar::GetSpeed() const
@@ -109,10 +69,18 @@ int CCar::GetTransmission() const
 	return m_transmission;
 }
 
-string CCar::GetDirection() const
+Direction CCar::GetDirection() const
 {
-	auto it = m_directionNameMap.find(m_direction);
-	return it->second;
+	Direction direction = Direction::Holding;
+	if (m_speed < 0)
+	{
+		direction = Direction::Backward;
+	}
+	else if (m_speed > 0)
+	{
+		direction = Direction::Forward;
+	}
+	return direction;
 }
 
 bool CCar::CanChangeTransmission(int transmission) const
@@ -164,16 +132,22 @@ void CCar::SetDirection(int speed)
 	}
 }
 
+std::string CCar::DirectionToString(Direction direction) const
+{
+	auto it = m_directionNameMap.find(direction);
+	return it->second;
+}
+
 bool CCar::CheckIsSpeedAllowedByTransmission(int speed, int transmission) const
 {
 	auto it = m_transmissionSpeedMap.find(transmission);
 	if (it == m_transmissionSpeedMap.end())
 	{
-		return BeepBeepException(to_string(transmission) + " not exist");
+		throw runtime_error(to_string(transmission) + " not exist");
 	}
 	if (speed < it->second.first || speed > it->second.second)
 	{
-		return BeepBeepException(to_string(transmission) + " can accept speed between " + to_string(it->second.first)
+		throw runtime_error(to_string(transmission) + " can accept speed between " + to_string(it->second.first)
 			+ " and " + to_string(it->second.second) + " ; speed = " + to_string(speed));
 	}
 	return true;
@@ -181,13 +155,13 @@ bool CCar::CheckIsSpeedAllowedByTransmission(int speed, int transmission) const
 
 bool CCar::CheckForSupportingCurrentDirectionByTransmission(int transmission) const
 {
-	if (transmission == -1 && m_direction != Direction::Forward
+	if (transmission == -1 && GetDirection() == Direction::Holding
 		|| transmission > 0 && m_direction != Direction::Backward
 		|| transmission == 0)
 	{
 		return true;
 	}
-	return BeepBeepException(to_string(transmission) + " transmission dont supporting current direction " + GetDirection());
+	throw runtime_error(to_string(transmission) + " transmission dont supporting current direction " + DirectionToString(GetDirection()));
 }
 
 bool CCar::CheckForTurnedOffEngine() const
@@ -196,7 +170,7 @@ bool CCar::CheckForTurnedOffEngine() const
 	{
 		return true;
 	}
-	return BeepBeepException("Engine is turned on!");
+	throw runtime_error("Engine is turned on!");
 }
 
 bool CCar::CheckForTurnedOnEngine() const
@@ -205,7 +179,7 @@ bool CCar::CheckForTurnedOnEngine() const
 	{
 		return true;
 	}
-	return BeepBeepException("Engine is turned off!");
+	throw runtime_error("Engine is turned off!");
 }
 
 bool CCar::CheckForZeroSpeed() const
@@ -214,7 +188,7 @@ bool CCar::CheckForZeroSpeed() const
 	{
 		return true;
 	}
-	return BeepBeepException("Car is moving!");
+	throw runtime_error("Car is moving!");
 }
 
 bool CCar::CheckForZeroTransmission() const
@@ -223,7 +197,7 @@ bool CCar::CheckForZeroTransmission() const
 	{
 		return true;
 	}
-	return BeepBeepException("Car have non zero transmission!");
+	throw runtime_error("Car have non zero transmission!");
 }
 
 bool CCar::CheckForNonNegativeInputSpeed(int speed) const
@@ -232,7 +206,7 @@ bool CCar::CheckForNonNegativeInputSpeed(int speed) const
 	{
 		return true;
 	}
-	return BeepBeepException("Speed value can't be less then 0!");
+	throw runtime_error("Speed value can't be less then 0!");
 }
 
 bool CCar::CheckForAlreadySettedTransmission(int tranmission) const
@@ -241,7 +215,7 @@ bool CCar::CheckForAlreadySettedTransmission(int tranmission) const
 	{
 		return true;
 	}
-	return BeepBeepException(to_string(tranmission) + " transmission already setted.");
+	throw runtime_error(to_string(tranmission) + " transmission already setted.");
 }
 
 bool CCar::CheckForIncreasingSpeedNonOnZeroTransmission(int speed) const
@@ -250,14 +224,5 @@ bool CCar::CheckForIncreasingSpeedNonOnZeroTransmission(int speed) const
 	{
 		return true;
 	}
-	return BeepBeepException("Cant increase speed on zero transmission!!!!!");
-}
-
-bool CCar::BeepBeepException(const string& exceptionText) const
-{
-	if (m_isExceptionEnabled)
-	{
-		throw runtime_error(exceptionText);
-	}
-	return false;
+	throw runtime_error("Cant increase speed on zero transmission!!!!!");
 }

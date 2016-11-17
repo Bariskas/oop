@@ -9,8 +9,7 @@ using namespace std;
 
 int main()
 {
-	bool enableException = true;
-	CCar car(enableException);
+	CCar car;
 	CRemoteControl remoteControl(car, cin, cout);
 
 	while (!cin.eof() && !cin.fail())

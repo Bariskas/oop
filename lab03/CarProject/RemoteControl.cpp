@@ -5,6 +5,12 @@
 using namespace std;
 using namespace std::placeholders;
 
+const CRemoteControl::DirectionNameMap CRemoteControl::m_directionNameMap{
+	{ Direction::Backward, "Backward" },
+	{ Direction::Forward, "Forward" },
+	{ Direction::Holding, "Holding" }
+};
+
 CRemoteControl::CRemoteControl(CCar& car, istream& input, ostream& output) 
 	: m_car(car)
 	, m_input(input)
@@ -50,7 +56,7 @@ bool CRemoteControl::Info(istream& /*args*/)
 	string info;
 	if (m_car.IsTurnedOn())
 	{
-		info.append("Car is turned on and have \"" + m_car.GetDirection() + "\" direction with " + to_string(m_car.GetTransmission()) + " transmission and speed = " + to_string(m_car.GetSpeed()));
+		info.append("Car is turned on and have \"" + DirectionToString(m_car.GetDirection()) + "\" direction with " + to_string(m_car.GetTransmission()) + " transmission and speed = " + to_string(m_car.GetSpeed()));
 	}
 	else
 	{
@@ -92,4 +98,10 @@ bool CRemoteControl::SetGear(istream& args)
 	m_car.SetTransmission(gear);
 	m_output << "Car have transmission " + to_string(m_car.GetTransmission()) << endl;
 	return true;
+}
+
+std::string CRemoteControl::DirectionToString(Direction direction)
+{
+	auto it = m_directionNameMap.find(direction);
+	return it->second;
 }
