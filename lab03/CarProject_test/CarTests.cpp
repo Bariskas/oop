@@ -14,16 +14,16 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarTexture)
 		BOOST_CHECK_EQUAL(car.IsTurnedOn(), false);
 	}
 
-	BOOST_AUTO_TEST_CASE(can_be_turned_on)
-	{
-		BOOST_CHECK_NO_THROW(car.TurnOnEngine());
-		BOOST_CHECK_EQUAL(car.IsTurnedOn(), true);
-	}
-
 	BOOST_AUTO_TEST_CASE(speed_and_transmission_0_by_default)
 	{
 		BOOST_CHECK_EQUAL(car.GetTransmission(), 0);
 		BOOST_CHECK_EQUAL(car.GetSpeed(), 0);
+	}
+
+	BOOST_AUTO_TEST_CASE(can_be_turned_on)
+	{
+		BOOST_CHECK_NO_THROW(car.TurnOnEngine());
+		BOOST_CHECK_EQUAL(car.IsTurnedOn(), true);
 	}
 
 	BOOST_AUTO_TEST_CASE(cant_change_speed_or_transmission)
@@ -133,8 +133,8 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarTexture)
 		BOOST_FIXTURE_TEST_SUITE(when_change_tranmission_on_1, when_change_tranmission_on_1_)
 			BOOST_AUTO_TEST_CASE(speed_can_be_changed_between_0_and_30)
 			{
-				BOOST_CHECK_NO_THROW(car.SetSpeed(20));
-				BOOST_CHECK_EQUAL(car.GetSpeed(), 20);
+				BOOST_CHECK_NO_THROW(car.SetSpeed(30));
+				BOOST_CHECK_EQUAL(car.GetSpeed(), 30);
 				BOOST_CHECK_NO_THROW(car.SetSpeed(0));
 				BOOST_CHECK_EQUAL(car.GetSpeed(), 0);
 				BOOST_CHECK_THROW(car.SetSpeed(40), runtime_error);
