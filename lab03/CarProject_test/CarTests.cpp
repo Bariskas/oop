@@ -88,10 +88,10 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarTexture)
 		};
 
 		BOOST_FIXTURE_TEST_SUITE(when_change_tranmission_on_negative, when_change_tranmission_on_negative_)
-			BOOST_AUTO_TEST_CASE(speed_can_be_increased)
+			BOOST_AUTO_TEST_CASE(speed_cant_be_increased)
 			{
-				BOOST_CHECK_NO_THROW(car.SetSpeed(10));
-				BOOST_CHECK_EQUAL(car.GetSpeed(), 10);
+				BOOST_CHECK_THROW(car.SetSpeed(10), runtime_error);
+				BOOST_CHECK_EQUAL(car.GetSpeed(), 0);
 			}
 
 			BOOST_AUTO_TEST_CASE(car_cant_be_turned_off)
@@ -104,7 +104,7 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarTexture)
 			{
 				when_set_speed_10_on_negative_transmission_()
 				{
-					car.SetSpeed(10);
+					car.SetSpeed(-10);
 				}
 			};
 
@@ -117,7 +117,7 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarTexture)
 
 				BOOST_AUTO_TEST_CASE(direction_must_be_backward)
 				{
-					BOOST_CHECK_EQUAL(car.GetDirection(), Direction::Backward);
+					BOOST_CHECK_EQUAL(static_cast<int>(car.GetDirection()), static_cast<int>(Direction::Backward));
 				}
 			BOOST_AUTO_TEST_SUITE_END()
 		BOOST_AUTO_TEST_SUITE_END()

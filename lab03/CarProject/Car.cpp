@@ -4,7 +4,7 @@
 using namespace std;
 
 const CCar::TranmissionSpeedMap CCar::m_transmissionSpeedMap{
-	{ -1,{ 0, 20 } },
+	{ -1,{ -20, 0 } },
 	{ 0,{ INT_MIN, INT_MAX } },
 	{ 1,{ 0, 30 } },
 	{ 2,{ 20, 50 } },
@@ -103,7 +103,6 @@ bool CCar::CanChangeSpeed(int speed) const
 	bool canChange = false;
 
 	if (CheckForTurnedOnEngine()
-		&& CheckForNonNegativeInputSpeed(speed)
 		&& CheckIsSpeedAllowedByTransmission(speed, m_transmission)
 		&& CheckForIncreasingSpeedNonOnZeroTransmission(speed))
 	{
@@ -198,15 +197,6 @@ bool CCar::CheckForZeroTransmission() const
 		return true;
 	}
 	throw runtime_error("Car have non zero transmission!");
-}
-
-bool CCar::CheckForNonNegativeInputSpeed(int speed) const
-{
-	if (speed >= 0)
-	{
-		return true;
-	}
-	throw runtime_error("Speed value can't be less then 0!");
 }
 
 bool CCar::CheckForAlreadySettedTransmission(int tranmission) const

@@ -31,7 +31,6 @@ private:
 	bool CheckForSupportingCurrentDirectionByTransmission(int transmission) const;
 	bool CheckForZeroSpeed() const;
 	bool CheckForZeroTransmission() const;
-	bool CheckForNonNegativeInputSpeed(int speed) const;
 	bool CheckForAlreadySettedTransmission(int tranmission) const;
 	bool CheckForIncreasingSpeedNonOnZeroTransmission(int speed) const;
 
