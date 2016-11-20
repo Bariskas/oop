@@ -22,7 +22,7 @@ std::set<int> GetPrimeNumbers(int upperBound)
 	}
 
 	std::set<int> result;
-	for (int i = 2; i < upperBound; ++i)
+	for (int i = 2; i <= upperBound; ++i)
 	{
 		if (primeFlags[i])
 		{
