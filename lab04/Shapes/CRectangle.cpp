@@ -1,17 +1,17 @@
 #include "stdafx.h"
 #include "CRectangle.h"
+#include "SfmlUtils.h"
 
 using namespace std;
 
 CRectangle::CRectangle(CPoint leftTopPoint, double width, 
-	double height, string fillColor, string outlineColor)
+	double height, string outlineColor, string fillColor)
 	: m_fillColor(fillColor)
 	, m_outlineColor(outlineColor)
 	, m_leftTopPoint(leftTopPoint)
 	, m_width(width)
 	, m_height(height)
-{
-}
+{}
 
 double CRectangle::GetArea() const
 {
@@ -50,12 +50,20 @@ string CRectangle::GetFillColor() const
 
 void CRectangle::Draw(CCanvas& canvas) const
 {
-	canvas.FillPolygon({
+	vector<CPoint> points{
 		{ m_leftTopPoint.x, m_leftTopPoint.y },
-		{ m_leftTopPoint.x, m_leftTopPoint.y + m_height},
+		{ m_leftTopPoint.x, m_leftTopPoint.y + m_height },
 		{ m_leftTopPoint.x + m_width, m_leftTopPoint.y + m_height },
 		{ m_leftTopPoint.x + m_width, m_leftTopPoint.y }
-	}, 0);
+	};
+	canvas.FillPolygon(points, ColorFromStringToUnsigned(m_fillColor));
+
+	int recPointsNumber = points.size();
+	unsigned outlineColor = ColorFromStringToUnsigned(m_outlineColor);
+	for (int i = 0; i < recPointsNumber; ++i)
+	{
+		canvas.DrawLine(points[i], points[i % recPointsNumber], outlineColor);
+	}
 }
 
 CPoint CRectangle::GetLeftTop()

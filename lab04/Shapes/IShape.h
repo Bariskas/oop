@@ -1,8 +1,9 @@
 #pragma once
 
+#include "ICanvasDrawable.h"
 #include "stdafx.h"
 
-class IShape
+class IShape : public ICanvasDrawable
 {
 public:
 	virtual ~IShape() {};
@@ -11,3 +12,5 @@ public:
 	virtual std::string ToString() const = 0;
 	virtual std::string GetOutlineColor() const = 0;
 };
+
+typedef std::shared_ptr<IShape> ShapePtr;

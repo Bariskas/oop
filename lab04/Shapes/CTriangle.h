@@ -9,14 +9,15 @@ class CTriangle : public ISolidShape
 {
 public:
 	CTriangle(CPoint vertex1, CPoint vertex2, CPoint vertex3,
-		std::string fillColor, std::string outlineColor);
-
+		std::string outlineColor, std::string fillColor);
 	double GetArea() const override;
 	double GetPerimeter() const override;
 	std::string ToString() const override;
 	std::string GetOutlineColor() const override;
 
 	std::string GetFillColor() const override;
+
+	void Draw(CCanvas& canvas) const;
 
 	CPoint GetVertex1() const;
 	CPoint GetVertex2() const;

@@ -37,6 +37,10 @@ std::string CLineSegment::GetOutlineColor() const
 	return std::string();
 }
 
+void CLineSegment::Draw(CCanvas & canvas) const
+{
+}
+
 CPoint CLineSegment::GetStartPoint()
 {
 	return m_startPoint;

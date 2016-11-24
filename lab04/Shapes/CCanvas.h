@@ -6,6 +6,7 @@ class CCanvas : public ICanvas
 {
 public:
 	CCanvas();
+	void Display();
 	void DrawLine(CPoint from, CPoint to, unsigned lineColor) override;
 	void FillPolygon(std::vector<CPoint> points, unsigned fillColor) override;
 	void DrawCircle(CPoint center, double radius, unsigned lineColor) override;

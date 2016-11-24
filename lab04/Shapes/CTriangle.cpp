@@ -4,14 +4,13 @@
 
 using namespace std;
 
-CTriangle::CTriangle(CPoint vertex1, CPoint vertex2, CPoint vertex3, std::string fillColor, std::string outlineColor)
+CTriangle::CTriangle(CPoint vertex1, CPoint vertex2, CPoint vertex3, std::string outlineColor, std::string fillColor)
 	: m_vertex1(vertex1)
 	, m_vertex2(vertex2)
 	, m_vertex3(vertex3)
 	, m_outlineColor(outlineColor)
 	, m_fillColor(fillColor)
-{
-}
+{}
 
 double CTriangle::GetArea() const
 {
@@ -39,6 +38,11 @@ string CTriangle::ToString() const
 		<< "outlineColor = " << m_outlineColor << endl
 		<< "fillColor = " << m_fillColor << endl;
 	return ss.str();
+}
+
+void CTriangle::Draw(CCanvas& canvas) const
+{
+	
 }
 
 CPoint CTriangle::GetVertex1() const

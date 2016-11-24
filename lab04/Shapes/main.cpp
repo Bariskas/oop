@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "CRectangle.h"
+#include "CShapeFactory.h"
 #include "CCanvas.h"
 
 using namespace std;
@@ -24,7 +24,15 @@ int main()
 		cout << expectedString << endl;
 	}
 	CCanvas canvas;
-	rectangle.Draw(canvas);
+	//rectangle.Draw(canvas);
+	stringstream ss("Rectangle 50 50 200 50 00FF00FF 00FFFFFF\nRectangle 0 0 200 50 AAFFAAFF AAFFBBFF");
+	CShapeFactory factory;
+	vector<ShapePtr> shapes = factory.GetShapeFromStream(ss);
+	for (auto& shape : shapes)
+	{
+		shape->Draw(canvas);
+	}
+	canvas.Display();
 	getchar();
     return 0;
 }

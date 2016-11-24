@@ -6,11 +6,11 @@
 #include "CCanvas.h"
 #include "CPoint.h"
 
-class CRectangle : public ISolidShape, public ICanvasDrawable
+class CRectangle : public ISolidShape
 {
 public:
 	CRectangle(CPoint leftTopPoint, double width, 
-		double height, std::string fillColor, std::string outlineColor);
+		double height, std::string outlineColor, std::string fillColor);
 	~CRectangle() {};
 	double GetArea() const override;
 	double GetPerimeter() const override;

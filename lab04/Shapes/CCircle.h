@@ -9,13 +9,14 @@ class CCircle : public ISolidShape
 public:
 	CCircle(CPoint center, double radius,
 		std::string fillColor, std::string outlineColor);
-
 	double GetArea() const override;
 	double GetPerimeter() const override;
 	std::string ToString() const override;
 	std::string GetOutlineColor() const override;
 
 	std::string GetFillColor() const override;
+
+	void Draw(CCanvas& canvas) const;
 
 	CPoint GetCenter();
 	double GetRadius();

@@ -17,5 +17,8 @@
 #include <cmath>
 #include <climits>
 #include <vector>
+#include <map>
+#include <functional>
+#include <memory>
 
 #include <SFML/Graphics.hpp>

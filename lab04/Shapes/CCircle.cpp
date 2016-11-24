@@ -3,7 +3,7 @@
 
 using namespace std;
 
-CCircle::CCircle(CPoint center, double radius, string fillColor, string outlineColor)
+CCircle::CCircle(CPoint center, double radius, string outlineColor, string fillColor)
 	: m_center(center)
 	, m_radius(radius)
 	, m_fillColor(fillColor)
@@ -41,6 +41,10 @@ string CCircle::GetOutlineColor() const
 string CCircle::GetFillColor() const
 {
 	return m_fillColor;
+}
+
+void CCircle::Draw(CCanvas & canvas) const
+{
 }
 
 CPoint CCircle::GetCenter()
