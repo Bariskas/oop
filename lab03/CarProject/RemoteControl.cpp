@@ -60,7 +60,7 @@ bool CRemoteControl::Info(istream& /*args*/)
 	}
 	else
 	{
-		info.append("Car is turned off");
+		info.append("Car is turned off.");
 	}
 
 	m_output << info << endl;
@@ -71,14 +71,14 @@ bool CRemoteControl::Info(istream& /*args*/)
 bool CRemoteControl::EngineOn(istream& /*args*/)
 {
 	m_car.TurnOnEngine();
-	m_output << "Car engine is turned on" << endl;
+	m_output << "Car engine is turned on." << endl;
 	return true;
 }
 
 bool CRemoteControl::EngineOff(istream& /*args*/)
 {
 	m_car.TurnOffEngine();
-	m_output << "Car engine is turned off" << endl;
+	m_output << "Car engine is turned off." << endl;
 	return true;
 }
 
@@ -86,6 +86,10 @@ bool CRemoteControl::SetSpeed(istream& args)
 {
 	int speed;
 	args >> speed;
+	if (args.fail())
+	{
+		throw invalid_argument("Invalid input.");
+	}
 	m_car.SetSpeed(speed);
 	m_output << "Car have speed " + to_string(m_car.GetSpeed()) << endl;
 	return true;
@@ -95,6 +99,10 @@ bool CRemoteControl::SetGear(istream& args)
 {
 	int gear;
 	args >> gear;
+	if (args.fail())
+	{
+		throw invalid_argument("Invalid input.");
+	}
 	m_car.SetTransmission(gear);
 	m_output << "Car have transmission " + to_string(m_car.GetTransmission()) << endl;
 	return true;

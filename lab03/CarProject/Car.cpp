@@ -4,7 +4,7 @@
 using namespace std;
 
 const CCar::TranmissionSpeedMap CCar::m_transmissionSpeedMap{
-	{ -1,{ -20, 0 } },
+	{ -1,{ 0, 20 } },
 	{ 0,{ INT_MIN, INT_MAX } },
 	{ 1,{ 0, 30 } },
 	{ 2,{ 20, 50 } },
@@ -54,14 +54,13 @@ void CCar::SetSpeed(int speed)
 {
 	if (CanChangeSpeed(speed))
 	{
-		m_speed = speed;
+		m_speed = (m_transmission == -1 || GetDirection() == Direction::Backward) ? -speed : speed;
 	}
-	SetDirection(speed);
 }
 
 int CCar::GetSpeed() const
 {
-	return m_speed;
+	return abs(m_speed);
 }
 
 int CCar::GetTransmission() const
@@ -83,13 +82,18 @@ Direction CCar::GetDirection() const
 	return direction;
 }
 
+std::string CCar::GetDirectionAsString() const
+{
+	return DirectionToString(GetDirection());
+}
+
 bool CCar::CanChangeTransmission(int transmission) const
 {
 	bool canChange = false;
 
 	if (CheckForTurnedOnEngine()
 		&& CheckForAlreadySettedTransmission(transmission)
-		&& CheckIsSpeedAllowedByTransmission(m_speed, transmission)
+		&& CheckIsSpeedAllowedByTransmission(GetSpeed(), transmission)
 		&& CheckForSupportingCurrentDirectionByTransmission(transmission))
 	{
 		canChange = true;
@@ -103,6 +107,7 @@ bool CCar::CanChangeSpeed(int speed) const
 	bool canChange = false;
 
 	if (CheckForTurnedOnEngine()
+		&& CheckForNonNegativeInputSpeed(speed)
 		&& CheckIsSpeedAllowedByTransmission(speed, m_transmission)
 		&& CheckForIncreasingSpeedNonOnZeroTransmission(speed))
 	{
@@ -112,26 +117,7 @@ bool CCar::CanChangeSpeed(int speed) const
 	return canChange;
 }
 
-void CCar::SetDirection(int speed)
-{
-	if (speed == 0)
-	{
-		m_direction = Direction::Holding;
-	}
-	else if (m_transmission != 0)
-	{
-		if (m_transmission == -1)
-		{
-			m_direction = Direction::Backward;
-		}
-		else
-		{
-			m_direction = Direction::Forward;
-		}
-	}
-}
-
-std::string CCar::DirectionToString(Direction direction) const
+std::string CCar::DirectionToString(Direction direction)
 {
 	auto it = m_directionNameMap.find(direction);
 	return it->second;
@@ -155,7 +141,7 @@ bool CCar::CheckIsSpeedAllowedByTransmission(int speed, int transmission) const
 bool CCar::CheckForSupportingCurrentDirectionByTransmission(int transmission) const
 {
 	if (transmission == -1 && GetDirection() == Direction::Holding
-		|| transmission > 0 && m_direction != Direction::Backward
+		|| transmission > 0 && GetDirection() != Direction::Backward
 		|| transmission == 0)
 	{
 		return true;
@@ -169,7 +155,7 @@ bool CCar::CheckForTurnedOffEngine() const
 	{
 		return true;
 	}
-	throw runtime_error("Engine is turned on!");
+	throw runtime_error("Engine is turned on.");
 }
 
 bool CCar::CheckForTurnedOnEngine() const
@@ -178,7 +164,7 @@ bool CCar::CheckForTurnedOnEngine() const
 	{
 		return true;
 	}
-	throw runtime_error("Engine is turned off!");
+	throw runtime_error("Engine is turned off.");
 }
 
 bool CCar::CheckForZeroSpeed() const
@@ -187,7 +173,7 @@ bool CCar::CheckForZeroSpeed() const
 	{
 		return true;
 	}
-	throw runtime_error("Car is moving!");
+	throw runtime_error("Car is moving.");
 }
 
 bool CCar::CheckForZeroTransmission() const
@@ -196,7 +182,7 @@ bool CCar::CheckForZeroTransmission() const
 	{
 		return true;
 	}
-	throw runtime_error("Car have non zero transmission!");
+	throw runtime_error("Car have non zero transmission.");
 }
 
 bool CCar::CheckForAlreadySettedTransmission(int tranmission) const
@@ -210,9 +196,18 @@ bool CCar::CheckForAlreadySettedTransmission(int tranmission) const
 
 bool CCar::CheckForIncreasingSpeedNonOnZeroTransmission(int speed) const
 {
-	if (!(m_transmission == 0 && speed > m_speed))
+	if (!(m_transmission == 0 && speed > abs(m_speed)))
 	{
 		return true;
 	}
-	throw runtime_error("Cant increase speed on zero transmission!!!!!");
+	throw runtime_error("Cant increase speed on zero transmission.");
+}
+
+bool CCar::CheckForNonNegativeInputSpeed(int speed) const
+{
+	if (speed < 0)
+	{
+		throw runtime_error("Speed can't be negative.");
+	}
+	return true;
 }

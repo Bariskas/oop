@@ -18,12 +18,13 @@ public:
 	int GetTransmission() const;
 	int GetSpeed() const;
 	Direction GetDirection() const;
+	std::string GetDirectionAsString() const; // for boost tests
 
 private:
+	static std::string DirectionToString(Direction direction);
+
 	bool CanChangeTransmission(int tranmission) const;
 	bool CanChangeSpeed(int speed) const;
-	void SetDirection(int speed);
-	std::string DirectionToString(Direction direction) const;
 
 	bool CheckForTurnedOffEngine() const;
 	bool CheckIsSpeedAllowedByTransmission(int speed, int transmission) const;
@@ -33,6 +34,7 @@ private:
 	bool CheckForZeroTransmission() const;
 	bool CheckForAlreadySettedTransmission(int tranmission) const;
 	bool CheckForIncreasingSpeedNonOnZeroTransmission(int speed) const;
+	bool CheckForNonNegativeInputSpeed(int speed) const;
 
 private:
 	typedef std::map<int, std::pair<int, int>> TranmissionSpeedMap;
@@ -43,7 +45,6 @@ private:
 
 	bool m_isExceptionEnabled = false;
 	bool m_isTurnedOn = false;
-	Direction m_direction = Direction::Holding;
 	int m_speed = 0;
 	int m_transmission = 0;
 };
