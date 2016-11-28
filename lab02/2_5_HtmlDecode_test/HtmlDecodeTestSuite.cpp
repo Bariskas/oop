@@ -3,7 +3,7 @@
 
 using namespace std;
 
-BOOST_AUTO_TEST_SUITE(HtmlDecodeTestSuite)
+BOOST_AUTO_TEST_SUITE(HtmlDecode)
 
 	BOOST_AUTO_TEST_CASE(empty_string_should_proccessed_without_exception)
 	{
@@ -16,8 +16,8 @@ BOOST_AUTO_TEST_SUITE(HtmlDecodeTestSuite)
 		BOOST_CHECK_EQUAL(result, "&&heh");
 		result = DecodeHtmlEntities("&amp;amp;");
 		BOOST_CHECK_EQUAL(result, "&amp;");
-		result = DecodeHtmlEntities("123&amp;&amp;");
-		BOOST_CHECK_EQUAL(result, "123&&");
+		result = DecodeHtmlEntities("12\n3&amp;&amp;");
+		BOOST_CHECK_EQUAL(result, "12\n3&&");
 	}
 
 BOOST_AUTO_TEST_SUITE_END()

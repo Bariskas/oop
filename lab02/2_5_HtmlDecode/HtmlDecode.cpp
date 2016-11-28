@@ -13,40 +13,38 @@ using namespace std;
 
 string DecodeHtmlEntities(const string& toDecode)
 {
-	static map<string, string> htmlEntities = {
+	static vector<pair<string, string>> htmlEntities = {
 		{"&quot;", "\""}, {"&apos;", "\'"}, {"&lt;", "<"}, {"&gt;", ">"}, {"&amp;", "&"}
 	}; 
 
 	string result;
 	result.reserve(toDecode.length());
 
-	const char* stringToDecode = toDecode.c_str();
-
 	for (size_t i = 0; i < toDecode.size();)
 	{
-		if (stringToDecode[i] == '&')
+		if (toDecode[i] == '&')
 		{
 			bool isEntityDetected = false;
-			for (auto& entity : htmlEntities)
+
+			auto it = find_if(htmlEntities.begin(), htmlEntities.end(), [&](pair<string, string> & entity) {
+				return (toDecode.compare(i, entity.first.length(), entity.first) == 0);
+			});
+
+			if (it != htmlEntities.end())
 			{
-				auto codedHtmlEntity = get<0>(entity);
-				auto codedHtmlEntitySize = codedHtmlEntity.size();
-				if (std::strncmp(stringToDecode + i, codedHtmlEntity.c_str(), codedHtmlEntitySize) == 0)
-				{
-					result.append(get<1>(entity));
-					i += codedHtmlEntitySize;
-					isEntityDetected = true;
-				}
+				i += it->first.length();
+				isEntityDetected = true;
+				result.append(it->second);
 			}
-			if (!isEntityDetected)
+			else
 			{
-				result.push_back(stringToDecode[i]);
+				result.push_back(toDecode[i]);
 				i++;
 			}
 		}
 		else
 		{
-			result.push_back(stringToDecode[i]);
+			result.push_back(toDecode[i]);
 			++i;
 		}
 	}

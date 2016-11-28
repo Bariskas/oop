@@ -1,43 +1,6 @@
-#include <string>
-#include <iostream>
-#include <limits>
-#include <boost/format.hpp>
+﻿#include "Radix.h"
 
 using namespace std;
-
-string ChangeRadix(const string& sourceRadix, const string& destRadix, const string& value);
-unsigned StringToNumber(const string& stringToConvert, int sourceRadix = 10);
-string NumberToString(unsigned value, unsigned radix);
-int CharToNumber(char input);
-char NumberToChar(int input);
-bool IsMultiplicationOverflow(unsigned firstMultiplier, unsigned secondMultiplier);
-bool IsAdditionOverflow(unsigned firstArg, unsigned secondArg);
-bool IsValidRadix(int radix);
-unsigned MultiplicationWithOverflowCheck(unsigned arg1, unsigned arg2);
-unsigned AdditionWithOverflowCheck(unsigned arg1, unsigned arg2);
-
-int main(int argc, char * argv[])
-{
-	if (argc != 4)
-	{
-		cout << "Must be 3 arguments: <source notation> <destination notation> <value>" << endl;
-		return 1;
-	}
-
-	string result;
-	try
-	{
-		result = ChangeRadix(argv[1], argv[2], argv[3]);
-	}
-	catch (const exception& e)
-	{
-		cout << e.what() << endl;
-		return 1;
-	}
-
-	cout << result << endl;
-	return 0;
-}
 
 string ChangeRadix(const string& sourceRadixStr, const string& destRadixStr, const string& valueStr)
 {
@@ -73,7 +36,7 @@ unsigned StringToNumber(const string& stringToConvert, int radix)
 		throw invalid_argument("Radix must be between 2 and 36");
 	}
 	unsigned result;
-	
+
 	result = 0;
 	for (size_t i = 0; i < stringToConvert.length(); ++i)
 	{

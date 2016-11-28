@@ -14,5 +14,3 @@
 #include <set>
 #include <cstdlib> // atoi
 #include <vector>
-
-// TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

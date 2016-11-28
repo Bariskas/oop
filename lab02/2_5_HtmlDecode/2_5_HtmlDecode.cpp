@@ -9,7 +9,7 @@ using namespace std;
 int main()
 {
 	vector<string> inputVector(istream_iterator<string>(cin), (istream_iterator<string>()));
-	for (string strToDecode : inputVector)
+	for (auto strToDecode : inputVector)
 	{
 		cout << DecodeHtmlEntities(strToDecode) << endl;
 	}

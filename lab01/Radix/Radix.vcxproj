@@ -146,7 +146,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="radix.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Radix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="test.bat" />
@@ -161,6 +162,9 @@
     <Text Include="expected_test_unary_plus_result.txt" />
     <Text Include="overflow_result.txt" />
     <Text Include="wrong_radix_error.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Radix.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

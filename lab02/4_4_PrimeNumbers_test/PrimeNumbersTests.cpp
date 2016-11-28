@@ -3,19 +3,17 @@
 
 using namespace std;
 
-BOOST_AUTO_TEST_SUITE(GetPrimeNumbers_function_tests)
-
-BOOST_AUTO_TEST_CASE(should_be_only_one_prime_number_with_2_upperbound)
+BOOST_AUTO_TEST_SUITE(GetPrimeNumbers_function)
+BOOST_AUTO_TEST_CASE(should_be_2_3_5_numbers_with_6_upperbound)
 {
-	auto primeNumbers = GetPrimeNumbers(2);
-	BOOST_CHECK(primeNumbers.)
+	auto set = GetPrimeNumbers(6);
+	std::set<int> exp = { 2, 3, 5 };
+	BOOST_CHECK(set == exp);
 }
 
-BOOST_AUTO_TEST_CASE(sum_of_negative_values_must_be_zero)
+BOOST_AUTO_TEST_CASE(should_be_5761455_elements_with_100000000_upperbound)
 {
-	vector<double> testVector = { -2, -3, -4 };
-	auto sum = CalculatePositiveElementSum(testVector);
-	BOOST_CHECK_EQUAL(sum, 0);
+	auto set = GetPrimeNumbers(100000000);
+	BOOST_CHECK(set.size() == 5761455);
 }
-
 BOOST_AUTO_TEST_SUITE_END()
