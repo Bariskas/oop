@@ -186,7 +186,7 @@ bool CCar::CheckForAlreadySetTransmission(int tranmission) const
 	{
 		return true;
 	}
-	throw runtime_error(to_string(tranmission) + " transmission already setted.");
+	throw runtime_error(to_string(tranmission) + " transmission already set.");
 }
 
 bool CCar::CheckForIncreasingSpeedNonOnZeroTransmission(int speed) const

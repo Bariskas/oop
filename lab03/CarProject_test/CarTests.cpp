@@ -12,25 +12,24 @@ struct CarTexture
 {
 	CCar car;
 
-
 	void ExpectOperationFailure(const function<void(CCar & obj)> & op) const
 	{
 		auto clone(car);
 		BOOST_CHECK_THROW(op(clone), runtime_error);
 		BOOST_CHECK_EQUAL(clone.GetSpeed(), car.GetSpeed());
 		BOOST_CHECK_EQUAL(clone.GetTransmission(), car.GetTransmission());
-		BOOST_CHECK_EQUAL(clone.GetDirectionAsString(), car.GetDirectionAsString());
+		BOOST_CHECK(clone.GetDirection() == car.GetDirection());
 	}
 
 	void ExpectOperationSuccess(const function<void(CCar & obj)> & op, 
-		bool excpectedEngineState, int excpectedSpeed, int excpectedTransmission, 
-		const string & expectedTransmission)
+		bool expectedEngineState, int expectedSpeed, int expectedTransmission, 
+		Direction expectedDirection)
 	{
 		BOOST_CHECK_NO_THROW(op(car));
-		BOOST_CHECK_EQUAL(car.IsTurnedOn(), excpectedEngineState);
-		BOOST_CHECK_EQUAL(car.GetSpeed(), excpectedSpeed);
-		BOOST_CHECK_EQUAL(car.GetTransmission(), excpectedTransmission);
-		BOOST_CHECK_EQUAL(car.GetDirectionAsString(), expectedTransmission);
+		BOOST_CHECK_EQUAL(car.IsTurnedOn(), expectedEngineState);
+		BOOST_CHECK_EQUAL(car.GetSpeed(), expectedSpeed);
+		BOOST_CHECK_EQUAL(car.GetTransmission(), expectedTransmission);
+		BOOST_CHECK(car.GetDirection() == expectedDirection);
 	}
 
 	void ExpectCantSetTransmission(int tranmission) const
@@ -41,7 +40,7 @@ struct CarTexture
 	void ExpectCanSetTransmission(int tranmission)
 	{
 		ExpectOperationSuccess(bind(&CCar::SetTransmission, _1, tranmission),
-			car.IsTurnedOn(), car.GetSpeed(), tranmission, car.GetDirectionAsString());
+			car.IsTurnedOn(), car.GetSpeed(), tranmission, car.GetDirection());
 	}
 
 	void ExpectCantSetSpeed(int speed) const
@@ -49,7 +48,7 @@ struct CarTexture
 		ExpectOperationFailure(bind(&CCar::SetSpeed, _1, speed));
 	}
 
-	void ExpectCanSetSpeed(int speed, string direction)
+	void ExpectCanSetSpeed(int speed, Direction direction)
 	{
 		ExpectOperationSuccess(bind(&CCar::SetSpeed, _1, speed),
 			car.IsTurnedOn(), speed, car.GetTransmission(), direction);
@@ -63,7 +62,7 @@ struct CarTexture
 	void ExpectCanTurnOff()
 	{
 		ExpectOperationSuccess(bind(&CCar::TurnOffEngine, _1),
-			false, car.GetSpeed(), car.GetTransmission(), car.GetDirectionAsString());
+			false, car.GetSpeed(), car.GetTransmission(), car.GetDirection());
 	}
 
 	void ExpectCantTurnOn() const
@@ -74,7 +73,7 @@ struct CarTexture
 	void ExpectCanTurnOn()
 	{
 		ExpectOperationSuccess(bind(&CCar::TurnOnEngine, _1),
-			true, car.GetSpeed(), car.GetTransmission(), car.GetDirectionAsString());
+			true, car.GetSpeed(), car.GetTransmission(), car.GetDirection());
 	}
 };
 
@@ -156,12 +155,12 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarTexture)
 		BOOST_FIXTURE_TEST_SUITE(when_change_tranmission_on_negative, when_change_tranmission_on_negative_)
 			BOOST_AUTO_TEST_CASE(speed_can_be_increased)
 			{
-				ExpectCanSetSpeed(10, BACKWARD_DIRECTION);
+				ExpectCanSetSpeed(10, Direction::Backward);
 			}
 
 			BOOST_AUTO_TEST_CASE(speed_cant_be_bigger_20)
 			{
-				ExpectCanSetSpeed(20, BACKWARD_DIRECTION);
+				ExpectCanSetSpeed(20, Direction::Backward);
 				ExpectCantSetSpeed(21);
 			}
 
@@ -215,7 +214,7 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarTexture)
 
 					BOOST_AUTO_TEST_CASE(speed_can_be_decreased)
 					{
-						ExpectCanSetSpeed(5, BACKWARD_DIRECTION);
+						ExpectCanSetSpeed(5, Direction::Backward);
 					}
 
 					BOOST_AUTO_TEST_CASE(car_cant_be_turned_off)
@@ -257,8 +256,8 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarTexture)
 		BOOST_FIXTURE_TEST_SUITE(when_change_tranmission_on_1, when_change_tranmission_on_1_)
 			BOOST_AUTO_TEST_CASE(speed_can_be_changed_between_0_and_30)
 			{
-				ExpectCanSetSpeed(30, FORWARD_DIRECTION);
-				ExpectCanSetSpeed(0, HOLDING_DIRECTION);
+				ExpectCanSetSpeed(30, Direction::Forward);
+				ExpectCanSetSpeed(0, Direction::Holding);
 				ExpectCantSetSpeed(40);
 				ExpectCantSetSpeed(-10);
 			}
@@ -323,7 +322,7 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarTexture)
 
 					BOOST_AUTO_TEST_CASE(speed_can_be_decreased)
 					{
-						ExpectCanSetSpeed(5, FORWARD_DIRECTION);
+						ExpectCanSetSpeed(5, Direction::Forward);
 					}
 
 					BOOST_AUTO_TEST_CASE(car_cant_be_turned_off)
@@ -411,8 +410,8 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarTexture)
 			{
 				ExpectCantSetSpeed(40);
 				ExpectCantSetSpeed(151);
-				ExpectCanSetSpeed(150, FORWARD_DIRECTION);
-				ExpectCanSetSpeed(50, FORWARD_DIRECTION);
+				ExpectCanSetSpeed(150, Direction::Forward);
+				ExpectCanSetSpeed(50, Direction::Forward);
 			}
 
 			struct when_change_speed_to_150_ : when_change_tranmission_on_5_
@@ -456,7 +455,7 @@ BOOST_FIXTURE_TEST_SUITE(Car, CarTexture)
 
 				BOOST_AUTO_TEST_CASE(can_decrease_speed_for_0)
 				{
-					ExpectCanSetSpeed(0, HOLDING_DIRECTION);
+					ExpectCanSetSpeed(0, Direction::Holding);
 				}
 			BOOST_AUTO_TEST_SUITE_END()
 		BOOST_AUTO_TEST_SUITE_END()
