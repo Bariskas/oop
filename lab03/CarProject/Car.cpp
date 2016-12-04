@@ -82,17 +82,12 @@ Direction CCar::GetDirection() const
 	return direction;
 }
 
-std::string CCar::GetDirectionAsString() const
-{
-	return DirectionToString(GetDirection());
-}
-
 bool CCar::CanChangeTransmission(int transmission) const
 {
 	bool canChange = false;
 
 	if (CheckForTurnedOnEngine()
-		&& CheckForAlreadySettedTransmission(transmission)
+		&& CheckForAlreadySetTransmission(transmission)
 		&& CheckIsSpeedAllowedByTransmission(GetSpeed(), transmission)
 		&& CheckForSupportingCurrentDirectionByTransmission(transmission))
 	{
@@ -185,7 +180,7 @@ bool CCar::CheckForZeroTransmission() const
 	throw runtime_error("Car have non zero transmission.");
 }
 
-bool CCar::CheckForAlreadySettedTransmission(int tranmission) const
+bool CCar::CheckForAlreadySetTransmission(int tranmission) const
 {
 	if (tranmission != m_transmission)
 	{

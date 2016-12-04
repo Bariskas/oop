@@ -56,13 +56,13 @@ void CRectangle::Draw(CCanvas& canvas) const
 		{ m_leftTopPoint.x + m_width, m_leftTopPoint.y + m_height },
 		{ m_leftTopPoint.x + m_width, m_leftTopPoint.y }
 	};
-	canvas.FillPolygon(points, ColorFromStringToUnsigned(m_fillColor));
+	//canvas.FillPolygon(points, ColorFromStringToUnsigned(m_fillColor));
 
 	int recPointsNumber = points.size();
-	unsigned outlineColor = ColorFromStringToUnsigned(m_outlineColor);
+	unsigned long outlineColor = ColorFromStringToUnsigned(m_outlineColor);
 	for (int i = 0; i < recPointsNumber; ++i)
 	{
-		canvas.DrawLine(points[i], points[i % recPointsNumber], outlineColor);
+		canvas.DrawLine(points[i], points[(i + 1) % recPointsNumber], outlineColor);
 	}
 }
 

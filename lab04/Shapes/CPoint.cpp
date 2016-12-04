@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "MyUtils.h"
+#include "InputStreamUtils.h"
 #include "CPoint.h"
 
 using namespace std;
@@ -16,7 +16,7 @@ CPoint::CPoint(double x, double y)
 
 istream & operator>>(istream & input, CPoint & point)
 {
-	rd(input, point.x);
-	rd(input, point.y);
+	point.x = InputStreamUtils::ReadDouble(input);
+	point.y = InputStreamUtils::ReadDouble(input);
 	return input;
 }

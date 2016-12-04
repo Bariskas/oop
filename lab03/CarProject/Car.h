@@ -18,7 +18,6 @@ public:
 	int GetTransmission() const;
 	int GetSpeed() const;
 	Direction GetDirection() const;
-	std::string GetDirectionAsString() const; // for boost tests
 
 private:
 	static std::string DirectionToString(Direction direction);
@@ -32,7 +31,7 @@ private:
 	bool CheckForSupportingCurrentDirectionByTransmission(int transmission) const;
 	bool CheckForZeroSpeed() const;
 	bool CheckForZeroTransmission() const;
-	bool CheckForAlreadySettedTransmission(int tranmission) const;
+	bool CheckForAlreadySetTransmission(int tranmission) const;
 	bool CheckForIncreasingSpeedNonOnZeroTransmission(int speed) const;
 	bool CheckForNonNegativeInputSpeed(int speed) const;
 

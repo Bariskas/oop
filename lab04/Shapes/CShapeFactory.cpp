@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "MyUtils.h"
+#include "InputStreamUtils.h"
 #include "CShapeFactory.h"
 
 using namespace std;
@@ -17,16 +17,29 @@ CShapeFactory::CShapeFactory()
 vector<ShapePtr> CShapeFactory::GetShapeFromStream(istream& inputStream) const
 {
 	vector<ShapePtr> shapes;
+	stringstream shapeRepresentationStream;
+	string shapeStringRepresentation;
 	string shapeType;
-	while (inputStream >> shapeType)
+	while (getline(inputStream, shapeStringRepresentation))
 	{
+		shapeRepresentationStream.clear();
+		shapeRepresentationStream.str(shapeStringRepresentation);
+		shapeRepresentationStream >> shapeType;
 		auto initializerMapIt = m_shapeInitializerMap.find(shapeType);
 		if (initializerMapIt == m_shapeInitializerMap.end())
 		{
-			throw invalid_argument("unknow shape type: " + shapeType);
+			throw invalid_argument("Unknow shape type: " + shapeType + " in string \"" + shapeStringRepresentation + "\".");
 		}
 
-		shapes.push_back(initializerMapIt->second(getLineSS(inputStream)));
+		try
+		{
+			shapes.push_back(initializerMapIt->second(shapeRepresentationStream));
+		}
+		catch (const exception& e)
+		{
+			cout << e.what() << endl;
+		}
+		
 	}
 	return shapes;
 }
@@ -37,9 +50,8 @@ ShapePtr CShapeFactory::InitLineSegment(istream& inputStream) const
 	inputStream >> startPoint;
 	CPoint endPoint;
 	inputStream >> endPoint;
-	string outlineColor;
-	inputStream >> outlineColor;
-	return make_shared<CLineSegment>(startPoint, endPoint, outlineColor);
+	return make_shared<CLineSegment>(startPoint, endPoint,
+		InputStreamUtils::ReadColorString(inputStream));
 }
 
 ShapePtr CShapeFactory::InitTriangle(istream& inputStream) const
@@ -48,39 +60,25 @@ ShapePtr CShapeFactory::InitTriangle(istream& inputStream) const
 	CPoint vertex2;
 	CPoint vertex3;
 	inputStream >> vertex1 >> vertex2 >> vertex3;
-	string outlineColor;
-	inputStream >> outlineColor;
-	string fillColor;
-	inputStream >> fillColor;
 	return make_shared<CTriangle>(vertex1, vertex2, vertex3,
-		outlineColor, fillColor);
+		InputStreamUtils::ReadColorString(inputStream),
+		InputStreamUtils::ReadColorString(inputStream));
 }
 
 ShapePtr CShapeFactory::InitRectangle(istream& inputStream) const
 {
 	CPoint leftTopPoint;
 	inputStream >> leftTopPoint;
-	double width;
-	double height;
-	inputStream >> width >> height;
-	string outlineColor;
-	inputStream >> outlineColor;
-	string fillColor;
-	inputStream >> fillColor;
-	return make_shared<CRectangle>(leftTopPoint, width, height,
-		outlineColor, fillColor);
+	return make_shared<CRectangle>(leftTopPoint, InputStreamUtils::ReadDouble(inputStream),
+		InputStreamUtils::ReadDouble(inputStream), InputStreamUtils::ReadColorString(inputStream),
+		InputStreamUtils::ReadColorString(inputStream));
 }
 
 ShapePtr CShapeFactory::InitCircle(istream&  inputStream) const
 {
 	CPoint center;
 	inputStream >> center;
-	double radius;
-	inputStream >> radius;
-	string outlineColor;
-	inputStream >> outlineColor;
-	string fillColor;
-	inputStream >> fillColor;
-	return make_shared<CCircle>(center, radius,
-		outlineColor, fillColor);
+	return make_shared<CCircle>(center, InputStreamUtils::ReadDouble(inputStream),
+		InputStreamUtils::ReadColorString(inputStream),
+		InputStreamUtils::ReadColorString(inputStream));
 }

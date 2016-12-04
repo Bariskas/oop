@@ -14,7 +14,7 @@ int main()
 
 	CRectangle rectangle({ 200, 200 }, 100, 100, "ff0000", "00ff00");
 	cout << rectangle.ToString() << endl;
-	string expectedString = "Shape - rectangle\narea = 1240.28\nperimeter = 142.2\nleftTopPoint.x = 10.3\nleftTopPoint.y = 20.15\nwidth = 30.7\nheight = 40.4\noutlineColor = 00ff00\nfillColor = ff0000\n";
+	string expectedString = "Shape - rectangle\narea = 10000\nperimeter = 400\nleftTopPoint.x = 200\nleftTopPoint.y = 200\nwidth = 100\nheight = 100\noutlineColor = ff0000\nfillColor = 00ff00\n";
 	if (rectangle.ToString() == expectedString)
 	{
 		cout << "NIHUIASEBE" << endl;

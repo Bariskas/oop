@@ -1,5 +1,6 @@
 #pragma once
 
+#include "stdafx.h"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -9,13 +10,13 @@ inline std::istream& rd(std::istream & inputStream, double& number)
 {
 	if (inputStream.eof())
 	{
-		throw runtime_error("attempt to read from ended stream");
+		throw std::runtime_error("attempt to read from ended stream");
 	}
 	std::string numberString;
 	inputStream >> numberString;
 	if (numberString == "")
 	{
-		throw runtime_error("empty stream");
+		throw std::runtime_error("empty stream");
 	}
 	std::stringstream ss(numberString);
 	ss >> number;
@@ -26,14 +27,14 @@ inline std::istream& rd(std::istream & inputStream, double& number)
 	return inputStream;
 }
 
-inline stringstream getLineSS(std::istream & inputStream)
+inline std::stringstream getLineSS(std::istream & inputStream)
 {
 	if (inputStream.eof())
 	{
-		throw runtime_error("attempt to read from ended stream");
+		throw std::runtime_error("attempt to read from ended stream");
 	}
-	string line;
+	std::string line;
 	getline(inputStream, line);
-	stringstream ss(line);
+	std::stringstream ss(line);
 	return ss;
 }

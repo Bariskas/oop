@@ -3,9 +3,9 @@
 
 using namespace std;
 
-unsigned ColorFromStringToUnsigned(string colorString)
+unsigned long ColorFromStringToUnsigned(string colorString)
 {
-	unsigned colorUnsigned;
+	unsigned long colorUnsigned;
 	stringstream ss;
 	ss << std::hex << colorString;
 	ss >> colorUnsigned;
