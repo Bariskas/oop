@@ -81,6 +81,12 @@
     <ClInclude Include="InputStreamUtils.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="CTextFormCanvas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CShapeBase.h">
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -115,6 +121,12 @@
     </ClCompile>
     <ClCompile Include="InputStreamUtils.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="CTextFormCanvas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CShapeBase.cpp">
+      <Filter>Header Files\Shapes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

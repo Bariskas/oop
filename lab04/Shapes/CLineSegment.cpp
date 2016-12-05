@@ -41,12 +41,16 @@ void CLineSegment::Draw(CCanvas & canvas) const
 {
 }
 
-CPoint CLineSegment::GetStartPoint()
+CPoint CLineSegment::GetStartPoint() const
 {
 	return m_startPoint;
 }
 
-CPoint CLineSegment::GetEndPoint()
+CPoint CLineSegment::GetEndPoint() const
 {
 	return m_endPoint;
+}
+
+std::string CLineSegment::GetAdditionalInformation()
+{
 }
