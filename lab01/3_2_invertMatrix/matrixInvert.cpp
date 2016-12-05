@@ -159,7 +159,12 @@ void WriteMatrixToConsole(const matrix& matrix)
 double CalculateDeterminantForMatrix(const matrix& sourceMatrix)
 {
 	const double(&sm)[3][3] = sourceMatrix;
-	double determinant = (sm[0][0] * sm[1][1] * sm[2][2]) + (sm[0][1] * sm[1][2] * sm[2][0]) + (sm[0][2] * sm[1][0] * sm[2][1]) -
-		(sm[0][2] * sm[1][1] * sm[2][0]) - (sm[0][0] * sm[2][1] * sm[1][2]) - (sm[1][0] * sm[0][1] * sm[2][2]);
+	double determinant =
+		(sm[0][0] * sm[1][1] * sm[2][2]) +
+		(sm[0][1] * sm[1][2] * sm[2][0]) + 
+		(sm[0][2] * sm[1][0] * sm[2][1]) -
+		(sm[0][2] * sm[1][1] * sm[2][0]) -
+		(sm[0][0] * sm[2][1] * sm[1][2]) - 
+		(sm[1][0] * sm[0][1] * sm[2][2]);
 	return determinant;
 }
