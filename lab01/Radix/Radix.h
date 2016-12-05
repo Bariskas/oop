@@ -5,7 +5,7 @@
 #include <limits>
 #include <boost/format.hpp>
 
-std::string ChangeRadix(const std::string& sourceRadix, const std::string& destRadix, const std::string& value);
+std::string ChangeRadix(const unsigned sourceRadix, const unsigned destRadix, const std::string& value);
 unsigned StringToNumber(const std::string& stringToConvert, int sourceRadix = 10);
 std::string NumberToString(unsigned value, unsigned radix);
 int CharToNumber(char input);

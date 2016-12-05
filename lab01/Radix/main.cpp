@@ -4,6 +4,7 @@ using namespace std;
 
 int main(int argc, char * argv[])
 {
+	setlocale(LC_ALL, "");
 	if (argc != 4)
 	{
 		cout << "Must be 3 arguments: <source notation> <destination notation> <value>" << endl;
@@ -13,7 +14,7 @@ int main(int argc, char * argv[])
 	string result;
 	try
 	{
-		result = ChangeRadix(argv[1], argv[2], argv[3]);
+		result = ChangeRadix(StringToNumber(argv[1]), StringToNumber(argv[2]), argv[3]);
 	}
 	catch (const exception& e)
 	{

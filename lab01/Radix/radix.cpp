@@ -2,13 +2,9 @@
 
 using namespace std;
 
-string ChangeRadix(const string& sourceRadixStr, const string& destRadixStr, const string& valueStr)
+string ChangeRadix(const unsigned sourceRadix, const unsigned destinationRadix, const string& valueStr)
 {
-	int sourceRadix;
-	int destinationRadix;
 	unsigned value;
-	sourceRadix = StringToNumber(sourceRadixStr);
-	destinationRadix = StringToNumber(destRadixStr);
 
 	string result;
 	if (valueStr[0] == '+' || valueStr[0] == '-')
@@ -94,13 +90,24 @@ string NumberToString(unsigned number, unsigned radix)
 int CharToNumber(char input)
 {
 	int result;
+	if (input < 1)
+	{
+		throw invalid_argument("String content wrong symbol");
+	}
 	if (isdigit(input))
 	{
 		result = input - '0';
 	}
 	else
 	{
-		result = input - 'A' + 10;
+		if (isalpha(input))
+		{
+			result = toupper(input) - 'A' + 10;
+		}
+		else
+		{
+			throw invalid_argument("String content wrong symbol: " + input);
+		}
 	}
 	return result;
 }
