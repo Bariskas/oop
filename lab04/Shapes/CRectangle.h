@@ -1,12 +1,10 @@
 #pragma once
 
 #include "stdafx.h"
-#include "ISolidShape.h"
-#include "ICanvasDrawable.h"
-#include "CCanvas.h"
 #include "CPoint.h"
+#include "CSolidShapeBase.h"
 
-class CRectangle : public ISolidShape
+class CRectangle : public CSolidShapeBase
 {
 public:
 	CRectangle(CPoint leftTopPoint, double width, 
@@ -14,22 +12,17 @@ public:
 	~CRectangle() {};
 	double GetArea() const override;
 	double GetPerimeter() const override;
-	std::string ToString() const override;
-	std::string GetOutlineColor() const override;
 
-	std::string GetFillColor() const override;
+	void Draw(CCanvas& canvas) const override;
 
-	void Draw(CCanvas& canvas) const;
-
-	CPoint GetLeftTop();
-	CPoint GetRightBottom();
-	double GetWidth();
-	double GetHeight();
-
+	CPoint GetLeftTop() const;
+	CPoint GetRightBottom() const;
+	double GetWidth() const;
+	double GetHeight() const;
 private:
-	std::string m_fillColor;
-	std::string m_outlineColor;
-
+	void AppendAdditionalInformation(std::stringstream& ss) const final;
+	std::string GetShapeType() const final;
+private:
 	CPoint m_leftTopPoint;
 	double m_width;
 	double m_height;

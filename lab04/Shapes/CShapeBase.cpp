@@ -3,7 +3,21 @@
 
 using namespace std;
 
+CShapeBase::CShapeBase(std::string outlineColor)
+	: m_outlineColor(outlineColor)
+{
+}
+
 std::string CShapeBase::ToString() const
 {
-	return string("Shape: " + GetShapeType() + " Area: " + to_string(GetArea()) + " Perimeter: " + to_string(GetPerimeter()) + "\n" + GetAdditionalInformation());
+	stringstream ss;
+	ss << "Shape: " << GetShapeType() << " Area: " << GetArea() << " Perimeter: "
+		<< GetPerimeter() << endl;
+	AppendAdditionalInformation(ss);
+	return ss.str();
+}
+
+std::string CShapeBase::GetOutlineColor() const
+{
+	return m_outlineColor;
 }

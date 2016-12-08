@@ -87,6 +87,9 @@
     <ClInclude Include="CShapeBase.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="CSolidShapeBase.h">
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -126,7 +129,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CShapeBase.cpp">
-      <Filter>Header Files\Shapes</Filter>
+      <Filter>Source Files\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="CSolidShapeBase.cpp">
+      <Filter>Source Files\Shapes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

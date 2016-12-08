@@ -10,17 +10,16 @@ public:
 		std::string outlineColor);
 	double GetArea() const override;
 	double GetPerimeter() const override;
-	virtual std::string GetOutlineColor() const override;
 
-	void Draw(CCanvas& canvas) const;
+	void Draw(CCanvas& canvas) const override;
 
 	CPoint GetStartPoint() const;
 	CPoint GetEndPoint() const;
 
 private:
-	std::string GetAdditionalInformation();
-
-	std::string m_outlineColor;
+	void AppendAdditionalInformation(std::stringstream& ss) const final;
+	std::string GetShapeType() const final;
+private:
 	CPoint m_startPoint;
 	CPoint m_endPoint;
 };

@@ -176,6 +176,7 @@
     <ClInclude Include="CRectangle.h" />
     <ClInclude Include="CShapeBase.h" />
     <ClInclude Include="CShapeFactory.h" />
+    <ClInclude Include="CSolidShapeBase.h" />
     <ClInclude Include="CTextFormCanvas.h" />
     <ClInclude Include="CTriangle.h" />
     <ClInclude Include="ICanvas.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="CRectangle.cpp" />
     <ClCompile Include="CShapeBase.cpp" />
     <ClCompile Include="CShapeFactory.cpp" />
+    <ClCompile Include="CSolidShapeBase.cpp" />
     <ClCompile Include="CTextFormCanvas.cpp" />
     <ClCompile Include="CTriangle.cpp" />
     <ClCompile Include="InputStreamUtils.cpp" />

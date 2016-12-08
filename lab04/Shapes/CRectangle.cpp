@@ -6,9 +6,8 @@ using namespace std;
 
 CRectangle::CRectangle(CPoint leftTopPoint, double width, 
 	double height, string outlineColor, string fillColor)
-	: m_fillColor(fillColor)
-	, m_outlineColor(outlineColor)
-	, m_leftTopPoint(leftTopPoint)
+	: CSolidShapeBase(outlineColor, fillColor)
+    , m_leftTopPoint(leftTopPoint)
 	, m_width(width)
 	, m_height(height)
 {}
@@ -23,29 +22,14 @@ double CRectangle::GetPerimeter() const
 	return 2 * m_height + 2 * m_width;
 }
 
-string CRectangle::ToString() const
+void CRectangle::AppendAdditionalInformation(stringstream& ss) const
 {
-	stringstream ss;
-	ss << "Shape - rectangle" << endl
-		<< "area = " << GetArea() << endl
-		<< "perimeter = " << GetPerimeter() << endl
-		<< "leftTopPoint.x = " << m_leftTopPoint.x << endl
-		<< "leftTopPoint.y = " << m_leftTopPoint.y << endl
-		<< "width = " << m_width << endl
-		<< "height = " << m_height << endl
-		<< "outlineColor = " << m_outlineColor << endl
-		<< "fillColor = " << m_fillColor << endl;
-	return ss.str();
+	ss << "width: " << m_width << "height: " << m_height << " left top point: " << m_leftTopPoint.x << ":" << m_leftTopPoint.y << endl;
 }
 
-string CRectangle::GetOutlineColor() const
+std::string CRectangle::GetShapeType() const
 {
-	return m_outlineColor;
-}
-
-string CRectangle::GetFillColor() const
-{
-	return m_fillColor;
+	return "rectangle";
 }
 
 void CRectangle::Draw(CCanvas& canvas) const
@@ -56,32 +40,32 @@ void CRectangle::Draw(CCanvas& canvas) const
 		{ m_leftTopPoint.x + m_width, m_leftTopPoint.y + m_height },
 		{ m_leftTopPoint.x + m_width, m_leftTopPoint.y }
 	};
-	canvas.FillPolygon(points, sf::Color::Blue.toInteger());//ColorFromStringToUnsigned(m_fillColor));
+	canvas.FillPolygon(points, ColorFromStringToUnsigned(GetFillColor()));
 
 	int recPointsNumber = points.size();
-	unsigned long outlineColor = ColorFromStringToUnsigned(m_outlineColor);
+	unsigned long outlineColor = ColorFromStringToUnsigned(GetOutlineColor());
 	for (int i = 0; i < recPointsNumber; ++i)
 	{
 		canvas.DrawLine(points[i], points[(i + 1) % recPointsNumber], outlineColor);
 	}
 }
 
-CPoint CRectangle::GetLeftTop()
+CPoint CRectangle::GetLeftTop() const
 {
 	return m_leftTopPoint;
 }
 
-CPoint CRectangle::GetRightBottom()
+CPoint CRectangle::GetRightBottom() const
 {
 	return CPoint(m_leftTopPoint.x + m_width, m_leftTopPoint.y + m_height);
 }
 
-double CRectangle::GetWidth()
+double CRectangle::GetWidth() const
 {
 	return m_width;
 }
 
-double CRectangle::GetHeight()
+double CRectangle::GetHeight() const
 {
 	return m_height;
 }

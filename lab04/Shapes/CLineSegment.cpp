@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "CLineSegment.h"
+#include "SfmlUtils.h"
 
 using namespace std;
 
 CLineSegment::CLineSegment(CPoint startPoint, CPoint endPoint, std::string outlineColor)
-	: m_startPoint(startPoint)
+	: CShapeBase(outlineColor)
+	, m_startPoint(startPoint)
 	, m_endPoint(endPoint)
-	, m_outlineColor(outlineColor)
 {
 }
 
@@ -17,28 +18,12 @@ double CLineSegment::GetArea() const
 
 double CLineSegment::GetPerimeter() const
 {
-	return 0.;
-}
-
-string CLineSegment::ToString() const
-{
-	stringstream ss;
-	ss << "Shape - line" << endl
-		<< "startPoint.x = " << m_startPoint.x << endl
-		<< "startPoint.y = " << m_startPoint.y << endl
-		<< "endPoint.x = " << m_endPoint.x << endl
-		<< "endPoint.y = " << m_endPoint.y << endl
-		<< "outlineColor = " << m_outlineColor << endl;
-	return ss.str();
-}
-
-std::string CLineSegment::GetOutlineColor() const
-{
-	return std::string();
+	return sqrt(pow(m_endPoint.x - m_startPoint.x, 2) + pow(m_endPoint.y - m_startPoint.y, 2));
 }
 
 void CLineSegment::Draw(CCanvas & canvas) const
 {
+	canvas.DrawLine(m_startPoint, m_endPoint, ColorFromStringToUnsigned(m_outlineColor));
 }
 
 CPoint CLineSegment::GetStartPoint() const
@@ -51,6 +36,12 @@ CPoint CLineSegment::GetEndPoint() const
 	return m_endPoint;
 }
 
-std::string CLineSegment::GetAdditionalInformation()
+void CLineSegment::AppendAdditionalInformation(stringstream& ss) const
 {
+	ss << "from: " << m_startPoint.x << ":" << m_startPoint.y << " to: " << m_endPoint.x << ":" << m_endPoint.y << endl;
+}
+
+std::string CLineSegment::GetShapeType() const
+{
+	return "line";
 }
