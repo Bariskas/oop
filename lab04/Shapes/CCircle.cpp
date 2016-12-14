@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "CCircle.h"
+#include "CSolidShapeBase.h"
+#include "SfmlUtils.h"
 
 using namespace std;
 
@@ -27,8 +29,15 @@ void CCircle::AppendAdditionalInformation(stringstream& ss) const
 	<< " radius: " << m_radius << endl;
 }
 
+std::string CCircle::GetShapeType() const
+{
+	return "circle";
+}
+
 void CCircle::Draw(CCanvas & canvas) const
 {
+	//canvas.FillCircle(m_center, m_radius, ColorFromStringToUnsigned(m_fillColor));
+	canvas.DrawCircle(m_center, m_radius, ColorFromStringToUnsigned(m_outlineColor));
 }
 
 CPoint CCircle::GetCenter() const

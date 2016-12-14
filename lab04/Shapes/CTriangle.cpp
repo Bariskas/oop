@@ -39,7 +39,7 @@ std::string CTriangle::GetShapeType() const
 
 void CTriangle::Draw(CCanvas& canvas) const
 {
-	canvas.FillPolygon({m_vertex1, m_vertex2, m_vertex3}, ColorFromStringToUnsigned(GetFillColor());
+	canvas.FillPolygon({m_vertex1, m_vertex2, m_vertex3}, ColorFromStringToUnsigned(GetFillColor()));
 	auto outlineColor = ColorFromStringToUnsigned(CShapeBase::GetOutlineColor());
 	canvas.DrawLine(m_vertex1, m_vertex2, outlineColor);
 	canvas.DrawLine(m_vertex2, m_vertex3, outlineColor);

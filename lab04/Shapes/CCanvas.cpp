@@ -17,8 +17,8 @@ void CCanvas::DrawLine(CPoint from, CPoint to, unsigned long lineColor)
 {
 	sf::Vertex line[] =
 	{
-		sf::Vertex(sf::Vector2f(from.x, from.y), sf::Color::Green),// Color(lineColor)),
-		sf::Vertex(sf::Vector2f(to.x, to.y), sf::Color::Green)// Color(lineColor))
+		sf::Vertex(sf::Vector2f(from.x, from.y), Color(lineColor)),
+		sf::Vertex(sf::Vector2f(to.x, to.y), Color(lineColor))
 	};
 
 	m_window.draw(line, 2, sf::LineStrip);
@@ -43,6 +43,7 @@ void CCanvas::DrawCircle(CPoint center, double radius, unsigned long lineColor)
 	circle.setOrigin(radius, radius);
 	circle.setPosition(sf::Vector2f(center.x, center.y));
 	circle.setOutlineColor(sf::Color(lineColor));
+	circle.setOutlineThickness(1);
 	circle.setFillColor(sf::Color::Transparent);
 	m_window.draw(circle);
 }
