@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "CShapeFactory.h"
 #include "CCanvas.h"
+#include "ShapeUtils.h"
 
 using namespace std;
 
@@ -27,7 +28,7 @@ int main()
 	//rectangle.Draw(canvas);
 	stringstream ss;
 	// ITA TANK, DA
-	ss << "Rectangle 20 40 120 20 00FF00FF 00FFFFFF\n"
+	ss << "Rectangle 20 40 120 20 00FF00FF 00FFFFFF" << endl
 		<< "Circle 140 50 40 FFFF00FF FF0000FF" << endl
 		<< "Circle 140 95 20 FFFF00FF FF0000FF" << endl
 		<< "Circle 100 95 20 FFFF00FF FF0000FF" << endl
@@ -38,6 +39,16 @@ int main()
 	for (auto& shape : shapes)
 	{
 		shape->Draw(canvas);
+	}
+	ShapePtr shapeWithMaxArea = GetShapeWithMaxArea({});
+	if (shapeWithMaxArea != nullptr)
+	{
+		cout << "Max area: " << shapeWithMaxArea->GetArea() << endl;
+	}
+	ShapePtr shapeWithMinPerimeter = GetShapeWithMinPerimeter(shapes);
+	if (shapeWithMinPerimeter != nullptr)
+	{
+		cout << "Min perimeter: " << shapeWithMinPerimeter->GetPerimeter() << endl;
 	}
 	canvas.Display();
 	getchar();

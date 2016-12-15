@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
-#include "../Shapes/CCircle.h"
+#include "../Shapes/SfmlUtils.h"
 #include "../Shapes/CCanvas.h"
+#include "../Shapes/CCircle.h"
 
 using namespace std;
 
@@ -60,7 +61,7 @@ BOOST_FIXTURE_TEST_SUITE(Circle, CircleFixture)
 
 	BOOST_AUTO_TEST_CASE(can_be_converted_to_string)
 	{
-		const auto expectedString = "Shape: circle Area: 78.538 Perimeter: 31.416\nCenter: 10.0:10.0 Radius: 5\n";
+		const auto expectedString = "Shape: circle Area: 78.5398 Perimeter: 31.4159\nCenter: 10:10 Radius: 5\n";
 		string st = circle.ToString();
 		BOOST_CHECK_EQUAL(circle.ToString(), expectedString);
 	}

@@ -24,4 +24,7 @@
 #include <memory>
 #include <algorithm>
 
+#include "../Shapes/SfmlUtils.h"
+#include "../Shapes/CCanvas.h"
+
 #include <SFML/Graphics.hpp>
