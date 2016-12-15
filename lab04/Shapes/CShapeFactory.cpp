@@ -7,7 +7,7 @@ using namespace std::placeholders;
 
 CShapeFactory::CShapeFactory()
 	: m_shapeInitializerMap({
-		{ "LineSegment", bind(&CShapeFactory::InitLineSegment, this, _1) },
+		{ "Line", bind(&CShapeFactory::InitLineSegment, this, _1) },
 		{ "Triangle", bind(&CShapeFactory::InitTriangle, this, _1) },
 		{ "Rectangle", bind(&CShapeFactory::InitRectangle, this, _1) },
 		{ "Circle", bind(&CShapeFactory::InitCircle, this, _1) }
@@ -69,9 +69,11 @@ ShapePtr CShapeFactory::InitRectangle(istream& inputStream) const
 {
 	CPoint leftTopPoint;
 	inputStream >> leftTopPoint;
-	return make_shared<CRectangle>(leftTopPoint, InputStreamUtils::ReadDouble(inputStream),
-		InputStreamUtils::ReadDouble(inputStream), InputStreamUtils::ReadColorString(inputStream),
-		InputStreamUtils::ReadColorString(inputStream));
+	auto width = InputStreamUtils::ReadDouble(inputStream);
+	auto height = InputStreamUtils::ReadDouble(inputStream);
+	auto outlineColor = InputStreamUtils::ReadColorString(inputStream);
+	auto fillColor = InputStreamUtils::ReadColorString(inputStream);
+	return make_shared<CRectangle>(leftTopPoint, width, height, outlineColor, fillColor);
 }
 
 ShapePtr CShapeFactory::InitCircle(istream&  inputStream) const

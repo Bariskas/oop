@@ -25,8 +25,8 @@ double CCircle::GetPerimeter() const
 void CCircle::AppendAdditionalInformation(stringstream& ss) const
 {
 	ss <<
-		"center: " << m_center.x << ":" << m_center.y 
-	<< " radius: " << m_radius << endl;
+		"Center: " << m_center.x << ":" << m_center.y 
+	<< " Radius: " << m_radius << endl;
 }
 
 std::string CCircle::GetShapeType() const
@@ -36,7 +36,7 @@ std::string CCircle::GetShapeType() const
 
 void CCircle::Draw(CCanvas & canvas) const
 {
-	//canvas.FillCircle(m_center, m_radius, ColorFromStringToUnsigned(m_fillColor));
+	canvas.FillCircle(m_center, m_radius, ColorFromStringToUnsigned(m_fillColor));
 	canvas.DrawCircle(m_center, m_radius, ColorFromStringToUnsigned(m_outlineColor));
 }
 

@@ -25,10 +25,14 @@ int main()
 //	}
 	CCanvas canvas;
 	//rectangle.Draw(canvas);
-	stringstream ss();
-	ss << "Rectangle 50 50 200 50 00FF00FF 00FFFFFF\n";
-		<< "Rectangle 0 0 200 50 AAFFAAFF AAFFBBFF\n"
-	<<"Circle 300 300 300 FF0000FF FF0000FF";
+	stringstream ss;
+	// ITA TANK, DA
+	ss << "Rectangle 20 40 120 20 00FF00FF 00FFFFFF\n"
+		<< "Circle 140 50 40 FFFF00FF FF0000FF" << endl
+		<< "Circle 140 95 20 FFFF00FF FF0000FF" << endl
+		<< "Circle 100 95 20 FFFF00FF FF0000FF" << endl
+		<< "Circle 180 95 20 FFFF00FF FF0000FF" << endl
+		<< "Rectangle 79 70 122 40 00FF00FF 00FFFFFF\n";
 	CShapeFactory factory;
 	vector<ShapePtr> shapes = factory.GetShapeFromStream(ss);
 	for (auto& shape : shapes)

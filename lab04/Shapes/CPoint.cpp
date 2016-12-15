@@ -20,3 +20,8 @@ istream & operator>>(istream & input, CPoint & point)
 	point.y = InputStreamUtils::ReadDouble(input);
 	return input;
 }
+
+bool operator==(const CPoint& p1, const CPoint& p2)
+{
+	return p1.x == p2.x && p1.y == p2.y;
+}

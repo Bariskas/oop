@@ -36,9 +36,9 @@ void CRectangle::Draw(CCanvas& canvas) const
 {
 	vector<CPoint> points{
 		{ m_leftTopPoint.x, m_leftTopPoint.y },
-		{ m_leftTopPoint.x, m_leftTopPoint.y + m_height },
+		{ m_leftTopPoint.x + m_width, m_leftTopPoint.y },
 		{ m_leftTopPoint.x + m_width, m_leftTopPoint.y + m_height },
-		{ m_leftTopPoint.x + m_width, m_leftTopPoint.y }
+		{ m_leftTopPoint.x, m_leftTopPoint.y + m_height }
 	};
 	canvas.FillPolygon(points, ColorFromStringToUnsigned(GetFillColor()));
 

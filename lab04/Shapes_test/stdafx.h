@@ -10,3 +10,18 @@
 #include <tchar.h>
 
 #include <string>
+
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+#include <iostream>
+#include <sstream>
+#include <cmath>
+#include <climits>
+#include <vector>
+#include <map>
+#include <functional>
+#include <memory>
+#include <algorithm>
+
+#include <SFML/Graphics.hpp>

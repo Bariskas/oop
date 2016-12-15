@@ -23,3 +23,5 @@
 #include <algorithm>
 
 #include <SFML/Graphics.hpp>
+
+#pragma warning( disable : 4250 )

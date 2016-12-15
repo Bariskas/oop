@@ -1,7 +1,6 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "ShapeUtils.h"
-
-using namespace std;
+#include "CPoint.h"
 
 double GetDistanceBeetwen(CPoint point1, CPoint point2)
 {

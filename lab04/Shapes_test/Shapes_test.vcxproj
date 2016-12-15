@@ -71,15 +71,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(sdk2015)\SFML-2.4.0\include;$(sdk2015)\boost_1_61_0;$(IncludePath)</IncludePath>
+    <LibraryPath>$(sdk2015)\SFML-2.4.0\lib;$(sdk2015)\boost_1_61_0\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(sdk2015)\SFML-2.4.0\include;$(sdk2015)\boost_1_61_0;$(IncludePath)</IncludePath>
+    <LibraryPath>$(sdk2015)\SFML-2.4.0\lib;$(sdk2015)\boost_1_61_0\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(sdk2015)\SFML-2.4.0\include;$(sdk2015)\boost_1_61_0;$(IncludePath)</IncludePath>
+    <LibraryPath>$(sdk2015)\SFML-2.4.0\lib;$(sdk2015)\boost_1_61_0\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(sdk2015)\SFML-2.4.0\include;$(sdk2015)\boost_1_61_0;$(IncludePath)</IncludePath>
+    <LibraryPath>$(sdk2015)\SFML-2.4.0\lib;$(sdk2015)\boost_1_61_0\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -161,10 +169,39 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Shapes\CCanvas.h" />
+    <ClInclude Include="..\Shapes\CCircle.h" />
+    <ClInclude Include="..\Shapes\CLineSegment.h" />
+    <ClInclude Include="..\Shapes\CPoint.h" />
+    <ClInclude Include="..\Shapes\CRectangle.h" />
+    <ClInclude Include="..\Shapes\CShapeBase.h" />
+    <ClInclude Include="..\Shapes\CShapeFactory.h" />
+    <ClInclude Include="..\Shapes\CSolidShapeBase.h" />
+    <ClInclude Include="..\Shapes\CTextFormCanvas.h" />
+    <ClInclude Include="..\Shapes\CTriangle.h" />
+    <ClInclude Include="..\Shapes\ICanvas.h" />
+    <ClInclude Include="..\Shapes\ICanvasDrawable.h" />
+    <ClInclude Include="..\Shapes\InputStreamUtils.h" />
+    <ClInclude Include="..\Shapes\IShape.h" />
+    <ClInclude Include="..\Shapes\ISolidShape.h" />
+    <ClInclude Include="..\Shapes\ShapeUtils.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Shapes\CCanvas.cpp" />
+    <ClCompile Include="..\Shapes\CCircle.cpp" />
+    <ClCompile Include="..\Shapes\CLineSegment.cpp" />
+    <ClCompile Include="..\Shapes\CPoint.cpp" />
+    <ClCompile Include="..\Shapes\CRectangle.cpp" />
+    <ClCompile Include="..\Shapes\CShapeBase.cpp" />
+    <ClCompile Include="..\Shapes\CShapeFactory.cpp" />
+    <ClCompile Include="..\Shapes\CSolidShapeBase.cpp" />
+    <ClCompile Include="..\Shapes\CTextFormCanvas.cpp" />
+    <ClCompile Include="..\Shapes\CTriangle.cpp" />
+    <ClCompile Include="..\Shapes\InputStreamUtils.cpp" />
+    <ClCompile Include="..\Shapes\ShapeUtils.cpp" />
+    <ClCompile Include="CircleTests.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ShapeTestSuite.cpp" />
     <ClCompile Include="stdafx.cpp">
