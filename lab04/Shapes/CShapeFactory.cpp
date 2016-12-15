@@ -60,9 +60,10 @@ ShapePtr CShapeFactory::InitTriangle(istream& inputStream) const
 	CPoint vertex2;
 	CPoint vertex3;
 	inputStream >> vertex1 >> vertex2 >> vertex3;
+	auto outlineColor = InputStreamUtils::ReadColorString(inputStream);
+	auto fillColor = InputStreamUtils::ReadColorString(inputStream);
 	return make_shared<CTriangle>(vertex1, vertex2, vertex3,
-		InputStreamUtils::ReadColorString(inputStream),
-		InputStreamUtils::ReadColorString(inputStream));
+		outlineColor, fillColor);
 }
 
 ShapePtr CShapeFactory::InitRectangle(istream& inputStream) const
@@ -80,7 +81,9 @@ ShapePtr CShapeFactory::InitCircle(istream&  inputStream) const
 {
 	CPoint center;
 	inputStream >> center;
-	return make_shared<CCircle>(center, InputStreamUtils::ReadDouble(inputStream),
-		InputStreamUtils::ReadColorString(inputStream),
-		InputStreamUtils::ReadColorString(inputStream));
+	auto radius = InputStreamUtils::ReadDouble(inputStream);
+	auto outlineColor = InputStreamUtils::ReadColorString(inputStream);
+	auto fillColor = InputStreamUtils::ReadColorString(inputStream);
+	return make_shared<CCircle>(center, radius,
+		outlineColor, fillColor);
 }
