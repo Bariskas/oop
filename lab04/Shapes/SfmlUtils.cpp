@@ -3,7 +3,7 @@
 
 using namespace std;
 
-unsigned long ColorFromStringToUnsigned(string colorString)
+unsigned long ColorFromStringToUnsigned(const string colorString)
 {
 	unsigned long colorUnsigned;
 	stringstream ss;

@@ -5,6 +5,14 @@ using namespace std;
 
 double InputStreamUtils::ReadDouble(std::istream & inputStream)
 {
+#if 0
+	double result = 0;
+	if (inputStream >> result)
+	{
+		return result;
+	}
+	throw std::runtime_error("Invalid argument: " + numberString);
+#else
 	ThrowIfEof(inputStream);
 	auto numberString = GetStringFromStream(inputStream);
 	if (!IsValidStringForDouble(numberString))
@@ -12,6 +20,7 @@ double InputStreamUtils::ReadDouble(std::istream & inputStream)
 		throw std::runtime_error("Invalid argument: " + numberString);
 	}
 	return atof(numberString.c_str());
+#endif
 }
 
 string InputStreamUtils::ReadColorString(std::istream & inputStream)

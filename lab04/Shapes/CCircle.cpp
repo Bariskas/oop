@@ -36,8 +36,10 @@ std::string CCircle::GetShapeType() const
 
 void CCircle::Draw(CCanvas & canvas) const
 {
-	canvas.FillCircle(m_center, m_radius, ColorFromStringToUnsigned(m_fillColor));
-	canvas.DrawCircle(m_center, m_radius, ColorFromStringToUnsigned(m_outlineColor));
+	canvas.FillCircle(m_center, m_radius, 
+		ColorFromStringToUnsigned(GetFillColor()));
+	canvas.DrawCircle(m_center, m_radius,
+		ColorFromStringToUnsigned(GetOutlineColor()));
 }
 
 CPoint CCircle::GetCenter() const

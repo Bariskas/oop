@@ -13,3 +13,14 @@ string CSolidShapeBase::GetFillColor() const
 {
 	return m_fillColor;
 }
+
+std::string CSolidShapeBase::ToString() const
+{
+	return CShapeBase::ToString();
+}
+
+std::string CSolidShapeBase::GetOutlineColor() const
+{
+	return CShapeBase::GetOutlineColor();
+}
+

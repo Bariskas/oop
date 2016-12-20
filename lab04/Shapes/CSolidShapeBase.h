@@ -8,6 +8,9 @@ public:
 	virtual ~CSolidShapeBase() {};
 	CSolidShapeBase(std::string outlineColor, std::string fillColor);
 	std::string GetFillColor() const override;
-protected:
+
+	virtual std::string ToString() const override final;
+	virtual std::string GetOutlineColor() const override final;
+private:
 	std::string m_fillColor;
 };

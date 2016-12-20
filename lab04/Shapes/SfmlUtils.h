@@ -2,4 +2,4 @@
 
 #include "stdafx.h"
 
-unsigned long ColorFromStringToUnsigned(std::string colorString);
+unsigned long ColorFromStringToUnsigned(const std::string colorString);

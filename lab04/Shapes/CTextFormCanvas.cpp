@@ -10,16 +10,16 @@ CTextFormCanvas::CTextFormCanvas(ostream & outputStream)
 
 void CTextFormCanvas::Display()
 {
-	m_outputStream << "Display some shit." << endl;
+	m_outputStream << "Displaying." << endl;
 }
 
-void CTextFormCanvas::DrawLine(CPoint from, CPoint to, unsigned long lineColor)
+void CTextFormCanvas::DrawLine(const CPoint from, const CPoint to, unsigned long lineColor)
 {
 	m_outputStream << "Draw: line; from " << from.x << ":" << from.y << 
 		" to " << to.x << ":" << to.y << endl;
 }
 
-void CTextFormCanvas::FillPolygon(std::vector<CPoint> points, unsigned long fillColor)
+void CTextFormCanvas::FillPolygon(const std::vector<CPoint> points, unsigned long fillColor)
 {
 	m_outputStream << "Draw: polygon filling; polygon coordinates";
 	for (auto& point : points)
@@ -29,13 +29,13 @@ void CTextFormCanvas::FillPolygon(std::vector<CPoint> points, unsigned long fill
 	m_outputStream << endl;
 }
 
-void CTextFormCanvas::DrawCircle(CPoint center, double radius, unsigned long lineColor)
+void CTextFormCanvas::DrawCircle(const CPoint center, double radius, unsigned long lineColor)
 {
 	m_outputStream << "Draw: circle outline; radius " << radius <<
 		" center " << center.x << ":" << center.y << endl;
 }
 
-void CTextFormCanvas::FillCircle(CPoint center, double radius, unsigned long fillColor)
+void CTextFormCanvas::FillCircle(const CPoint center, double radius, unsigned long fillColor)
 {
 	m_outputStream << "Draw: circle filling; radius " << radius <<
 		" center " << center.x << ":" << center.y << endl;

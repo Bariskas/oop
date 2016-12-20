@@ -11,7 +11,7 @@ CShapeFactory::CShapeFactory()
 		{ "Triangle", bind(&CShapeFactory::InitTriangle, this, _1) },
 		{ "Rectangle", bind(&CShapeFactory::InitRectangle, this, _1) },
 		{ "Circle", bind(&CShapeFactory::InitCircle, this, _1) }
-})
+	})
 {}
 
 vector<ShapePtr> CShapeFactory::GetShapeFromStream(istream& inputStream) const

@@ -6,11 +6,11 @@ class CShapeBase : virtual public IShape
 public:
 	CShapeBase(std::string outlineColor);
 	virtual ~CShapeBase() {};
-	std::string ToString() const final;
-	std::string GetOutlineColor() const final;
+	std::string ToString() const override;
+	std::string GetOutlineColor() const override;
 protected:
 	virtual void AppendAdditionalInformation(std::stringstream& ss) const = 0;
 	virtual std::string GetShapeType() const = 0;
-protected:
+private:
 	std::string m_outlineColor;
 };

@@ -8,12 +8,13 @@
 
 using namespace std;
 
+void DrawShapes(vector<ShapePtr> shapes);
+
 int main()
 {
 	cout.setf(ios::fixed);
 	cout.precision(3);
 
-	CCanvas canvas;
 	stringstream ss;
 	ss << "Rectangle 20 40 120 20 00FF00FF 709E68FF" << endl
 		<< "Circle 140 50 40 FFFF00FF 628E79FF" << endl
@@ -23,12 +24,6 @@ int main()
 		<< "Rectangle 79 70 122 40 00FF00FF 466847FF" << endl;
 	CShapeFactory factory;
 	vector<ShapePtr> shapes = factory.GetShapeFromStream(ss);
-	for (auto& shape : shapes)
-	{
-		shape->Draw(canvas);
-	}
-	canvas.Display();
-
 	ShapePtr shapeWithMaxArea = GetShapeWithMaxArea(shapes);
 	if (shapeWithMaxArea != nullptr)
 	{
@@ -39,6 +34,17 @@ int main()
 	{
 		cout << "Min perimeter: " << shapeWithMinPerimeter->GetPerimeter() << endl;
 	}
+	sf::RenderTexture renderTexture;
+	if (!renderTexture.create(500, 500))
+	{
+		// error...
+	}
+	CCanvas canvas;
+	for (auto& shape : shapes)
+	{
+		shape->Draw(canvas);
+	}
+	canvas.Display();
 	getchar();
     return 0;
 }

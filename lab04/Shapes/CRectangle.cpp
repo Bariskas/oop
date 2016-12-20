@@ -42,9 +42,9 @@ void CRectangle::Draw(CCanvas& canvas) const
 	};
 	canvas.FillPolygon(points, ColorFromStringToUnsigned(GetFillColor()));
 
-	int recPointsNumber = points.size();
-	unsigned long outlineColor = ColorFromStringToUnsigned(GetOutlineColor());
-	for (int i = 0; i < recPointsNumber; ++i)
+	auto recPointsNumber = points.size();
+	auto outlineColor = ColorFromStringToUnsigned(GetOutlineColor());
+	for (size_t i = 0; i < recPointsNumber; ++i)
 	{
 		canvas.DrawLine(points[i], points[(i + 1) % recPointsNumber], outlineColor);
 	}

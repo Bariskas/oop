@@ -23,7 +23,8 @@ double CLineSegment::GetPerimeter() const
 
 void CLineSegment::Draw(CCanvas & canvas) const
 {
-	canvas.DrawLine(m_startPoint, m_endPoint, ColorFromStringToUnsigned(m_outlineColor));
+	canvas.DrawLine(m_startPoint, m_endPoint,
+		ColorFromStringToUnsigned(GetOutlineColor()));
 }
 
 CPoint CLineSegment::GetStartPoint() const
