@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lab05", "lab05\lab05.vcxproj", "{A3EBB3D1-B94C-4FE2-A285-66B5FA2C0D07}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RationalNumbers", "RationalNumbers\RationalNumbers.vcxproj", "{AB46EF88-6112-414F-9121-AC9BF7234507}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A3EBB3D1-B94C-4FE2-A285-66B5FA2C0D07}.Debug|x64.ActiveCfg = Debug|x64
-		{A3EBB3D1-B94C-4FE2-A285-66B5FA2C0D07}.Debug|x64.Build.0 = Debug|x64
-		{A3EBB3D1-B94C-4FE2-A285-66B5FA2C0D07}.Debug|x86.ActiveCfg = Debug|Win32
-		{A3EBB3D1-B94C-4FE2-A285-66B5FA2C0D07}.Debug|x86.Build.0 = Debug|Win32
-		{A3EBB3D1-B94C-4FE2-A285-66B5FA2C0D07}.Release|x64.ActiveCfg = Release|x64
-		{A3EBB3D1-B94C-4FE2-A285-66B5FA2C0D07}.Release|x64.Build.0 = Release|x64
-		{A3EBB3D1-B94C-4FE2-A285-66B5FA2C0D07}.Release|x86.ActiveCfg = Release|Win32
-		{A3EBB3D1-B94C-4FE2-A285-66B5FA2C0D07}.Release|x86.Build.0 = Release|Win32
+		{AB46EF88-6112-414F-9121-AC9BF7234507}.Debug|x64.ActiveCfg = Debug|x64
+		{AB46EF88-6112-414F-9121-AC9BF7234507}.Debug|x64.Build.0 = Debug|x64
+		{AB46EF88-6112-414F-9121-AC9BF7234507}.Debug|x86.ActiveCfg = Debug|Win32
+		{AB46EF88-6112-414F-9121-AC9BF7234507}.Debug|x86.Build.0 = Debug|Win32
+		{AB46EF88-6112-414F-9121-AC9BF7234507}.Release|x64.ActiveCfg = Release|x64
+		{AB46EF88-6112-414F-9121-AC9BF7234507}.Release|x64.Build.0 = Release|x64
+		{AB46EF88-6112-414F-9121-AC9BF7234507}.Release|x86.ActiveCfg = Release|Win32
+		{AB46EF88-6112-414F-9121-AC9BF7234507}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
