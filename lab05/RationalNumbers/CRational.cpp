@@ -19,6 +19,9 @@ CRational::CRational(int numerator, int denominator)
 	: m_numerator(numerator)
 	, m_denominator(denominator)
 {
+	auto gcd = Gcd(abs(m_numerator), abs(m_denominator));
+	m_numerator /= gcd;
+	m_denominator /= gcd;
 }
 
 int CRational::GetNumerator() const
@@ -73,14 +76,13 @@ CRational& CRational::operator-=(CRational const& rational)
 
 CRational const CRational::operator*(CRational const& rational) const
 {
-	return CRational(GetNumerator() + rational.GetNumerator(), 
-		GetDenominator() + rational.GetDenominator());
+	return CRational(GetNumerator() * rational.GetNumerator(), 
+		GetDenominator() * rational.GetDenominator());
 }
 
 CRational const CRational::operator/(CRational const& rational) const
 {
-	return CRational(GetNumerator() + rational.GetDenominator(),
-		GetDenominator() + rational.GetNumerator());
+	return *this * CRational(rational.GetDenominator(), rational.GetNumerator());
 }
 
 CRational& CRational::operator*=(CRational const& rational)
@@ -97,7 +99,7 @@ CRational& CRational::operator/=(CRational const& rational)
 
 bool CRational::operator==(CRational const& rational) const
 {
-	return this->ToDouble() == rational.ToDouble();
+	return this->GetNumerator() == rational.GetNumerator() && this->GetDenominator() == rational.GetDenominator();
 }
 
 bool CRational::operator!=(CRational const& rational) const
@@ -151,7 +153,7 @@ std::istream& operator >> (std::istream& input, CRational& rational)
 	string potentialRational;
 	input >> potentialRational;
 
-	int slashPos = potentialRational.find('/');
+	auto slashPos = potentialRational.find('/');
 	if (slashPos == std::string::npos)
 	{
 		throw invalid_argument("Wrong rational number format.");
@@ -174,4 +176,34 @@ int StrToInt(std::string const& str)
 		throw runtime_error("Bad number");
 	}
 	return stoi(str);
+}
+
+CRational const operator+(int integer, CRational const& rational)
+{
+	return rational + integer;
+}
+
+CRational const operator-(int integer, CRational const& rational)
+{
+	return -rational + integer;
+}
+
+CRational const operator*(int integer, CRational const& rational)
+{
+	return rational * integer;
+}
+
+CRational const operator/(int integer, CRational const& rational)
+{
+	return integer * CRational(rational.GetDenominator(), rational.GetNumerator());
+}
+
+CRational const operator==(int integer, CRational const& rational)
+{
+	return rational == integer;
+}
+
+CRational const operator!=(int integer, CRational const& rational)
+{
+	return rational != integer;
 }

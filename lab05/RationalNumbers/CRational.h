@@ -36,3 +36,10 @@ private:
 std::ostream& operator<<(std::ostream& output, CRational const& rational);
 std::istream& operator>>(std::istream& input, CRational& rational);
 int StrToInt(std::string const& str);
+
+CRational const operator+(int integer, CRational const& rational);
+CRational const operator-(int integer, CRational const& rational);
+CRational const operator*(int integer, CRational const& rational);
+CRational const operator/(int integer, CRational const& rational);
+CRational const operator==(int integer, CRational const& rational);
+CRational const operator!=(int integer, CRational const& rational);
