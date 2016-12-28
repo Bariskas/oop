@@ -127,6 +127,13 @@ bool CRational::operator>=(CRational const& rational) const
 	return !(*this < rational);
 }
 
+std::pair<int, CRational> CRational::ToCompoundFraction() const
+{
+	int intPart = this->GetNumerator() / this->GetDenominator();
+	CRational fractionPart(this->GetNumerator() - intPart *  this->GetDenominator(), this->GetDenominator());
+	return pair<int, CRational>(intPart, fractionPart);
+}
+
 int CRational::Gcd(int a, int b)
 {
 	while (b)
@@ -206,4 +213,24 @@ CRational const operator==(int integer, CRational const& rational)
 CRational const operator!=(int integer, CRational const& rational)
 {
 	return rational != integer;
+}
+
+CRational const operator>=(int integer, CRational const& rational)
+{
+	return rational < integer;
+}
+
+CRational const operator<=(int integer, CRational const& rational)
+{
+	return rational > integer;
+}
+
+CRational const operator>(int integer, CRational const& rational)
+{
+	return rational <= integer;
+}
+
+CRational const operator<(int integer, CRational const& rational)
+{
+	return rational >= integer;
 }

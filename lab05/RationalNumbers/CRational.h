@@ -26,6 +26,8 @@ public:
 	bool operator<=(CRational const& rational)const;
 	bool operator>(CRational const& rational)const;
 	bool operator>=(CRational const& rational)const;
+
+	std::pair<int, CRational> ToCompoundFraction()const;
 private:
 	int m_numerator;
 	int m_denominator;
@@ -43,3 +45,7 @@ CRational const operator*(int integer, CRational const& rational);
 CRational const operator/(int integer, CRational const& rational);
 CRational const operator==(int integer, CRational const& rational);
 CRational const operator!=(int integer, CRational const& rational);
+CRational const operator>=(int integer, CRational const& rational);
+CRational const operator<=(int integer, CRational const& rational);
+CRational const operator>(int integer, CRational const& rational);
+CRational const operator<(int integer, CRational const& rational);

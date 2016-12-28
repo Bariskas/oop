@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "../RationalNumbers/CRational.h"
 
+using namespace std;
+
 struct RationalNumbersFixture
 {
 	static void CheckRationalNumberState(CRational rational, int numerator, int denominator)
@@ -20,7 +22,7 @@ BOOST_AUTO_TEST_CASE(constructors_check)
 	CRational r3(5, 6);
 	CheckRationalNumberState(r3, 5, 6);
 }
-BOOST_AUTO_TEST_CASE(can_be_represent_like_double)
+BOOST_AUTO_TEST_CASE(can_be_represented_like_double)
 {
 	CRational r1;
 	BOOST_CHECK_CLOSE_FRACTION(r1.ToDouble(), 0, 0.0000001);
@@ -133,5 +135,53 @@ BOOST_AUTO_TEST_CASE(check_not_equal_compare_operator)
 	CRational r5(3, 1);
 	BOOST_CHECK_EQUAL(3 != r5, false);
 	BOOST_CHECK_EQUAL(3 != r3, true);
+}
+BOOST_AUTO_TEST_CASE(check_other_compare_operators)
+{
+	CRational r1(1, 2);
+	CRational r2(1, 3);
+	BOOST_CHECK_EQUAL(r1 >= r2, true);
+	BOOST_CHECK_EQUAL(r1 <= r2, false);
+	CRational r3(3);
+	BOOST_CHECK_EQUAL(r3 > 2, true);
+	BOOST_CHECK_EQUAL(r1 < 7, true);
+	BOOST_CHECK_EQUAL(2 > r3, false);
+	BOOST_CHECK_EQUAL(7 < r1, false);
+	CRational r4(7, 2);
+	BOOST_CHECK_EQUAL(3 <= r4, true);
+	CRational r5(8, 2);
+	BOOST_CHECK_EQUAL(3 >= r5, false);
+}
+BOOST_AUTO_TEST_CASE(check_input_operator)
+{
+	CRational testRational;
+	stringstream ss("7/15");
+	ss >> testRational;
+	BOOST_CHECK_EQUAL(testRational.GetDenominator(), 15);
+	BOOST_CHECK_EQUAL(testRational.GetNumerator(), 7);
+	ss.clear();
+	ss.str("7");
+	BOOST_CHECK_THROW(ss >> testRational, invalid_argument);
+	ss.clear();
+	ss.str("7s/5");
+	BOOST_CHECK_THROW(ss >> testRational, runtime_error);
+}
+BOOST_AUTO_TEST_CASE(check_output_operator)
+{
+	CRational testRational(7, 15);
+	stringstream ss;
+	ss << testRational;
+	BOOST_CHECK_EQUAL(ss.str(), "7/15");
+}
+BOOST_AUTO_TEST_CASE(check_to_compound_fraction)
+{
+	CRational testRational(9, 4);
+	auto compoundfraction = testRational.ToCompoundFraction();
+	BOOST_CHECK_EQUAL(compoundfraction.first, 2);
+	BOOST_CHECK_EQUAL(compoundfraction.second, CRational(1, 4));
+	CRational testNegativeRational(-9, 4);
+	auto negativeCompoundfraction = testNegativeRational.ToCompoundFraction();
+	BOOST_CHECK_EQUAL(negativeCompoundfraction.first, -2);
+	BOOST_CHECK_EQUAL(negativeCompoundfraction.second, CRational(-1, 4));
 }
 BOOST_AUTO_TEST_SUITE_END()
