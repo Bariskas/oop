@@ -5,20 +5,12 @@
 using namespace std;
 
 string const CHttpUrl::DOMAIN_REGEXP = R"(([\w\.]+\.[a-z]{2,6}\.?))";
-string const CHttpUrl::DOCUMENT_REGEXP = R"((\/[\w\.]*)*\/?)";
+string const CHttpUrl::DOCUMENT_REGEXP = R"((\/?[\w\.]*)*\/?)";
 string const CHttpUrl::URL_REGEXP = R"(^(http(s)?:\/\/)?([\w\.]+\.[a-z]{2,6}\.?)(:([\d]{1,5}))?((\/[\w\.]*)*)\/?$)";
 int const CHttpUrl::SSL_SYMBOL_MR_INDEX = 2;
 int const CHttpUrl::DOMAIN_MR_INDEX = 3;
 int const CHttpUrl::PORT_MR_INDEX = 5;
 int const CHttpUrl::DOCUMENT_MR_INDEX = 6;
-
-CHttpUrl::CHttpUrl()
-{
-}
-
-CHttpUrl::~CHttpUrl()
-{
-}
 
 CHttpUrl::CHttpUrl(std::string const& url)
 {
@@ -29,45 +21,40 @@ CHttpUrl::CHttpUrl(std::string const& url)
 		m_url = url;
 		m_protocol = cm[SSL_SYMBOL_MR_INDEX].length() == 0 ? HTTP : HTTPS;
 		m_domain = cm[DOMAIN_MR_INDEX];
-		m_document = cm[DOCUMENT_MR_INDEX];
-		int portValue = cm[PORT_MR_INDEX].length() != 0 ? stoi(cm[PORT_MR_INDEX]) : GetDefaultPortForProtocol(m_protocol);
-		if (portValue > numeric_limits<unsigned short>::max())
-		{
-			throw out_of_range(url + ": max port value is 65535");
-		}
+		m_document = cm[DOCUMENT_MR_INDEX].length() != 0 ? cm[DOCUMENT_MR_INDEX].str() : "/";
+		int portValue = cm[PORT_MR_INDEX].length() != 0 
+			? GetPortFromString(cm[PORT_MR_INDEX])
+			: GetDefaultPortForProtocol(m_protocol);
 		m_port = portValue;
 	}
 	else
 	{
-		throw CUrlParsingError(url + ": wrong url format");
+		throw CUrlParsingError("Wrong url format");
 	}
+}
+
+CHttpUrl::CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol)
+	: m_protocol(protocol)
+{
+	ValidateDomain(domain);
+	m_domain = domain;
+	ValidateDocument(document);
+	m_document = document[0] == '/' ? document : '/' + document;
+	m_port = GetDefaultPortForProtocol(protocol);
+
+	m_url = GenerateUrl(m_protocol, m_domain, m_port, m_document);
 }
 
 CHttpUrl::CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol, unsigned short port)
 	: m_protocol(protocol)
 	, m_port(port)
 {
-	regex regExp(DOMAIN_REGEXP);
-	if (regex_match(domain.c_str(), regExp))
-	{
-		m_domain = domain;
-	}
-	else
-	{
-		throw invalid_argument(domain + ": wrong domain format");
-	}
-	regExp.assign(DOCUMENT_REGEXP);
-	if (regex_match(document.c_str(), regExp))
-	{
-		m_document = document[0] == '/' ? document : '/' + document;
-	}
-	else
-	{
-		throw invalid_argument(document + ": wrong document format");
-	}
-	stringstream ss;
-	ss << ProtocolToString(protocol) << "://" << m_domain << m_document;
-	m_url = ss.str();
+	ValidateDomain(domain);
+	m_domain = domain;
+	ValidateDocument(document);
+	m_document = document[0] == '/' ? document : '/' + document;
+	
+	m_url = GenerateUrl(m_protocol, m_domain, m_port, m_document);
 }
 
 std::string CHttpUrl::GetURL() const
@@ -103,4 +90,47 @@ std::string CHttpUrl::ProtocolToString(Protocol protocol)
 unsigned short CHttpUrl::GetDefaultPortForProtocol(Protocol protocol)
 {
 	return protocol == HTTP ? 80 : 443;
+}
+
+std::string CHttpUrl::GenerateUrl(Protocol protocol, std::string const& domain, 
+	unsigned short port, std::string const& document)
+{
+	string urlPortPart = GetUrlPortPart(port, protocol);
+	stringstream ss;
+	ss << ProtocolToString(protocol) << "://" << domain << urlPortPart << document;
+	return ss.str();
+}
+
+unsigned short CHttpUrl::GetPortFromString(std::string const& portString)
+{
+	int portValue = stoul(portString);
+	if (portValue > numeric_limits<unsigned short>::max())
+	{
+		throw CUrlParsingError("Max port value is 65535");
+	}
+	return portValue;
+}
+
+void CHttpUrl::ValidateDomain(std::string const& domainString)
+{
+	regex regExp(DOMAIN_REGEXP);
+	if (!regex_match(domainString.c_str(), regExp))
+	{
+		throw CUrlParsingError(domainString + ": wrong domain format");
+	}
+}
+
+
+void CHttpUrl::ValidateDocument(std::string const& documentString)
+{
+	regex regExp(DOCUMENT_REGEXP);
+	if (!regex_match(documentString.c_str(), regExp))
+	{
+		throw CUrlParsingError(documentString + ": wrong document format");
+	}
+}
+
+std::string CHttpUrl::GetUrlPortPart(unsigned short port, Protocol protocol)
+{
+	return GetDefaultPortForProtocol(protocol) == port ? "" : ':' + to_string(port);
 }

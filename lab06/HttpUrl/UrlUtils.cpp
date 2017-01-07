@@ -5,7 +5,7 @@
 
 using namespace std;
 
-std::vector<CHttpUrl> CUrlUtils::ReadUrls(std::istream& inputStream)
+std::vector<CHttpUrl> CUrlUtils::ReadUrls(std::istream& inputStream, std::ostream& errorStream)
 {
 	vector<CHttpUrl> urls;
 	string tempString;
@@ -18,23 +18,24 @@ std::vector<CHttpUrl> CUrlUtils::ReadUrls(std::istream& inputStream)
 		}
 		catch (const CUrlParsingError& e)
 		{
-			cout << e.what() << endl;
+			errorStream << '"' << tempString << "\": " << e.what() << endl;
 		}
 		catch (const exception& e)
 		{
-			cout << e.what() << endl;
+			errorStream << e.what() << endl;
 		}
 	}
 	return urls;
 }
 
-void CUrlUtils::WriteUrlsInfo(std::vector<CHttpUrl> urls, std::ostream& inputStream)
+void CUrlUtils::WriteUrlsInfo(std::vector<CHttpUrl> urls, std::ostream& outputStream)
 {
 	for (const auto& url : urls)
 	{
-		cout << "Protocol: " << CHttpUrl::ProtocolToString(url.GetProtocol()) << endl
-			<< "Port: " << url.GetPort() << endl
+		outputStream << "Url: " << url.GetURL() << endl
+			<< "Protocol: " << CHttpUrl::ProtocolToString(url.GetProtocol()) << endl
 			<< "Domen: " << url.GetDomain() << endl
+			<< "Port: " << url.GetPort() << endl
 			<< "Document: " << url.GetDocument() << endl;
 	}
 }

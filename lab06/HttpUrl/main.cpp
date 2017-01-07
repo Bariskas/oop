@@ -8,11 +8,8 @@ using namespace std;
 
 int main()
 {
-	stringstream ss(
-		"http://google.com:66000/index.html https://www.google.com/opopop/index.html"
-	);
 	auto urls = CUrlUtils::ReadUrls(cin);
-	CUrlUtils::WriteUrlsInfo(urls, cout);
+	CUrlUtils::WriteUrlsInfo(urls);
     return 0;
 }
 

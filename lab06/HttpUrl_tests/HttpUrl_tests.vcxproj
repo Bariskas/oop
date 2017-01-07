@@ -155,7 +155,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\HttpUrl\HttpUrl.cpp" />
+    <ClCompile Include="..\HttpUrl\UrlParsingError.cpp" />
+    <ClCompile Include="..\HttpUrl\UrlUtils.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="HttpUrl_tests.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
