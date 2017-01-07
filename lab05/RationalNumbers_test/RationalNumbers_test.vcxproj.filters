@@ -38,5 +38,8 @@
     <ClCompile Include="..\RationalNumbers\CRational.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\RationalNumbers\NumberUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

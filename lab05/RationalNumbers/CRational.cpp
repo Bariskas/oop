@@ -1,4 +1,5 @@
 ﻿#include "stdafx.h"
+#include "NumberUtils.h"
 #include "CRational.h"
 
 using namespace std;
@@ -19,7 +20,7 @@ CRational::CRational(int numerator, int denominator)
 	: m_numerator(numerator)
 	, m_denominator(denominator)
 {
-	auto gcd = Gcd(abs(m_numerator), abs(m_denominator));
+	auto gcd = NumberUtils::Gcd(abs(m_numerator), abs(m_denominator));
 	m_numerator /= gcd;
 	m_denominator /= gcd;
 }
@@ -49,19 +50,6 @@ CRational const CRational::operator-() const
 	return CRational(-GetNumerator(), GetDenominator());
 }
 
-CRational const CRational::operator+(CRational const& rational) const
-{
-	int lcm = Lcm(GetDenominator(), rational.GetDenominator());
-	int numerator = GetNumerator() * (lcm / GetDenominator()) 
-		+ rational.GetNumerator() * (lcm / rational.GetDenominator());
-	return CRational(numerator, lcm);
-}
-
-CRational const CRational::operator-(CRational const& rational) const
-{
-	return *this + -rational;
-}
-
 CRational& CRational::operator+=(CRational const& rational)
 {
 	*this = *this + rational;
@@ -72,17 +60,6 @@ CRational& CRational::operator-=(CRational const& rational)
 {
 	*this = *this - rational;
 	return *this;
-}
-
-CRational const CRational::operator*(CRational const& rational) const
-{
-	return CRational(GetNumerator() * rational.GetNumerator(), 
-		GetDenominator() * rational.GetDenominator());
-}
-
-CRational const CRational::operator/(CRational const& rational) const
-{
-	return *this * CRational(rational.GetDenominator(), rational.GetNumerator());
 }
 
 CRational& CRational::operator*=(CRational const& rational)
@@ -97,56 +74,11 @@ CRational& CRational::operator/=(CRational const& rational)
 	return *this;
 }
 
-bool CRational::operator==(CRational const& rational) const
-{
-	return this->GetNumerator() == rational.GetNumerator() && this->GetDenominator() == rational.GetDenominator();
-}
-
-bool CRational::operator!=(CRational const& rational) const
-{
-	return !(*this == rational);
-}
-
-bool CRational::operator<(CRational const& rational) const
-{
-	return this->ToDouble() < rational.ToDouble();
-}
-
-bool CRational::operator>(CRational const& rational) const
-{
-	return this->ToDouble() > rational.ToDouble();
-}
-
-bool CRational::operator<=(CRational const& rational) const
-{
-	return !(*this > rational);
-}
-
-bool CRational::operator>=(CRational const& rational) const
-{
-	return !(*this < rational);
-}
-
 std::pair<int, CRational> CRational::ToCompoundFraction() const
 {
 	int intPart = this->GetNumerator() / this->GetDenominator();
 	CRational fractionPart(this->GetNumerator() - intPart *  this->GetDenominator(), this->GetDenominator());
 	return pair<int, CRational>(intPart, fractionPart);
-}
-
-int CRational::Gcd(int a, int b)
-{
-	while (b)
-	{
-		a %= b;
-		swap(a, b);
-	}
-	return a;
-}
-
-int CRational::Lcm(int a, int b)
-{
-	return a / Gcd(a, b) * b;
 }
 
 std::ostream& operator<<(std::ostream& output, CRational const& rational)
@@ -169,68 +101,63 @@ std::istream& operator >> (std::istream& input, CRational& rational)
 	string numeratorStr = potentialRational.substr(0, slashPos);
 	string denumeratorStr = potentialRational.substr(slashPos + 1, potentialRational.length() - numeratorStr.length() - 1);
 
-	CRational parsedRational(StrToInt(numeratorStr), StrToInt(denumeratorStr));
+	CRational parsedRational(NumberUtils::StrToInt(numeratorStr), NumberUtils::StrToInt(denumeratorStr));
 	swap(rational, parsedRational);
 
 	return input;
 }
 
-int StrToInt(std::string const& str)
+CRational const operator+(CRational const& leftRational, CRational const& rightRational)
 {
-	bool isAllDigits = all_of(str.begin(), str.end(), [](char ch) {return isdigit(ch); });
-	if (!isAllDigits)
-	{
-		throw runtime_error("Bad number");
-	}
-	return stoi(str);
+	int lcm = NumberUtils::Lcm(leftRational.GetDenominator(), rightRational.GetDenominator());
+	int numerator = leftRational.GetNumerator() * (lcm / leftRational.GetDenominator())
+		+ rightRational.GetNumerator() * (lcm / rightRational.GetDenominator());
+	return CRational(numerator, lcm);
 }
 
-CRational const operator+(int integer, CRational const& rational)
+CRational const operator-(CRational const& leftRational, CRational const& rightRational)
 {
-	return rational + integer;
+	return leftRational + (-rightRational);
 }
 
-CRational const operator-(int integer, CRational const& rational)
+CRational const operator*(CRational const& leftRational, CRational const& rightRational)
 {
-	return -rational + integer;
+	return CRational(leftRational.GetNumerator() * rightRational.GetNumerator(),
+		leftRational.GetDenominator() * rightRational.GetDenominator());
 }
 
-CRational const operator*(int integer, CRational const& rational)
+CRational const operator/(CRational const& leftRational, CRational const& rightRational)
 {
-	return rational * integer;
+	return leftRational * CRational(rightRational.GetDenominator(), rightRational.GetNumerator());
 }
 
-CRational const operator/(int integer, CRational const& rational)
+bool operator==(CRational const& leftRational, CRational const& rightRational)
 {
-	return integer * CRational(rational.GetDenominator(), rational.GetNumerator());
+	return leftRational.GetNumerator() == rightRational.GetNumerator()
+		&& leftRational.GetDenominator() == rightRational.GetDenominator();
 }
 
-CRational const operator==(int integer, CRational const& rational)
+bool operator!=(CRational const& leftRational, CRational const& rightRational)
 {
-	return rational == integer;
+	return !(leftRational == rightRational);
 }
 
-CRational const operator!=(int integer, CRational const& rational)
+bool operator>=(CRational const& leftRational, CRational const& rightRational)
 {
-	return rational != integer;
+	return !(leftRational < rightRational);
 }
 
-CRational const operator>=(int integer, CRational const& rational)
+bool operator<=(CRational const& leftRational, CRational const& rightRational)
 {
-	return rational < integer;
+	return !(leftRational > rightRational);
 }
 
-CRational const operator<=(int integer, CRational const& rational)
+bool operator>(CRational const& leftRational, CRational const& rightRational)
 {
-	return rational > integer;
+	return leftRational.ToDouble() > rightRational.ToDouble();
 }
 
-CRational const operator>(int integer, CRational const& rational)
+bool operator<(CRational const& leftRational, CRational const& rightRational)
 {
-	return rational <= integer;
-}
-
-CRational const operator<(int integer, CRational const& rational)
-{
-	return rational >= integer;
+	return leftRational.ToDouble() < rightRational.ToDouble();
 }

@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\RationalNumbers\CRational.cpp" />
+    <ClCompile Include="..\RationalNumbers\NumberUtils.cpp" />
     <ClCompile Include="RationalNumbersTests.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
