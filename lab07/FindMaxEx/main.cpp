@@ -13,12 +13,11 @@ int main()
 	};
 	CSportsman tallestSportsman;
 	FindMax(sportsmans, tallestSportsman, CSportsman::LessHeight);
-	cout << "The tallest sportsman is " << tallestSportsman.fullName 
+	cout << "The tallest sportsman is " << tallestSportsman.fullName
 		<< " with height: " << tallestSportsman.height << endl;
 	CSportsman fattestSportsman;
 	FindMax(sportsmans, fattestSportsman, CSportsman::LessWeight);
 	cout << "The fattest sportsman is " << fattestSportsman.fullName
 		<< " with weight: " << fattestSportsman.weight << endl;
-    return 0;
+	return 0;
 }
-
