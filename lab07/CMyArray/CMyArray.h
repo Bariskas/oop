@@ -7,7 +7,51 @@ template <typename T>
 class CMyArray
 {
 public:
+	~CMyArray()
+	{
+		DeleteItems(m_begin, m_end);
+	}
+
 	CMyArray() = default;
+
+	CMyArray(size_t size)
+	{
+		if (size != 0)
+		{
+			m_begin = RawAlloc(size);
+			m_end = m_begin;
+			m_endOfCapacity = m_begin + size;
+		}
+	}
+
+	CMyArray(CMyArray&& arr)
+		: m_begin(arr.m_begin)
+		, m_end(arr.m_end)
+		, m_endOfCapacity(arr.m_endOfCapacity)
+	{
+		arr.m_begin = nullptr;
+		arr.m_end = nullptr;
+		arr.m_endOfCapacity = nullptr;
+	}
+
+	CMyArray(std::initializer_list<T> initList)
+	{
+		const auto size = initList.size();
+		if (size != 0)
+		{
+			m_begin = RawAlloc(size);
+			try
+			{
+				CopyItems(initList.begin(), initList.end(), m_begin, m_end);
+				m_endOfCapacity = m_end;
+			}
+			catch (...)
+			{
+				DeleteItems(m_begin, m_end);
+				throw;
+			}
+		}
+	}
 
 	CMyArray(const CMyArray& arr)
 	{
@@ -62,6 +106,50 @@ public:
 		}
 	}
 
+	void Resize(size_t size)
+	{
+		if (size != GetSize())
+		{
+			CMyArray<T> temp(size);
+			size_t copiesCount = std::min(GetSize(), size);
+			for (size_t i = 0;  i < copiesCount; ++i)
+			{
+				temp.Append(*(m_begin + i));
+			}
+			for (size_t i = GetSize(); i < size; ++i)
+			{
+				temp.Append(T());
+			}
+			*this = std::move(temp);
+		}
+	}
+
+	void Clear()
+	{
+		DeleteItems(m_begin, m_end);
+		m_begin = nullptr;
+		m_end = nullptr;
+		m_endOfCapacity = nullptr;
+	}
+
+	T & operator[](size_t index)
+	{
+		if (GetSize() <= index)
+		{	
+			throw std::out_of_range("index out of range");
+		}
+		return m_begin[index];
+	}
+
+	const T & operator[](size_t index) const
+	{
+		if (GetSize() <= index)
+		{
+			throw std::out_of_range("index out of range");
+		}
+		return m_begin[index];
+	}
+
 	T & GetBack()
 	{
 		assert(GetSize() != 0u);
@@ -83,9 +171,34 @@ public:
 	{
 		return m_endOfCapacity - m_begin;
 	}
-	~CMyArray()
+
+	CMyArray& operator=(CMyArray& arr)
 	{
-		DeleteItems(m_begin, m_end);
+		if (std::addressof(arr) != this)
+		{
+			CMyArray copy(arr);
+			std::swap(m_begin, copy.m_begin);
+			std::swap(m_end, copy.m_end);
+			std::swap(m_endOfCapacity, copy.m_endOfCapacity);
+		}
+		return *this;
+	}
+
+	CMyArray& operator=(CMyArray&& arr)
+	{
+		if (&arr != this)
+		{
+			DeleteItems(m_begin, m_end);
+			m_begin = arr.m_begin;
+			m_end = arr.m_end;
+			m_endOfCapacity = arr.m_endOfCapacity;
+
+			arr.m_begin = nullptr;
+			arr.m_end = nullptr;
+			arr.m_endOfCapacity = nullptr;
+		}
+
+		return *this;
 	}
 private:
 	static void DeleteItems(T *begin, T *end)
@@ -97,7 +210,7 @@ private:
 	}
 
 	// Копирует элементы из текущего вектора в to, возвращает newEnd
-	static void CopyItems(const T *srcBegin, T *srcEnd, T * const dstBegin, T * & dstEnd)
+	static void CopyItems(const T *srcBegin, const T *srcEnd, T * const dstBegin, T * & dstEnd)
 	{
 		for (dstEnd = dstBegin; srcBegin != srcEnd; ++srcBegin, ++dstEnd)
 		{
