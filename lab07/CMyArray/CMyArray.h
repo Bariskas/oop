@@ -1,11 +1,15 @@
 #pragma once
 
-#include <new>
 #include <algorithm>
+#include "CMyIterator.h"
 
 template <typename T>
 class CMyArray
 {
+	typedef MyIterator<T> iterator;
+	typedef MyIterator<const T> const_iterator;
+	typedef std::reverse_iterator<iterator> reverse_iterator;
+	typedef std::reverse_iterator<const_iterator> reverse_const_iterator;
 public:
 	~CMyArray()
 	{
@@ -76,7 +80,7 @@ public:
 	{
 		if (m_end == m_endOfCapacity) // no free space
 		{
-			size_t newCapacity = std::max(1u, GetCapacity() * 2);
+			size_t newCapacity = std::max(size_t(1), GetCapacity() * 2);
 
 			auto newBegin = RawAlloc(newCapacity);
 			T *newEnd = newBegin;
@@ -199,6 +203,44 @@ public:
 		}
 
 		return *this;
+	}
+
+	iterator begin()
+	{
+		return iterator(m_begin);
+	}
+
+	iterator end()
+	{
+		return iterator(m_end);
+	}
+
+	const_iterator begin() const
+	{
+		return const_iterator(m_begin);
+	}
+
+	const_iterator end() const
+	{
+		return const_iterator(m_end);
+	}
+
+	reverse_iterator rbegin()
+	{
+		return reverse_iterator(m_end);
+	}
+	reverse_iterator rend()
+	{
+		return reverse_iterator(m_begin);
+	}
+
+	reverse_const_iterator rbegin() const
+	{
+		return reverse_const_iterator(m_end);
+	}
+	reverse_const_iterator rend() const
+	{
+		return reverse_const_iterator(m_begin);
 	}
 private:
 	static void DeleteItems(T *begin, T *end)

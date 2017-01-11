@@ -4,6 +4,7 @@
 struct MyArray_
 {
 	CMyArray<int> intArray{ 1,2,3 };
+	const CMyArray<int> constIntArray{ 1,2,3 };
 	CMyArray<int> emptyArray = CMyArray<int>();
 };
 
@@ -74,5 +75,32 @@ BOOST_AUTO_TEST_CASE(can_be_moved)
 	BOOST_CHECK_EQUAL(emptyArray[0], intArray[0]);
 	BOOST_CHECK_EQUAL(emptyArray[1], intArray[1]);
 	BOOST_CHECK_EQUAL(emptyArray[2], intArray[2]);
+}
+BOOST_AUTO_TEST_CASE(have_bidirectional_iterator)
+{
+	BOOST_CHECK(intArray.begin() != intArray.end());
+
+	int i = 1;
+	for(auto it = intArray.begin(); it != intArray.end(); ++it)
+	{
+		BOOST_CHECK_EQUAL(*it, i++);
+	}
+	i = 3;
+	for (auto it = intArray.rbegin(); it != intArray.rend(); ++it)
+	{
+		BOOST_CHECK_EQUAL(*it, i--);
+	}
+
+	i = 1;
+	for (auto it = constIntArray.begin(); it != constIntArray.end(); ++it)
+	{
+		BOOST_CHECK_EQUAL(*it, i++);
+	}
+	i = 3;
+	for (auto it = constIntArray.rbegin(); it != constIntArray.rend(); ++it)
+	{
+		BOOST_CHECK_EQUAL(*it, i--);
+	}
+	BOOST_CHECK(emptyArray.begin() == emptyArray.end());
 }
 BOOST_AUTO_TEST_SUITE_END()
