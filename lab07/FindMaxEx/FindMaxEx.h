@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
 
-template <typename T, typename Less>
-bool FindMax(std::vector<T> const& arr, T& maxValue, Less const& less = std::less<T>)
+template <typename T, typename Less = std::less<T>>
+bool FindMax(std::vector<T> const& arr, T& maxValue, Less const& less = Less())
 {
 	if (arr.size() == 0)
 	{
