@@ -6,7 +6,7 @@ using namespace std;
 
 string const CHttpUrl::DOMAIN_REGEXP = R"(([\w\.]+\.[a-z]{2,6}\.?))";
 string const CHttpUrl::DOCUMENT_REGEXP = R"((\/?[\w\.]*)*\/?)";
-string const CHttpUrl::URL_REGEXP = R"(^(http(s)?:\/\/)?([\w\.]+\.[a-z]{2,6}\.?)(:([\d]{1,5}))?((\/[\w\.]*)*)\/?$)";
+string const CHttpUrl::URL_REGEXP = R"(^(http(s)?:\/\/)?([\w\d][\w\d\.]+)(:([\d]{1,5}))?((\/[\w\.]*)*)\/?$)";
 int const CHttpUrl::SSL_SYMBOL_MR_INDEX = 2;
 int const CHttpUrl::DOMAIN_MR_INDEX = 3;
 int const CHttpUrl::PORT_MR_INDEX = 5;
@@ -18,7 +18,6 @@ CHttpUrl::CHttpUrl(std::string const& url)
 	regex regExp(URL_REGEXP);
 	if (regex_match(url.c_str(), cm, regExp))
 	{
-		m_url = url;
 		m_protocol = cm[SSL_SYMBOL_MR_INDEX].length() == 0 ? HTTP : HTTPS;
 		m_domain = cm[DOMAIN_MR_INDEX];
 		m_document = cm[DOCUMENT_MR_INDEX].length() != 0 ? cm[DOCUMENT_MR_INDEX].str() : "/";
@@ -26,6 +25,8 @@ CHttpUrl::CHttpUrl(std::string const& url)
 			? GetPortFromString(cm[PORT_MR_INDEX])
 			: GetDefaultPortForProtocol(m_protocol);
 		m_port = portValue;
+
+		m_url = GenerateUrl(m_protocol, m_domain, m_port, m_document);
 	}
 	else
 	{
@@ -53,7 +54,7 @@ CHttpUrl::CHttpUrl(std::string const& domain, std::string const& document, Proto
 	m_domain = domain;
 	ValidateDocument(document);
 	m_document = document[0] == '/' ? document : '/' + document;
-	
+	ValidatePort(port);
 	m_url = GenerateUrl(m_protocol, m_domain, m_port, m_document);
 }
 
@@ -104,10 +105,7 @@ std::string CHttpUrl::GenerateUrl(Protocol protocol, std::string const& domain,
 unsigned short CHttpUrl::GetPortFromString(std::string const& portString)
 {
 	int portValue = stoul(portString);
-	if (portValue > numeric_limits<unsigned short>::max())
-	{
-		throw CUrlParsingError("Max port value is 65535");
-	}
+	ValidatePort(portValue);
 	return portValue;
 }
 
@@ -127,6 +125,14 @@ void CHttpUrl::ValidateDocument(std::string const& documentString)
 	if (!regex_match(documentString.c_str(), regExp))
 	{
 		throw CUrlParsingError(documentString + ": wrong document format");
+	}
+}
+
+void CHttpUrl::ValidatePort(unsigned short port)
+{
+	if (port > numeric_limits<unsigned short>::max() || port < 1)
+	{
+		throw CUrlParsingError("Wrong port value");
 	}
 }
 

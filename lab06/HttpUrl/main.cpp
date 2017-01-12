@@ -8,8 +8,7 @@ using namespace std;
 
 int main()
 {
-	auto urls = CUrlUtils::ReadUrls(cin);
-	CUrlUtils::WriteUrlsInfo(urls);
+	CUrlUtils::ReadAndWriteUrls(cin);
     return 0;
 }
 

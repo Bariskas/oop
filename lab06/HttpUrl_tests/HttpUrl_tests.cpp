@@ -32,16 +32,11 @@ BOOST_FIXTURE_TEST_SUITE(Url, UrlFixture)
 		{
 			BOOST_CHECK_THROW(CHttpUrl("Http://"), CUrlParsingError);
 			BOOST_CHECK_THROW(CHttpUrl("http://"), CUrlParsingError);
-			BOOST_CHECK_THROW(CHttpUrl("http"), CUrlParsingError);
-			BOOST_CHECK_THROW(CHttpUrl("Https"), CUrlParsingError);
 			BOOST_CHECK_THROW(CHttpUrl("https://"), CUrlParsingError);
 		}
 		BOOST_AUTO_TEST_CASE(with_wrong_domen)
 		{
-			BOOST_CHECK_THROW(CHttpUrl("google.c"), CUrlParsingError);
-			BOOST_CHECK_THROW(CHttpUrl("google"), CUrlParsingError);
-			BOOST_CHECK_THROW(CHttpUrl("www.google.c"), CUrlParsingError);
-			BOOST_CHECK_THROW(CHttpUrl(".google.c"), CUrlParsingError);
+			BOOST_CHECK_THROW(CHttpUrl(".google"), CUrlParsingError);
 		}
 		BOOST_AUTO_TEST_CASE(with_wrong_protocol)
 		{
@@ -50,6 +45,7 @@ BOOST_FIXTURE_TEST_SUITE(Url, UrlFixture)
 		BOOST_AUTO_TEST_CASE(with_wrong_port)
 		{
 			BOOST_CHECK_THROW(CHttpUrl("http://google.com:65536"), CUrlParsingError);
+			BOOST_CHECK_THROW(CHttpUrl("http://google.com:0/"), CUrlParsingError);
 			BOOST_CHECK_THROW(CHttpUrl("http://google.com:-1/"), CUrlParsingError);
 			BOOST_CHECK_THROW(CHttpUrl("http://google.com:abc/index.txt"), CUrlParsingError);
 		}
@@ -61,6 +57,7 @@ BOOST_FIXTURE_TEST_SUITE(Url, UrlFixture)
 	BOOST_FIXTURE_TEST_SUITE(success_creation_from_string, UrlFixture)
 		BOOST_AUTO_TEST_CASE(without_protocol_and_without_port)
 		{
+			CheckUrlState(CHttpUrl("google"), HTTP, "google", 80, "/");
 			CheckUrlState(CHttpUrl("google.com"), HTTP, "google.com", 80, "/");
 			CheckUrlState(CHttpUrl("google.com/index.html"), HTTP, "google.com", 80, "/index.html");
 			CheckUrlState(CHttpUrl("google.com/folder/index.html"), HTTP, "google.com", 80, "/folder/index.html");
@@ -118,27 +115,12 @@ BOOST_FIXTURE_TEST_SUITE(Url, UrlFixture)
 BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_FIXTURE_TEST_SUITE(UrlUtils, UrlFixture)
-	BOOST_AUTO_TEST_CASE(reading_valid_urls)
-	{
-		stringstream ss(
-			"http://google.com:300/index.html https://www.google.com/opopop/index.html"
-		);
-		auto urls = CUrlUtils::ReadUrls(ss);
-		CheckUrlState(urls[0], HTTP, "google.com", 300, "/index.html",
-			"http://google.com:300/index.html");
-		CheckUrlState(urls[1], HTTPS, "www.google.com", 443, "/opopop/index.html",
-			"https://www.google.com/opopop/index.html");
-	}
 	BOOST_AUTO_TEST_CASE(reading_invalid_urls)
 	{
 		boost::test_tools::output_test_stream errorOutput;
-		stringstream ss(
-			"http://google.com:65536/index.html https://www.google.c/opopop/index.html"
-		);
-		CUrlUtils::ReadUrls(ss, errorOutput);
-		BOOST_CHECK(errorOutput.is_equal(R"("http://google.com:65536/index.html": Max port value is 65535
-"https://www.google.c/opopop/index.html": Wrong url format
-)"));
+		stringstream ss("http://google.com:65536/index.html");
+		CUrlUtils::ReadAndWriteUrls(ss, cout, errorOutput);
+		BOOST_CHECK(errorOutput.is_equal("\"http://google.com:65536/index.html\": Wrong port value\n"));
 	}
 	BOOST_AUTO_TEST_CASE(write_urls_info)
 	{
@@ -146,8 +128,7 @@ BOOST_FIXTURE_TEST_SUITE(UrlUtils, UrlFixture)
 		stringstream ss(
 			"http://google.com:300/index.html https://www.google.com/opopop/index.html"
 		);
-		auto urls = CUrlUtils::ReadUrls(ss);
-		CUrlUtils::WriteUrlsInfo(urls, infoOutput);
+		CUrlUtils::ReadAndWriteUrls(ss, infoOutput);
 		BOOST_CHECK(infoOutput.is_equal(R"(Url: http://google.com:300/index.html
 Protocol: http
 Domen: google.com

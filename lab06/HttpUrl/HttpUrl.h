@@ -36,6 +36,7 @@ private:
 	static unsigned short GetPortFromString(std::string const& portString);
 	static void ValidateDomain(std::string const& domainString);
 	static void ValidateDocument(std::string const& documentString);
+	static void ValidatePort(unsigned short port);
 	static std::string GetUrlPortPart(unsigned short port, Protocol protocol);
 private:
 	std::string m_url;

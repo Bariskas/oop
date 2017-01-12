@@ -6,7 +6,8 @@ class CUrlUtils
 public:
 	CUrlUtils() = delete;
 	~CUrlUtils() = delete;
-	static std::vector<CHttpUrl> ReadUrls(std::istream& inputStream, std::ostream& errorStream = std::cout);
-	static void WriteUrlsInfo(std::vector<CHttpUrl> urls, std::ostream& outputStream = std::cout);
+	static void ReadAndWriteUrls(std::istream& inputStream, 
+		std::ostream& outputStream = std::cout, std::ostream& errorStream = std::cout);
+	static void CUrlUtils::WriteUrlInfo(CHttpUrl url, std::ostream& outputStream);
 };
 
