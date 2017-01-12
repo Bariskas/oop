@@ -11,3 +11,5 @@ public:
 	int height;
 	int weight;
 };
+ 
+std::ostream& operator<<(std::ostream& output, CSportsman const& sportsman);
