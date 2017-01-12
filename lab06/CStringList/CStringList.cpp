@@ -11,7 +11,7 @@ size_t CStringList::GetSize() const
 
 bool CStringList::Empty() const
 {
-	return static_cast<bool>(m_size);
+	return m_size == 0;
 }
 
 void CStringList::Append(const std::string & data)
@@ -27,6 +27,7 @@ void CStringList::Append(const std::string & data)
 		m_firstNode = move(newNode);
 	}
 	m_lastNode = newLastNode;
+	m_fictiveNode->prev = m_lastNode;
 	++m_size;
 }
 
@@ -46,8 +47,17 @@ void CStringList::PushFront(const std::string& data)
 	++m_size;
 }
 
-void CStringList::Clear()
+void CStringList::Delete(iterator it)
 {
+	auto node = it.m_node;
+	if (node->prev)
+	{
+		node->prev->next = move(node->next);
+	}
+}
+
+void CStringList::Clear()
+{/*
 	_Nodeptr _Pnode = this->_Nextnode(this->_Myhead());
 	this->_Nextnode(this->_Myhead()) = this->_Myhead();
 	this->_Prevnode(this->_Myhead()) = this->_Myhead();
@@ -57,12 +67,7 @@ void CStringList::Clear()
 	{	// delete an element
 		_Pnext = this->_Nextnode(_Pnode);
 		this->_Freenode(_Pnode);
-	}
-}
-
-CStringList::CIterator CStringList::begin()
-{
-	return CIterator(m_firstNode.get());
+	}*/
 }
 
 std::string & CStringList::GetBackElement()
@@ -77,20 +82,42 @@ std::string const & CStringList::GetBackElement() const
 	return m_lastNode->data;
 }
 
-
-
-CStringList::CIterator::CIterator(Node * node)
-	:m_node(node)
+CStringList::iterator CStringList::begin()
 {
+	return iterator(m_firstNode.get());
 }
 
-std::string & CStringList::CIterator::operator*() const
+CStringList::iterator CStringList::end()
 {
-	return m_node->data;
+	return iterator(m_fictiveNode);
 }
 
-CStringList::CIterator & CStringList::CIterator::operator++()
+CStringList::const_iterator CStringList::begin() const
 {
-	m_node = m_node->next.get();
-	return *this;
+	return const_iterator(m_firstNode.get());
+}
+
+CStringList::const_iterator CStringList::end() const
+{
+	return const_iterator(m_fictiveNode);
+}
+
+CStringList::reverse_iterator CStringList::rbegin()
+{
+	return reverse_iterator(m_fictiveNode);
+}
+
+CStringList::reverse_iterator CStringList::rend()
+{
+	return reverse_iterator(m_firstNode.get());
+}
+
+CStringList::reverse_const_iterator CStringList::rbegin() const
+{
+	return reverse_const_iterator(m_fictiveNode);
+}
+
+CStringList::reverse_const_iterator CStringList::rend() const
+{
+	return reverse_const_iterator(m_firstNode.get());
 }
