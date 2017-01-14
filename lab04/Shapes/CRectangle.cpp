@@ -24,7 +24,7 @@ double CRectangle::GetPerimeter() const
 
 void CRectangle::AppendAdditionalInformation(stringstream& ss) const
 {
-	ss << "width: " << m_width << "height: " << m_height << " left top point: " << m_leftTopPoint.x << ":" << m_leftTopPoint.y << endl;
+	ss << "width: " << m_width << " height: " << m_height << " left top point: " << m_leftTopPoint.x << ":" << m_leftTopPoint.y << endl;
 }
 
 std::string CRectangle::GetShapeType() const
@@ -57,7 +57,7 @@ CPoint CRectangle::GetLeftTop() const
 
 CPoint CRectangle::GetRightBottom() const
 {
-	return CPoint(m_leftTopPoint.x + m_width, m_leftTopPoint.y + m_height);
+	return CPoint(m_leftTopPoint.x + m_width, m_leftTopPoint.y - m_height);
 }
 
 double CRectangle::GetWidth() const

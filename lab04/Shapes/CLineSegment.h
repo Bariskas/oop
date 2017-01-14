@@ -15,7 +15,6 @@ public:
 
 	CPoint GetStartPoint() const;
 	CPoint GetEndPoint() const;
-
 private:
 	void AppendAdditionalInformation(std::stringstream& ss) const final;
 	std::string GetShapeType() const final;

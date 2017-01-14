@@ -3,7 +3,7 @@
 
 using namespace std;
 
-BOOST_AUTO_TEST_SUITE(CalculatePositiveElementSum_function)
+BOOST_AUTO_TEST_SUITE(CalculatePositiveElementSumFunction)
 	BOOST_AUTO_TEST_CASE(empty_vector_must_processed_without_exception)
 	{
 		BOOST_CHECK_NO_THROW(CalculatePositiveElementSum({}));
@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_SUITE(CalculatePositiveElementSum_function)
 	}
 BOOST_AUTO_TEST_SUITE_END()
 
-BOOST_AUTO_TEST_SUITE(ConvertVector_function)
+BOOST_AUTO_TEST_SUITE(ConvertVectorFunction)
 	BOOST_AUTO_TEST_CASE(odd_doubled_even_without_sum_of_positives)
 	{
 		vector<double> testVector = { 2.5, 3.0, 4.5 };

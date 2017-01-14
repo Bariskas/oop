@@ -8,7 +8,7 @@ public:
 	virtual ~CShapeBase() {};
 	std::string ToString() const override;
 	std::string GetOutlineColor() const override;
-protected:
+private:
 	virtual void AppendAdditionalInformation(std::stringstream& ss) const = 0;
 	virtual std::string GetShapeType() const = 0;
 private:

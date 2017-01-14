@@ -5,12 +5,19 @@ using namespace std;
 
 BOOST_AUTO_TEST_SUITE(Dictionary)
 
-	BOOST_AUTO_TEST_CASE(with_empty_file_dictionary_should_be_empty)
+	BOOST_AUTO_TEST_CASE(empty_dictionary_return_empty_translations)
 	{
-		stringstream inputStream("");
-		unordered_map<string, string> dictionary{};
-		FillDictionaryFromStream(dictionary, inputStream);
-		BOOST_CHECK_EQUAL(dictionary.empty(), true);
+		unordered_multimap<string, string> dictionary;
+		string result = GetTranslate(dictionary, "Hello");
+		BOOST_CHECK(result.length() == 0);
 	}
-
+	BOOST_AUTO_TEST_CASE(translations_can_be_added)
+	{
+		unordered_multimap<string, string> dictionary;
+		string rusWord = "привет";
+		string engWord = "hello";
+		AddTranslateToDictionary(dictionary, rusWord, engWord);
+		string result = GetTranslate(dictionary, rusWord);
+		BOOST_CHECK_EQUAL(result, engWord);
+	}
 BOOST_AUTO_TEST_SUITE_END()

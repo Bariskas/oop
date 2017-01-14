@@ -21,12 +21,12 @@ struct CircleFixture
 BOOST_FIXTURE_TEST_SUITE(Circle, CircleFixture)
 	BOOST_AUTO_TEST_CASE(is_a_shape)
 	{
-		BOOST_CHECK(static_cast<const ISolidShape*>(&circle));
+		BOOST_CHECK(static_cast<const IShape*>(&circle));
 	}
 
 	BOOST_AUTO_TEST_CASE(is_a_solid_body)
 	{
-		BOOST_CHECK(static_cast<const IShape*>(&circle));
+		BOOST_CHECK(static_cast<const ISolidShape*>(&circle));
 	}
 
 	BOOST_AUTO_TEST_CASE(has_a_center)

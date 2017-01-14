@@ -17,7 +17,7 @@ public:
 
 	CPoint GetCenter() const;
 	double GetRadius() const;
-protected:
+private:
 	void AppendAdditionalInformation(std::stringstream& ss) const override;
 	std::string GetShapeType() const override;
 private:

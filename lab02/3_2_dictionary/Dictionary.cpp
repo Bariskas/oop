@@ -3,61 +3,102 @@
 
 using namespace std;
 
-void LoadDictionaryFromFile(unordered_map<string, string>& dictionary, const string& dictionaryFilePath)
+void LoadDictionaryFromFile(unordered_multimap<string, string>& dictionary, ifstream& ifs)
 {
-	ifstream dictionaryFileStream(dictionaryFilePath);
-	if (dictionaryFileStream.is_open())
+	if (ifs.is_open())
 	{
-		FillDictionaryFromStream(dictionary, dictionaryFileStream);
+		FillDictionaryFromStream(dictionary, ifs);
 	}
+	ifs.close();
 }
 
-void FillDictionaryFromStream(unordered_map<string, string>& dictionary, istream& stream)
+void FillDictionaryFromStream(unordered_multimap<string, string>& dictionary, istream& stream)
 {
 	if (stream.peek() == std::istream::traits_type::eof())
 	{
 		return;
 	}
-
+	
+	bool isTranslateNow = false;
+	
 	string russianSentence;
 	string englishSentence;
 
 	while (!stream.eof())
 	{
-		getline(stream, russianSentence);
-		if (!isRussianSentence(russianSentence))
-		{
-			throw invalid_argument("Russian sentence contain bad symbols or empty");
-		}
-
+		GetNextSentence(stream, russianSentence, englishSentence);
 		if (stream.eof())
 		{
-			throw invalid_argument("Wrong dictionary file structure");
+			return;
 		}
-
-		getline(stream, englishSentence);
-		if (!isEnglishSentence(englishSentence))
-		{
-			throw invalid_argument("English sentence contain bad symbols or empty");
-		}
+		GetNextSentence(stream, russianSentence, englishSentence);
 
 		boost::trim(russianSentence);
 		boost::trim(englishSentence);
-
-		dictionary.insert(make_pair(russianSentence, englishSentence));
+		string russianLowSentence = russianSentence;
+		string englishLowSentence = englishSentence;
+		boost::algorithm::to_lower(russianLowSentence, std::locale(""));
+		boost::algorithm::to_lower(englishLowSentence, std::locale(""));
+		dictionary.insert(make_pair(russianLowSentence, englishSentence));
+		dictionary.insert(make_pair(englishLowSentence, russianSentence));
 	}
 }
 
-bool isRussianSentence(const string& word)
+void GetNextSentence(std::istream& inputStream, std::string& russianSentence, std::string& englishSentence)
+{
+	if (inputStream.eof())
+	{
+		return;
+	}
+	string tempString;
+	getline(inputStream, tempString);
+	if (IsRussianSentence(tempString))
+	{
+		russianSentence = tempString;
+	}
+	else if (IsEnglishSentence(tempString))
+	{
+		englishSentence = tempString;
+	}
+}
+
+std::string GetTranslate(std::unordered_multimap<std::string, std::string>& dictionary, 
+	std::string const& wordForTranslate)
+{
+	string word;
+	transform(wordForTranslate.begin(), wordForTranslate.end(),
+		back_inserter(word), ::tolower);
+	auto translations = dictionary.equal_range(word);
+	string result;
+	for (auto it = translations.first; it != translations.second; ++it)
+	{
+		result += it->second + " ";
+	}
+	return result.substr(0, result.length() - 1);
+}
+
+void AddTranslateToDictionary(std::unordered_multimap<std::string, std::string>& dictionary, std::string& wordToAdd, std::string& translate)
+{
+	boost::trim(wordToAdd);
+	boost::trim(translate);
+	string wordToAddLow = wordToAdd;
+	string translateLow = translate;
+	boost::algorithm::to_lower(wordToAddLow, std::locale(""));
+	boost::algorithm::to_lower(translateLow, std::locale(""));
+	dictionary.insert(make_pair(wordToAddLow, translate));
+	dictionary.insert(make_pair(translateLow, wordToAddLow));
+}
+
+bool IsRussianSentence(const string& word)
 {
 	return all_of(word.begin(), word.end(), [](char ch) {
 		return (ch >= 'À' && ch <= 'ß') || (ch >= 'à' && ch <= 'ÿ') || ch == ' ';
-	});
+	}) && word.length() != 0;
 }
 
-bool isEnglishSentence(const string& word)
+bool IsEnglishSentence(const string& word)
 {
 	return all_of(word.begin(), word.end(), [](char ch) {
-		return (ch > 'A' && ch < 'Z') || (ch > 'a' && ch < 'z') || ch == ' ';
-	});
+		return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == ' ';
+	}) && word.length() != 0;
 }

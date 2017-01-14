@@ -162,6 +162,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\3_2_dictionary\Dictionary.cpp" />
     <ClCompile Include="3_2_dictionary_test.cpp" />
     <ClCompile Include="DictionaryTestSuite.cpp" />
     <ClCompile Include="stdafx.cpp">

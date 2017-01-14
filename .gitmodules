@@ -1,0 +1,3 @@
+[submodule "sfmlmodule"]
+	path = sfmlmodule
+	url = https://github.com/AndrewOvchinnikov/SFML.git
