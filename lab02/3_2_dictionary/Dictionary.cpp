@@ -3,15 +3,6 @@
 
 using namespace std;
 
-void LoadDictionaryFromFile(unordered_multimap<string, string>& dictionary, ifstream& ifs)
-{
-	if (ifs.is_open())
-	{
-		FillDictionaryFromStream(dictionary, ifs);
-	}
-	ifs.close();
-}
-
 void FillDictionaryFromStream(unordered_multimap<string, string>& dictionary, istream& stream)
 {
 	if (stream.peek() == std::istream::traits_type::eof())
@@ -29,7 +20,7 @@ void FillDictionaryFromStream(unordered_multimap<string, string>& dictionary, is
 		GetNextSentence(stream, russianSentence, englishSentence);
 		if (stream.eof())
 		{
-			return;
+			throw invalid_argument("Wrong dictionary file structure");
 		}
 		GetNextSentence(stream, russianSentence, englishSentence);
 
@@ -46,10 +37,6 @@ void FillDictionaryFromStream(unordered_multimap<string, string>& dictionary, is
 
 void GetNextSentence(std::istream& inputStream, std::string& russianSentence, std::string& englishSentence)
 {
-	if (inputStream.eof())
-	{
-		return;
-	}
 	string tempString;
 	getline(inputStream, tempString);
 	if (IsRussianSentence(tempString))
@@ -92,7 +79,8 @@ void AddTranslateToDictionary(std::unordered_multimap<std::string, std::string>&
 bool IsRussianSentence(const string& word)
 {
 	return all_of(word.begin(), word.end(), [](char ch) {
-		return (ch >= 'À' && ch <= 'ß') || (ch >= 'à' && ch <= 'ÿ') || ch == ' ';
+		return (ch >= 'À' && ch <= 'ß') || (ch >= 'à' && ch <= 'ÿ') || ch == ' '
+			|| ch == '¸' || ch == '¨';
 	}) && word.length() != 0;
 }
 

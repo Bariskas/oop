@@ -8,8 +8,6 @@ class MyIterator
 	template <typename T> friend class CMyArray;
 public:
 	MyIterator();
-	MyIterator(MyIterator const& otherIt);
-	MyIterator& operator=(MyIterator const& otherIt);
 	bool operator==(MyIterator const& otherIt)const;
 	bool operator!=(MyIterator const& otherIt)const;
 	T& operator*()const;
@@ -33,19 +31,6 @@ template <typename T>
 MyIterator<T>::MyIterator()
 	: m_pointer(nullptr)
 {
-}
-
-template <typename T>
-MyIterator<T>::MyIterator(MyIterator const& otherIt)
-	: m_pointer(otherIt.m_pointer)
-{
-}
-
-template <typename T>
-MyIterator<T>& MyIterator<T>::operator=(MyIterator const& otherIt)
-{
-	m_pointer = otherIt.m_pointer;
-	return *this;
 }
 
 template <typename T>

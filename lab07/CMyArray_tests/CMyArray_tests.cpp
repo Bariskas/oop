@@ -9,6 +9,14 @@ struct MyArray_
 };
 
 BOOST_FIXTURE_TEST_SUITE(MyArray, MyArray_)
+BOOST_AUTO_TEST_CASE(have_count_constructor)
+{
+	CMyArray<int> defaultValuesArray(5);
+	for (auto it = defaultValuesArray.begin(); it != defaultValuesArray.end(); ++it)
+	{
+		BOOST_CHECK_EQUAL(*it, 0);
+	}
+}
 BOOST_AUTO_TEST_CASE(can_return_count_of_elements)
 {
 	BOOST_CHECK_EQUAL(intArray.GetSize(), 3);
@@ -31,20 +39,31 @@ BOOST_AUTO_TEST_CASE(can_get_elements_with_brackets)
 	BOOST_CHECK_EQUAL(intArray[0], 1);
 	BOOST_CHECK_THROW(intArray[6], std::out_of_range);
 }
-BOOST_AUTO_TEST_CASE(can_be_resized)
-{
-	intArray.Resize(10);
-	BOOST_CHECK_EQUAL(intArray.GetSize(), 10);
-	emptyArray.Resize(10);
-	BOOST_CHECK_EQUAL(emptyArray.GetSize(), 10);
-}
+BOOST_AUTO_TEST_SUITE(resizing)
+	BOOST_AUTO_TEST_CASE(can_be_resized)
+	{
+		intArray.Resize(10);
+		BOOST_CHECK_EQUAL(intArray.GetSize(), 10);
+		emptyArray.Resize(10);
+		BOOST_CHECK_EQUAL(emptyArray.GetSize(), 10);
+	}
+	BOOST_AUTO_TEST_CASE(resize_to_size_under_capacity)
+	{
+		intArray.Resize(2);
+		BOOST_CHECK_EQUAL(intArray.GetSize(), 2);
+		BOOST_CHECK_EQUAL(intArray[0], 1);
+		BOOST_CHECK_EQUAL(intArray[1], 2);
+		BOOST_CHECK_THROW(intArray[2], std::out_of_range);
+	}
+BOOST_AUTO_TEST_SUITE_END()
+
 BOOST_AUTO_TEST_CASE(can_be_cleared)
 {
 	intArray.Clear();
 	BOOST_CHECK_EQUAL(intArray.GetSize(), 0);
 	BOOST_CHECK_THROW(intArray[1], std::out_of_range);
 }
-BOOST_AUTO_TEST_CASE(can_be_сopied)
+BOOST_AUTO_TEST_CASE(can_be_copied)
 {
 	CMyArray<int> copy(intArray);
 	BOOST_CHECK_EQUAL(copy.GetSize(), intArray.GetSize());

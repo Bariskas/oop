@@ -1,6 +1,5 @@
 #pragma once
 
-void LoadDictionaryFromFile(std::unordered_multimap<std::string, std::string>& dictionary, std::ifstream&  ifs);
 void FillDictionaryFromStream(std::unordered_multimap<std::string, std::string>& dictionary, std::istream& stream);
 void GetNextSentence(std::istream& inputStream, std::string& russianSentence,
 	std::string& englishSentence);

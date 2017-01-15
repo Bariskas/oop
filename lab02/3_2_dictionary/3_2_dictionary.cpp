@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 
 	if (argc != 2)
 	{
-		cout << "Wrong arguments count";
+		cout << "Wrong arguments count: dictionary.exe <dictionaryPath>";
 		return false;
 	}
 	string dictionaryPath = argv[1];
@@ -81,7 +81,11 @@ bool InitDictionary(unordered_multimap<string, string>& dictionary,
 		try
 		{
 			ifstream dictionaryFileStream(dictionaryPath);
-			LoadDictionaryFromFile(dictionary, dictionaryFileStream);
+			if (dictionaryFileStream.is_open())
+			{
+				FillDictionaryFromStream(dictionary, dictionaryFileStream);
+			}
+			dictionaryFileStream.close();
 		}
 		catch (const exception& e)
 		{

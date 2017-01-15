@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include "CMyIterator.h"
+#include <vector>
 
 template <typename T>
 class CMyArray
@@ -18,13 +19,17 @@ public:
 
 	CMyArray() = default;
 
-	CMyArray(size_t size)
+	explicit CMyArray(size_t size)
 	{
-		if (size != 0)
+		if (size < 0)
 		{
 			m_begin = RawAlloc(size);
-			m_end = m_begin;
+			m_end = m_begin + size;
 			m_endOfCapacity = m_begin + size;
+		}
+		for (auto it = this->begin(); it != this->end(); ++it)
+		{
+			*it = T();
 		}
 	}
 
@@ -38,7 +43,7 @@ public:
 		arr.m_endOfCapacity = nullptr;
 	}
 
-	CMyArray(std::initializer_list<T> initList)
+	CMyArray(std::initializer_list<T>const initList)
 	{
 		const auto size = initList.size();
 		if (size != 0)
@@ -112,19 +117,42 @@ public:
 
 	void Resize(size_t size)
 	{
+		std::vector heh;
 		if (size != GetSize())
 		{
-			CMyArray<T> temp(size);
-			size_t copiesCount = std::min(GetSize(), size);
-			for (size_t i = 0;  i < copiesCount; ++i)
+			if (size < this->GetSize())
 			{
-				temp.Append(*(m_begin + i));
+				size_t elementsToDelete = this->GetSize() - size;
+				auto it = end();
+				while (elementsToDelete != 0)
+				{
+					--elementsToDelete;
+					--it;
+					(*it).~T();
+				}
 			}
-			for (size_t i = GetSize(); i < size; ++i)
+			else if (size > this->GetSize() && size < this->GetCapacity())
 			{
-				temp.Append(T());
+				for (auto i = this->GetSize(); i < size; ++i)
+				{
+					(*this)[i] = T();
+				}
 			}
-			*this = std::move(temp);
+			else if (size > this->GetCapacity())
+			{
+				CMyArray<T> temp(size);
+				size_t copiesCount = std::min(GetSize(), size);
+				for (size_t i = 0; i < copiesCount; ++i)
+				{
+					temp.Append(*(m_begin + i));
+				}
+				for (size_t i = GetSize(); i < size; ++i)
+				{
+					temp.Append(T());
+				}
+				*this = std::move(temp);
+			}
+			m_end = m_begin + size;
 		}
 	}
 
@@ -133,7 +161,6 @@ public:
 		DeleteItems(m_begin, m_end);
 		m_begin = nullptr;
 		m_end = nullptr;
-		m_endOfCapacity = nullptr;
 	}
 
 	T & operator[](size_t index)
@@ -176,7 +203,7 @@ public:
 		return m_endOfCapacity - m_begin;
 	}
 
-	CMyArray& operator=(CMyArray& arr)
+	CMyArray& operator=(const CMyArray& arr)
 	{
 		if (std::addressof(arr) != this)
 		{
