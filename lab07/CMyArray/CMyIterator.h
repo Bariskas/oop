@@ -3,7 +3,7 @@
 
 template<typename T>
 class MyIterator
-	: public std::iterator <std::bidirectional_iterator_tag, T>
+	: public std::iterator <std::random_access_iterator_tag, T>
 {
 	template <typename T> friend class CMyArray;
 public:
@@ -16,6 +16,15 @@ public:
 	MyIterator const operator++(int);
 	MyIterator& operator--();
 	MyIterator const operator--(int);
+	MyIterator const operator+(ptrdiff_t diff);
+	MyIterator const operator-(ptrdiff_t diff);
+	bool operator<(MyIterator const& other) const;
+	bool operator>(MyIterator const& other) const;
+	bool operator<=(MyIterator const& other) const;
+	bool operator>=(MyIterator const& other) const;
+	MyIterator operator+=(ptrdiff_t diff);
+	MyIterator operator-=(ptrdiff_t diff);
+	T & operator[](ptrdiff_t index) const;
 private:
 	MyIterator(T* p);
 	T* m_pointer;
@@ -86,4 +95,62 @@ MyIterator<T> const MyIterator<T>::operator--(int)
 	MyIterator<T> temp(*this);
 	--*this;
 	return *this;
+}
+
+template <typename T>
+MyIterator<T> const MyIterator<T>::operator+(ptrdiff_t diff)
+{
+	m_pointer += diff;
+	return *this;
+}
+
+template <typename T>
+MyIterator<T> const MyIterator<T>::operator-(ptrdiff_t diff)
+{
+	m_pointer -= diff;
+	return *this;
+}
+
+template <typename T>
+bool MyIterator<T>::operator<(MyIterator const& otherIt) const
+{
+	return m_pointer < otherIt.m_pointer;
+}
+
+template <typename T>
+bool MyIterator<T>::operator>(MyIterator const& otherIt) const
+{
+	return m_pointer > otherIt.m_pointer;
+}
+
+template <typename T>
+bool MyIterator<T>::operator<=(MyIterator const& otherIt) const
+{
+	return m_pointer <= otherIt.m_pointer;
+}
+
+template <typename T>
+bool MyIterator<T>::operator>=(MyIterator const& otherIt) const
+{
+	return m_pointer >= otherIt.m_pointer;
+}
+
+template <typename T>
+MyIterator<T> MyIterator<T>::operator+=(ptrdiff_t diff)
+{
+	m_pointer += diff;
+	return *this;
+}
+
+template <typename T>
+MyIterator<T> MyIterator<T>::operator-=(ptrdiff_t diff)
+{
+	m_pointer -= diff;
+	return *this;
+}
+
+template <typename T>
+T& MyIterator<T>::operator[](ptrdiff_t index) const
+{
+	return *(m_pointer + index);
 }

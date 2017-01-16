@@ -21,7 +21,7 @@ public:
 
 	explicit CMyArray(size_t size)
 	{
-		if (size < 0)
+		if (size > 0)
 		{
 			m_begin = RawAlloc(size);
 			m_end = m_begin + size;
@@ -43,42 +43,20 @@ public:
 		arr.m_endOfCapacity = nullptr;
 	}
 
-	CMyArray(std::initializer_list<T>const initList)
+	CMyArray(std::initializer_list<T>const& initList)
 	{
 		const auto size = initList.size();
-		if (size != 0)
-		{
-			m_begin = RawAlloc(size);
-			try
-			{
-				CopyItems(initList.begin(), initList.end(), m_begin, m_end);
-				m_endOfCapacity = m_end;
-			}
-			catch (...)
-			{
-				DeleteItems(m_begin, m_end);
-				throw;
-			}
-		}
+		auto from = initList.begin();
+		auto to = initList.end();
+		CopyArray(from, to, size);
 	}
 
 	CMyArray(const CMyArray& arr)
 	{
 		const auto size = arr.GetSize();
-		if (size != 0)
-		{
-			m_begin = RawAlloc(size);
-			try
-			{
-				CopyItems(arr.m_begin, arr.m_end, m_begin, m_end);
-				m_endOfCapacity = m_end;
-			}
-			catch (...)
-			{
-				DeleteItems(m_begin, m_end);
-				throw;
-			}
-		}
+		auto from = arr.m_begin;
+		auto to = arr.m_end;
+		CopyArray(from, to, size);
 	}
 
 	void Append(const T & value)
@@ -117,40 +95,40 @@ public:
 
 	void Resize(size_t size)
 	{
-		std::vector heh;
 		if (size != GetSize())
 		{
 			if (size < this->GetSize())
 			{
-				size_t elementsToDelete = this->GetSize() - size;
-				auto it = end();
-				while (elementsToDelete != 0)
-				{
-					--elementsToDelete;
-					--it;
-					(*it).~T();
-				}
+				DestroyItems(m_begin + size, m_end);
 			}
-			else if (size > this->GetSize() && size < this->GetCapacity())
+			else if (size > this->GetSize() && size <= this->GetCapacity())
 			{
-				for (auto i = this->GetSize(); i < size; ++i)
+				auto oldSize = this->GetSize();
+				for (auto it = begin() + oldSize; it != begin() + size; ++it)	
 				{
-					(*this)[i] = T();
+					*it = T();
 				}
 			}
 			else if (size > this->GetCapacity())
 			{
 				CMyArray<T> temp(size);
-				size_t copiesCount = std::min(GetSize(), size);
-				for (size_t i = 0; i < copiesCount; ++i)
+				try
 				{
-					temp.Append(*(m_begin + i));
+					CopyItems(m_begin, m_end, temp.m_begin, temp.m_end);
+					size_t itemsCountToInit = size - this->GetSize();
+					while (itemsCountToInit != 1)
+					{
+						new (temp.m_end) T();
+						++temp.m_end;
+					}
+					*this = std::move(temp);
 				}
-				for (size_t i = GetSize(); i < size; ++i)
+				catch (...)
 				{
-					temp.Append(T());
+					DeleteItems(temp.m_begin, temp.m_end);
+					throw;
 				}
-				*this = std::move(temp);
+
 			}
 			m_end = m_begin + size;
 		}
@@ -314,6 +292,24 @@ private:
 	static void RawDealloc(T *p)
 	{
 		free(p);
+	}
+
+	void CopyArray(const T* from, const T* to, size_t size)
+	{
+		if (size != 0)
+		{
+			m_begin = RawAlloc(size);
+			try
+			{
+				CopyItems(from, to, m_begin, m_end);
+				m_endOfCapacity = m_end;
+			}
+			catch (...)
+			{
+				DeleteItems(m_begin, m_end);
+				throw;
+			}
+		}
 	}
 
 private:

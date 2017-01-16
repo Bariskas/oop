@@ -5,18 +5,40 @@ struct MyArray_
 {
 	CMyArray<int> intArray{ 1,2,3 };
 	const CMyArray<int> constIntArray{ 1,2,3 };
+	CMyArray<int> reserveCapacityArray;
 	CMyArray<int> emptyArray = CMyArray<int>();
+	MyArray_()
+	{
+		reserveCapacityArray = CMyArray<int>(5);
+		reserveCapacityArray.Resize(3);
+		reserveCapacityArray[0] = 1;
+		reserveCapacityArray[1] = 2;
+		reserveCapacityArray[2] = 3;
+	}
 };
 
 BOOST_FIXTURE_TEST_SUITE(MyArray, MyArray_)
-BOOST_AUTO_TEST_CASE(have_count_constructor)
-{
-	CMyArray<int> defaultValuesArray(5);
-	for (auto it = defaultValuesArray.begin(); it != defaultValuesArray.end(); ++it)
-	{
-		BOOST_CHECK_EQUAL(*it, 0);
-	}
-}
+	BOOST_FIXTURE_TEST_SUITE(Constrcturs, MyArray_)
+		BOOST_AUTO_TEST_CASE(have_count_constructor)
+		{
+			CMyArray<int> defaultValuesArray(5);
+			for (auto it = defaultValuesArray.begin(); it != defaultValuesArray.end(); ++it)
+			{
+				BOOST_CHECK_EQUAL(*it, 0);
+			}
+			BOOST_CHECK_EQUAL(defaultValuesArray.GetSize(), 5);
+		}
+		BOOST_AUTO_TEST_CASE(have_init_list_constructor)
+		{
+			CMyArray<int> testArray{1, 2, 3, 4, 5};
+			int value = 1;
+			for (auto it = testArray.begin(); it != testArray.end(); ++it, ++value)
+			{
+				BOOST_CHECK_EQUAL(*it, value);
+			}
+			BOOST_CHECK_EQUAL(testArray.GetSize(), 5);
+		}
+	BOOST_AUTO_TEST_SUITE_END()
 BOOST_AUTO_TEST_CASE(can_return_count_of_elements)
 {
 	BOOST_CHECK_EQUAL(intArray.GetSize(), 3);
@@ -40,20 +62,36 @@ BOOST_AUTO_TEST_CASE(can_get_elements_with_brackets)
 	BOOST_CHECK_THROW(intArray[6], std::out_of_range);
 }
 BOOST_AUTO_TEST_SUITE(resizing)
-	BOOST_AUTO_TEST_CASE(can_be_resized)
+	BOOST_AUTO_TEST_CASE(new_size_less_then_initial)
 	{
-		intArray.Resize(10);
-		BOOST_CHECK_EQUAL(intArray.GetSize(), 10);
-		emptyArray.Resize(10);
-		BOOST_CHECK_EQUAL(emptyArray.GetSize(), 10);
-	}
-	BOOST_AUTO_TEST_CASE(resize_to_size_under_capacity)
-	{
+		BOOST_CHECK_EQUAL(intArray.GetCapacity(), 3);
 		intArray.Resize(2);
 		BOOST_CHECK_EQUAL(intArray.GetSize(), 2);
 		BOOST_CHECK_EQUAL(intArray[0], 1);
 		BOOST_CHECK_EQUAL(intArray[1], 2);
-		BOOST_CHECK_THROW(intArray[2], std::out_of_range);
+	}
+	BOOST_AUTO_TEST_CASE(new_size_bigger_then_initial_but_less_then_capacity)
+	{
+		BOOST_CHECK_EQUAL(reserveCapacityArray.GetSize(), 3);
+		BOOST_CHECK_EQUAL(reserveCapacityArray.GetCapacity(), 5);
+		reserveCapacityArray.Resize(4);
+		BOOST_CHECK_EQUAL(reserveCapacityArray.GetSize(), 4);
+		BOOST_CHECK_EQUAL(reserveCapacityArray.GetCapacity(), 5);
+		BOOST_CHECK_EQUAL(reserveCapacityArray[0], 1);
+		BOOST_CHECK_EQUAL(reserveCapacityArray[1], 2);
+		BOOST_CHECK_EQUAL(reserveCapacityArray[2], 3);
+		BOOST_CHECK_EQUAL(reserveCapacityArray[3], 0);
+	}
+	BOOST_AUTO_TEST_CASE(new_size_bigger_then_initial)
+	{
+		BOOST_CHECK_EQUAL(intArray.GetCapacity(), 3);
+		intArray.Resize(4);
+		BOOST_CHECK_EQUAL(intArray.GetCapacity(), 4);
+		BOOST_CHECK_EQUAL(intArray.GetSize(), 4);
+		BOOST_CHECK_EQUAL(intArray[0], 1);
+		BOOST_CHECK_EQUAL(intArray[1], 2);
+		BOOST_CHECK_EQUAL(intArray[2], 3);
+		BOOST_CHECK_EQUAL(intArray[3], 0);
 	}
 BOOST_AUTO_TEST_SUITE_END()
 
