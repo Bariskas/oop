@@ -145,6 +145,26 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CBus.h" />
+    <ClInclude Include="CCarImpl.h" />
+    <ClInclude Include="CPerson.h" />
+    <ClInclude Include="CPersonImpl.h" />
+    <ClInclude Include="CPoliceMan.h" />
+    <ClInclude Include="CPoliceCar.h" />
+    <ClInclude Include="CRacer.h" />
+    <ClInclude Include="CRacingCar.h" />
+    <ClInclude Include="CTaxi.h" />
+    <ClInclude Include="CVehicleImpl.h" />
+    <ClInclude Include="IBasicVechicle.h" />
+    <ClInclude Include="IBus.h" />
+    <ClInclude Include="ICar.h" />
+    <ClInclude Include="IPerson.h" />
+    <ClInclude Include="IPoliceCar.h" />
+    <ClInclude Include="IPoliceMan.h" />
+    <ClInclude Include="IRacer.h" />
+    <ClInclude Include="IRacingCar.h" />
+    <ClInclude Include="ITaxi.h" />
+    <ClInclude Include="IVehicle.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -155,7 +175,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Vehicle.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
